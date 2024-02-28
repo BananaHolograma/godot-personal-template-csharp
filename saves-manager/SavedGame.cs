@@ -4,23 +4,22 @@ using Godot;
 using Godot.Collections;
 using System;
 using System.Linq;
-
-
 public partial class SavedGame : Resource
 {
     public static string DefaultPath = OS.GetUserDataDir();
 
     [Export]
-    string Filename;
+    public string Filename;
     [Export]
-    string VersionControl = (string)ProjectSettings.GetSetting("application/config/version");
-    [Export]
-    string EngineVersion = $"Godot {Engine.GetVersionInfo()}";
-    [Export]
-    string LastDatetime;
+    public string VersionControl = (string)ProjectSettings.GetSetting("application/config/version");
 
     [Export]
-    GameSettings GameSettings;
+    public string EngineVersion;
+
+    [Export]
+    public string LastDatetime;
+    [Export]
+    public GameSettings GameSettings;
 
 
     public void UpdateLastDatetime()
@@ -35,6 +34,7 @@ public partial class SavedGame : Resource
 
     public void WriteSavegame(string filename)
     {
+        EngineVersion = $"Godot {Engine.GetVersionInfo()}";
         UpdateLastDatetime();
         ResourceSaver.Save(this, GetSavePath(filename.GetBaseName()));
     }
