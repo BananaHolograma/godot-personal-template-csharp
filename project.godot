@@ -15,6 +15,11 @@ config/description="My streamlined personal template for Godot, designed to kick
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+AudioManager="*res://autoload/audio/AudioManager.cs"
+MusicManager="*res://autoload/audio/MusicManager.cs"
+
 [dotnet]
 
 project/assembly_name="godot-personal-template-csharp"

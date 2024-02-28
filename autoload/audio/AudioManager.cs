@@ -1,11 +1,8 @@
 namespace GameRoot;
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-[GlobalClass]
 public partial class AudioManager : Node
 {
     public string[] availableBuses;

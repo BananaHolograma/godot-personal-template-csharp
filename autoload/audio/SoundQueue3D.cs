@@ -8,6 +8,7 @@ namespace GameRoot;
 /// This can improve performance and memory usage, especially when dealing with numerous short sounds
 /// </summary>
 [Tool]
+[GlobalClass]
 public partial class SoundQueue3D : Node3D, ISoundQueue
 {
     private int _next = 0;
