@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 AudioManager="*res://autoload/audio/AudioManager.cs"
 MusicManager="*res://autoload/audio/MusicManager.cs"
+Utilities="*res://autoload/Utilities.cs"
 
 [dotnet]
 
