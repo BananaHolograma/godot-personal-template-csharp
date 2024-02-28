@@ -57,7 +57,7 @@ public partial class MusicManager : Node
                 if (crossfade)
                 {
                     AudioStreamPlayer nextPlayer = CurrentPlayer.Name == "AudioStreamPlayer" ? PlayerTwo : Player;
-                    nextPlayer.VolumeDb = -80.0f;
+                    nextPlayer.VolumeDb = VOLUME_DB_INAUDIBLE;
                     PlayStream(nextPlayer, stream);
 
                     EmitSignal(SignalName.ChangedStream, CurrentPlayer.Stream, stream);
