@@ -7,6 +7,36 @@ namespace GameRoot;
 
 public static class VectorWizard
 {
+
+
+    /// <summary>
+    /// Determines if two Vector2 objects are within a specified squared distance.
+    /// </summary>
+    /// <param name="v1">The first Vector2 to compare.</param>
+    /// <param name="v2">The second Vector2 to compare.</param>
+    /// <param name="distance">The squared distance threshold.</param>
+    /// <returns>True if the two vectors are within the specified squared distance, false otherwise.</returns>
+    /// <remarks>
+    /// This function provides increased efficiency by comparing squared distances directly,
+    /// avoiding a potentially expensive square root operation.
+    /// </remarks>
+    public static bool IsWithinDistanceSquaredV2(this Vector2 v1, Vector2 v2, float distance)
+        => v1.DistanceSquaredTo(v2) <= distance * distance;
+
+    /// <summary>
+    /// Determines if two Vector3 objects are within a specified squared distance.
+    /// </summary>
+    /// <param name="v1">The first Vector3 to compare.</param>
+    /// <param name="v2">The second Vector3 to compare.</param>
+    /// <param name="distance">The squared distance threshold.</param>
+    /// <returns>True if the two vectors are within the specified squared distance, false otherwise.</returns>
+    /// <remarks>
+    /// This function also uses squared distance comparison for efficiency.
+    /// </remarks>
+    public static bool IsWithinDistanceSquaredV3(this Vector3 v1, Vector3 v2, float distance)
+        => v1.DistanceSquaredTo(v2) <= distance * distance;
+
+
     /// <summary>
     /// Generates a sequence of random directions with angles in degrees, confined to a horizontal plane.
     /// 

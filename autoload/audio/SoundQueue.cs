@@ -50,6 +50,21 @@ public partial class SoundQueue : Node, ISoundQueue
             _next %= _audioStreamPlayers.Count;
         }
     }
+
+    public void PlayWithPitchRange(float minPitchScale = 0.9f, float maxPitchScale = 1.3f)
+    {
+        RandomNumberGenerator rng = new();
+
+        if (!_audioStreamPlayers[_next].Playing)
+        {
+            AudioStreamPlayer nextPlayer = _audioStreamPlayers[_next++];
+            nextPlayer.PitchScale = rng.RandfRange(minPitchScale, maxPitchScale);
+            nextPlayer.Play();
+            _next %= _audioStreamPlayers.Count;
+        }
+    }
+
+
     public override string[] _GetConfigurationWarnings()
     {
         if (GetChildCount() == 0)

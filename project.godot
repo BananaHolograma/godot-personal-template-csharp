@@ -22,6 +22,7 @@ MusicManager="*res://autoload/audio/MusicManager.cs"
 Utilities="*res://autoload/general/Utilities.cs"
 GameEvents="*res://autoload/events/GameEvents.cs"
 SaveManager="*res://autoload/saves/SaveManager.cs"
+NodeWizard="*res://autoload/general/NodeWizard.cs"
 
 [dotnet]
 
