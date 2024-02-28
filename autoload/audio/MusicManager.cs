@@ -1,7 +1,6 @@
 namespace GameRoot;
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Godot;
 
 /// <summary>
@@ -16,7 +15,9 @@ public partial class MusicManager : Node
     public Dictionary<string, AudioStream> MusicBank = new();
 
     public AudioStreamPlayer Player;
+    public AudioStreamPlayer PlayerTwo;
 
+    private AudioStreamPlayer CurrentPlayer;
     private int CrossFadingTime = 3;
 
     public override void _Ready()
@@ -24,11 +25,22 @@ public partial class MusicManager : Node
         AudioManager = GetTree().Root.GetNode<AudioManager>("AudioManager");
         Player = new AudioStreamPlayer
         {
+            Name = "AudioStreamPlayer",
+            Bus = "Music",
+            Autoplay = false
+        };
+
+        PlayerTwo = new AudioStreamPlayer
+        {
+            Name = "AudioStreamPlayerTwo",
             Bus = "Music",
             Autoplay = false
         };
 
         AddChild(Player);
+        AddChild(PlayerTwo);
+
+        CurrentPlayer = Player;
     }
     public void PlayMusic(string name, bool crossfade = true)
     {
@@ -36,35 +48,45 @@ public partial class MusicManager : Node
         {
             AudioStream stream = MusicBank[name];
 
-            if (Player.Playing)
+            if (CurrentPlayer.Playing)
             {
-                if (stream == Player.Stream) return;
+                if (stream == CurrentPlayer.Stream) return;
 
                 if (crossfade)
                 {
+                    AudioStreamPlayer nextPlayer = CurrentPlayer.Name == "AudioStreamPlayer" ? PlayerTwo : Player;
+                    nextPlayer.VolumeDb = -80.0f;
+                    PlayStream(nextPlayer, stream);
+
+                    EmitSignal(SignalName.ChangedStream, CurrentPlayer.Stream, stream);
+
                     float volume = Mathf.LinearToDb(AudioManager.GetActualVolumeDBFromBusName(Player.Bus));
 
                     Tween crossFadeTween = CreateTween();
                     crossFadeTween.SetParallel(true);
-                    crossFadeTween.TweenProperty(Player, "volume_db", -80.0f, CrossFadingTime);
-                    crossFadeTween.Chain().TweenCallback(Callable.From(() => { PlayStream(stream); }));
-                    crossFadeTween.Chain().TweenProperty(Player, "volume_db", volume, CrossFadingTime);
-                }
-                else
-                {
-                    PlayStream(stream);
-                }
+                    crossFadeTween.TweenProperty(CurrentPlayer, "volume_db", -80.0f, CrossFadingTime);
+                    crossFadeTween.TweenProperty(nextPlayer, "volume_db", volume, CrossFadingTime);
+                    crossFadeTween.Chain().TweenCallback(Callable.From(() => { CurrentPlayer = nextPlayer; }));
 
-                EmitSignal(SignalName.ChangedStream, Player.Stream, stream);
+                    return;
+                }
             }
+
+            EmitSignal(SignalName.ChangedStream, CurrentPlayer.Stream, stream);
+            PlayStream(CurrentPlayer, stream);
 
         }
     }
 
-    public void PlayStream(AudioStream stream)
+    public void PlayStream(AudioStreamPlayer Player, AudioStream stream)
     {
         Player.Stop();
         Player.Stream = stream;
         Player.Play();
+    }
+
+    public void AddStreamToMusicBank(string name, AudioStream stream)
+    {
+        MusicBank.Add(name, stream);
     }
 }
