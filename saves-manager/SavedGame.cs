@@ -19,6 +19,9 @@ public partial class SavedGame : Resource
     [Export]
     string LastDatetime;
 
+    [Export]
+    GameSettings GameSettings;
+
 
     public void UpdateLastDatetime()
     {
