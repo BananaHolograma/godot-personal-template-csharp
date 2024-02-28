@@ -17,8 +17,10 @@ public partial class MusicManager : Node
     public AudioStreamPlayer Player;
     public AudioStreamPlayer PlayerTwo;
 
+    public const float VOLUME_DB_INAUDIBLE = -80f;
+
     private AudioStreamPlayer CurrentPlayer;
-    private int CrossFadingTime = 3;
+    private float CrossFadingTime = 3f;
 
     public override void _Ready()
     {
@@ -64,8 +66,8 @@ public partial class MusicManager : Node
 
                     Tween crossFadeTween = CreateTween();
                     crossFadeTween.SetParallel(true);
-                    crossFadeTween.TweenProperty(CurrentPlayer, "volume_db", -80.0f, CrossFadingTime);
-                    crossFadeTween.TweenProperty(nextPlayer, "volume_db", volume, CrossFadingTime);
+                    crossFadeTween.TweenProperty(CurrentPlayer, "volume_db", VOLUME_DB_INAUDIBLE, CrossFadingTime).SetEase(Tween.EaseType.Out);
+                    crossFadeTween.TweenProperty(nextPlayer, "volume_db", volume, CrossFadingTime).SetEase(Tween.EaseType.In);
                     crossFadeTween.Chain().TweenCallback(Callable.From(() => { CurrentPlayer = nextPlayer; }));
 
                     return;
@@ -74,8 +76,10 @@ public partial class MusicManager : Node
 
             EmitSignal(SignalName.ChangedStream, CurrentPlayer.Stream, stream);
             PlayStream(CurrentPlayer, stream);
-
+            return;
         }
+
+        GD.PushWarning($"Expected music name {name} to exists in the MusicBank but no stream was found.");
     }
 
     public void PlayStream(AudioStreamPlayer Player, AudioStream stream)
