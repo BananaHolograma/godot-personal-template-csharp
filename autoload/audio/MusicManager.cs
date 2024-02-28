@@ -30,7 +30,7 @@ public partial class MusicManager : Node
 
         AddChild(Player);
     }
-    public async Task PlayMusic(string name, bool crossfade = true)
+    public void PlayMusic(string name, bool crossfade = true)
     {
         if (MusicBank.ContainsKey(name))
         {
@@ -46,17 +46,25 @@ public partial class MusicManager : Node
 
                     Tween crossFadeTween = CreateTween();
                     crossFadeTween.SetParallel(true);
-                    crossFadeTween.TweenProperty(Player, "volume_db", -80, CrossFadingTime);
+                    crossFadeTween.TweenProperty(Player, "volume_db", -80.0f, CrossFadingTime);
+                    crossFadeTween.Chain().TweenCallback(Callable.From(() => { PlayStream(stream); }));
                     crossFadeTween.Chain().TweenProperty(Player, "volume_db", volume, CrossFadingTime);
-
-                    await ToSignal(crossFadeTween, Tween.SignalName.Finished);
+                }
+                else
+                {
+                    PlayStream(stream);
                 }
 
-                Player.Stop();
-                Player.Stream = stream;
-                Player.Play();
+                EmitSignal(SignalName.ChangedStream, Player.Stream, stream);
             }
 
         }
+    }
+
+    public void PlayStream(AudioStream stream)
+    {
+        Player.Stop();
+        Player.Stream = stream;
+        Player.Play();
     }
 }

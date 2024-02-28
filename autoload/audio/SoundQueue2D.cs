@@ -13,7 +13,7 @@ public partial class SoundQueue2D : Node2D, ISoundQueue
 {
     private int _next = 0;
 
-    private List<AudioStreamPlayer2D> _audioStreamPlayers = new();
+    private readonly List<AudioStreamPlayer2D> _audioStreamPlayers = new();
 
     [Export]
     public int Count { get; set; } = 1;

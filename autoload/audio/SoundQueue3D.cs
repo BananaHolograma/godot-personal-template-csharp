@@ -13,7 +13,7 @@ public partial class SoundQueue3D : Node3D, ISoundQueue
 {
     private int _next = 0;
 
-    private List<AudioStreamPlayer3D> _audioStreamPlayers = new();
+    private readonly List<AudioStreamPlayer3D> _audioStreamPlayers = new();
 
     [Export]
     public int Count { get; set; } = 1;
