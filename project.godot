@@ -12,7 +12,7 @@ config_version=5
 
 config/name="godot-personal-template-csharp"
 config/description="My streamlined personal template for Godot, designed to kickstart new projects with all the repetitive groundwork already taken care of"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [dotnet]
