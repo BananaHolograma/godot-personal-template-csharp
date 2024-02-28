@@ -19,7 +19,8 @@ config/icon="res://icon.svg"
 
 AudioManager="*res://autoload/audio/AudioManager.cs"
 MusicManager="*res://autoload/audio/MusicManager.cs"
-Utilities="*res://autoload/Utilities.cs"
+Utilities="*res://autoload/general/Utilities.cs"
+GameEvents="*res://autoload/events/GameEvents.cs"
 
 [dotnet]
 
