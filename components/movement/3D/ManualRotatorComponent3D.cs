@@ -11,7 +11,6 @@ public partial class ManualRotatorComponent3D : Node
     [Export]
     public Node3D Target;
 
-
     public override void _Input(InputEvent @event)
     {
         if (Target is not null && InputMap.HasAction("manual_rotate") && @event.IsActionPressed("manual_rotate") && @event is InputEventMouseMotion motion)

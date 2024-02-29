@@ -49,8 +49,8 @@ public partial class Door : Node3D
     public float DelayBeforeClose = 0f;
 
 
-    private bool isOpen;
-    private bool isLocked;
+    private bool isOpen = false;
+    private bool isLocked = false;
     public virtual void Open()
     {
 

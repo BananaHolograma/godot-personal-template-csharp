@@ -34,7 +34,7 @@ public static class NodeExtension
     /// <param name="result">The list to which the found nodes of type T will be added.</param>
     /// <remarks>
     /// This function traverses the entire sub-tree starting from the root node, searching for nodes of type T. 
-    /// It adds any found nodes to the provided list. You must ensure that the list is of the appropriate type (e.g., List<T>).
+    /// It adds any found nodes to the provided list. You must ensure that the list is of the appropriate type").
     /// </remarks>
     public static void FindNodesRecursively<T>(this Node node, List<T> result) where T : Node
     {
@@ -42,14 +42,11 @@ public static class NodeExtension
 
         foreach (Node child in node.GetChildren(true))
         {
-            if (child is T nodeFound)
+            if (child is T nodeFound && child.GetType() == typeof(T))
             {
                 result.Add(nodeFound);
             }
-            else
-            {
-                FindNodesRecursively(child, result);
-            }
+            FindNodesRecursively(child, result);
         }
     }
 

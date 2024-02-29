@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
-using Godot.Collections;
 using GodotExtensions;
 
 namespace GameRoot;
@@ -9,50 +10,117 @@ namespace GameRoot;
 [GlobalClass]
 public partial class FiniteStateMachine : Node
 {
+    #region Signals
     [Signal]
-    public delegate void StateChangedEventHandler(State fromState, State state);
+    public delegate void StateChangedEventHandler(State from, State to);
     [Signal]
-    public delegate void StackPushedEventHandler(State newState, Array<State> stack);
+    public delegate void StackPushedEventHandler(State newState, Godot.Collections.Array<State> stack);
     [Signal]
-    public delegate void StackFlushedEventHandler(Array<State> stack);
+    public delegate void StackFlushedEventHandler(Godot.Collections.Array<State> stack);
 
-    [Export]
-    public CharacterBody2D Actor;
+    #endregion
+
+    #region Exports
     [Export]
     public State CurrentState;
+    [Export]
+    public bool EnableStack = true;
     [Export]
     public int StackCapacity = 3;
     [Export]
     public bool FlushStackWhenReachCapacity = false;
-    [Export]
-    public bool EnableStack { get; set; } = true;
 
-    public Dictionary States = new();
-    public Array<State> StatesStack = new();
-    public State NextState;
+    #endregion
+
+    public readonly Dictionary<string, State> States = new();
+    public readonly Godot.Collections.Array<State> StatesStack = new();
     public bool Locked = false;
 
+    #region Public
     public override void _Ready()
     {
+        StateChanged += OnStateChanged;
+
         InitializeStateNodes();
 
-        foreach (State state in States.Values)
+        if (CurrentState == null)
         {
-            state.StateFinished += OnFinishedState;
-            state.FSM = this;
-            state.Ready();
+            GD.PushError($"{GetPath()} | This Finite state machine does not have an initial state defined");
+            return;
         }
+
+        EnterState(CurrentState);
+    }
+
+    public void ChangeState(State nextState)
+    {
+        if (CurrentStateIs(nextState)) return;
 
         if (CurrentState is not null)
         {
-            ChangeState(CurrentState, new(), true);
+            EmitSignal(SignalName.StateChanged, CurrentState, nextState);
         }
-
-        UnlockStateMachine();
-
-        StackPushed += OnStackPushed;
     }
 
+    public void ChangeState(string nextState)
+    {
+        if (CurrentStateIs(nextState)) return;
+
+        if (CurrentState is not null)
+        {
+            EmitSignal(SignalName.StateChanged, CurrentState, GetStateByName(nextState));
+        }
+    }
+
+    public void EnterState(State state)
+    {
+        state.Enter();
+    }
+
+    public void ExitState(State state)
+    {
+        state.Exit();
+    }
+
+    public bool CurrentStateIs(string name)
+    {
+        return name.ToLower().Equals(CurrentState.Name.ToString().ToLower());
+    }
+
+    public bool CurrentStateIs(State state)
+    {
+        return state == CurrentState;
+    }
+
+    public State GetStateByName(string name)
+    {
+        if (States.ContainsKey(name)) return States[name];
+
+        return null;
+    }
+
+    public void PushStateToStack(State state)
+    {
+        if (EnableStack && StackCapacity > 0 && StatesStack.Count > 0)
+        {
+            if (StatesStack.Count >= StackCapacity)
+            {
+                if (FlushStackWhenReachCapacity)
+                {
+                    StatesStack.Clear();
+                    EmitSignal(SignalName.StackFlushed, StatesStack);
+                }
+                else
+                {
+                    StatesStack.RemoveAt(0);
+                }
+            }
+
+            StatesStack.Add(state);
+
+            EmitSignal(SignalName.StackPushed, state, StatesStack);
+        }
+    }
 
     public override void _UnhandledInput(InputEvent @event)
     {
@@ -67,102 +135,6 @@ public partial class FiniteStateMachine : Node
     public override void _Process(double delta)
     {
         CurrentState.Update(delta);
-    }
-
-    public void ChangeState(State newState, Dictionary parameters, bool force = false)
-    {
-        if (!force && CurrentStateIs(newState))
-        {
-            return;
-        }
-
-        if (CurrentState is not null && NextState is not null)
-        {
-            ExitState(CurrentState, NextState);
-        }
-
-        PushStateToStack(CurrentState);
-        EmitSignal(SignalName.StateChanged, CurrentState, newState);
-
-        CurrentState = newState;
-        CurrentState.parameters = parameters;
-
-        EnterState(newState);
-        NextState = null;
-    }
-
-    public void ChangeStateByName(string name, Dictionary parameters, bool force = false)
-    {
-        State state = GetStateByName(name);
-
-        if (state is not null)
-        {
-            ChangeState(state, parameters, force);
-        }
-
-        GD.PushError($"FSMPlugin: The state {name} does not exists on this FiniteStateMachine");
-    }
-
-    public void EnterState(State state)
-    {
-        state.Enter();
-        state.EmitSignal(State.SignalName.StateEntered);
-    }
-
-
-    public void ExitState(State state, State _NextState)
-    {
-        state.Exit(_NextState);
-    }
-
-
-    public bool CurrentStateIs(State state)
-    {
-        return state.Name.ToString().ToLower().Equals(CurrentState.Name.ToString().ToLower());
-    }
-
-    public bool CurrentStateNameIs(string name)
-    {
-        State state = GetStateByName(name);
-
-        if (state is not null)
-        {
-            return CurrentStateIs(state);
-        }
-
-        return false;
-    }
-
-    public State GetStateByName(string name)
-    {
-        if (States.ContainsKey(name))
-        {
-            return (State)States[name];
-        }
-
-        return null;
-    }
-
-    public void PushStateToStack(State state)
-    {
-        if (EnableStack && StackCapacity > 0)
-        {
-            if (StatesStack.Count >= StackCapacity)
-            {
-                if (FlushStackWhenReachCapacity)
-                {
-                    EmitSignal(SignalName.StackFlushed, StatesStack);
-                    StatesStack.Clear();
-                }
-                else
-                {
-                    StatesStack.RemoveAt(0);
-                }
-            }
-
-            StatesStack.Add(state);
-            EmitSignal(SignalName.StackPushed, state, StatesStack);
-        }
     }
 
     public void LockStateMachine()
@@ -181,15 +153,9 @@ public partial class FiniteStateMachine : Node
         SetProcessUnhandledInput(true);
     }
 
-    private void AddStateToDictionary(State state)
-    {
-        if (state.IsInsideTree())
-        {
-            States.Add(state.Name, GetNode(state.GetPath()));
-        }
-    }
+    #endregion
 
-
+    #region PrivateFunctions
     private void InitializeStateNodes(Node node = null)
     {
         List<State> states = new();
@@ -202,24 +168,25 @@ public partial class FiniteStateMachine : Node
         }
     }
 
-    private void OnFinishedState(string nextState, Dictionary parameters)
+    private void AddStateToDictionary(State state)
     {
-        State state = GetStateByName(nextState);
-
-        if (state is not null)
-        {
-            ChangeState(state, parameters);
-        }
+        States.Add(state.Name, state);
+        state.FSM = this;
+        state.Ready();
     }
 
+    #endregion
 
-    private void OnStackPushed(State newState, Array<State> stack)
+    #region SignalCallbacks
+    public void OnStateChanged(State from, State to)
     {
-        foreach (State state in States.Values)
-        {
-            state.PreviousStates = stack;
-        }
+        PushStateToStack(from);
+        ExitState(from);
+        EnterState(to);
+
+        CurrentState = to;
+
     }
 
-
+    #endregion
 }
