@@ -66,7 +66,7 @@ public partial class FirstPersonController : CharacterBody3D
     public Vector3 OriginalEyesPosition;
 
     public bool Locked = false;
-    public float HeadBobTimePassed = 0;
+    public float HeadBobTimePassed = 0f;
 
     public override void _UnhandledInput(InputEvent @event)
     {
@@ -97,19 +97,30 @@ public partial class FirstPersonController : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
     {
+
+        HeadBobbing(delta);
+
         if (Velocity.Y > 0) SmoothCameraJitter(delta);
     }
 
-    public void SmoothCameraJitter(double delta)
+    public void HeadBobbing(double delta)
     {
-        Eyes.GlobalPosition = Eyes.GlobalPosition with
+        if (HeadBobbingEnabled && IsOnFloor())
         {
-            X = Head.GlobalPosition.X,
-            Y = (float)Mathf.Lerp(Eyes.GlobalPosition.Y, Head.GlobalPosition.Y, CameraJitterSmoothing * delta),
-            Z = Head.GlobalPosition.Z
-        };
+            if (Velocity.IsNotZeroApprox())
+            {
+                HeadBobTimePassed += (float)delta * Velocity.Length() * (IsOnFloor() ? 1f : 0);
 
-        Eyes.GlobalPosition = Eyes.GlobalPosition with { Y = Mathf.Clamp(Eyes.GlobalPosition.Y, -Head.GlobalPosition.Y - 1, Head.GlobalPosition.Y + 1) };
+                Transform3D newTransform = Eyes.Transform;
+                newTransform.Origin = newTransform.Origin with
+                {
+                    X = Mathf.Cos(HeadBobTimePassed * HeadBobFrequency / 2f) * HeadBobAmplitude,
+                    Y = Mathf.Sin(HeadBobTimePassed * HeadBobFrequency) * HeadBobAmplitude,
+                };
+
+                Eyes.Transform = newTransform;
+            }
+        }
     }
 
     public void RotateCamera(float relativeX, float relativeY)
@@ -125,6 +136,18 @@ public partial class FirstPersonController : CharacterBody3D
 
         Rotation = Rotation with { Y = Mathf.LerpAngle(Rotation.Y, targetRotationY, CameraSensitivity) };
         Head.Rotation = Head.Rotation with { X = Mathf.LerpAngle(Head.Rotation.X, targetRotationX, CameraSensitivity) };
+    }
+
+    public void SmoothCameraJitter(double delta)
+    {
+        Eyes.GlobalPosition = Eyes.GlobalPosition with
+        {
+            X = Head.GlobalPosition.X,
+            Y = (float)Mathf.Lerp(Eyes.GlobalPosition.Y, Head.GlobalPosition.Y, CameraJitterSmoothing * delta),
+            Z = Head.GlobalPosition.Z
+        };
+
+        Eyes.GlobalPosition = Eyes.GlobalPosition with { Y = Mathf.Clamp(Eyes.GlobalPosition.Y, -Head.GlobalPosition.Y - 1, Head.GlobalPosition.Y + 1) };
     }
 
     public void SwitchMouseMode()
