@@ -14,6 +14,8 @@ public partial class FiniteStateMachine : Node
     [Signal]
     public delegate void StateChangedEventHandler(State from, State to);
     [Signal]
+    public delegate void StateChangeFailedEventHandler(State from, State to);
+    [Signal]
     public delegate void StackPushedEventHandler(State newState, Godot.Collections.Array<State> stack);
     [Signal]
     public delegate void StackFlushedEventHandler(Godot.Collections.Array<State> stack);
@@ -33,6 +35,7 @@ public partial class FiniteStateMachine : Node
     #endregion
 
     public readonly Dictionary<string, State> States = new();
+    public readonly Dictionary<string, Transition> Transitions = new();
     public readonly Godot.Collections.Array<State> StatesStack = new();
     public bool Locked = false;
 
@@ -42,6 +45,7 @@ public partial class FiniteStateMachine : Node
         StateChanged += OnStateChanged;
 
         InitializeStateNodes();
+        RegisterTransitions();
 
         if (CurrentState == null)
         {
@@ -52,22 +56,41 @@ public partial class FiniteStateMachine : Node
         EnterState(CurrentState);
     }
 
-    public void ChangeState(State nextState)
+    public void ChangeStateTo(State nextState)
     {
         if (CurrentStateIs(nextState)) return;
 
         if (CurrentState is not null)
         {
-            EmitSignal(SignalName.StateChanged, CurrentState, nextState);
+            string transitionName = BuildTransitionName(CurrentState, nextState);
+
+            if (!Transitions.ContainsKey(transitionName))
+            {
+                Transitions[transitionName] = new NeutralTransition();
+            }
+
+            Transition transition = Transitions[transitionName];
+            transition.FromState = CurrentState;
+            transition.ToState = nextState;
+
+            if (transition.ShouldTransition())
+            {
+                transition.OnTransition();
+                EmitSignal(SignalName.StateChanged, transition.FromState, transition.ToState);
+                return;
+            }
+
+            EmitSignal(SignalName.StateChangeFailed, transition.FromState, transition.ToState);
         }
     }
 
-    public void ChangeState(string nextState)
+    public void ChangeStateTo(string nextState)
     {
         if (CurrentStateIs(nextState)) return;
 
         if (CurrentState is not null)
         {
+
             EmitSignal(SignalName.StateChanged, CurrentState, GetStateByName(nextState));
         }
     }
@@ -167,6 +190,15 @@ public partial class FiniteStateMachine : Node
             AddStateToDictionary(state);
         }
     }
+    /// <summary>
+    /// To register a new transition just use Transitions.Add("IdleToWalk", new NeutralTransition());
+    /// </summary>
+    private void RegisterTransitions()
+    {
+
+    }
+
+    private string BuildTransitionName(State from, State to) => $"{from.Name}To{to.Name}";
 
     private void AddStateToDictionary(State state)
     {
