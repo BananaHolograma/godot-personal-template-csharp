@@ -11,7 +11,7 @@ public partial class Walk : Motion
 
     public override void Enter()
     {
-        Actor.Velocity = new Vector3(Actor.Velocity.X, 0, Actor.Velocity.Z);
+        Actor.Velocity = Actor.Velocity with { Y = 0 };
         GD.Print("ENTER WALK ", Actor.Velocity);
     }
 

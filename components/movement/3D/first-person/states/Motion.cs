@@ -71,10 +71,10 @@ public partial class Motion : State
 			Actor.Velocity += Vector3.Down * (float)(Gravity * delta);
 		}
 
-		if (IsFalling() && !StairtStepping)
+		/* if (IsFalling() && !StairtStepping)
 		{
 			FSM.ChangeStateTo("Fall");
-		}
+		} */
 
 	}
 
@@ -95,7 +95,7 @@ public partial class Motion : State
 		}
 		else
 		{
-			Actor.Velocity = new Vector3(worldCoordinateSpaceDirection.X * speed, Actor.Velocity.Y, worldCoordinateSpaceDirection.Z * speed);
+			Actor.Velocity = Actor.Velocity with { X = worldCoordinateSpaceDirection.X * speed, Z = worldCoordinateSpaceDirection.Z * speed };
 		}
 	}
 

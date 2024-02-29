@@ -47,7 +47,7 @@ public partial class FiniteStateMachine : Node
 
         if (CurrentState == null)
         {
-            GD.PushError($"{GetPath()} | This Finite state machine does not have an initial state defined");
+            GD.PushError("This Finite state machine does not have an initial state defined");
             return;
         }
 

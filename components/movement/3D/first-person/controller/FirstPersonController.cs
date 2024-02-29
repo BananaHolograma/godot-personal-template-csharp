@@ -68,9 +68,13 @@ public partial class FirstPersonController : CharacterBody3D
     public bool Locked = false;
     public float HeadBobTimePassed = 0;
 
-
     public override void _UnhandledInput(InputEvent @event)
     {
+        if (!Locked && Input.MouseMode.Equals(Input.MouseModeEnum.Captured) && @event is InputEventMouseMotion motion)
+        {
+            RotateCamera(motion.Relative.X, motion.Relative.Y);
+        }
+
         if (Input.IsActionJustPressed("ui_cancel"))
         {
             SwitchMouseMode();
@@ -91,6 +95,21 @@ public partial class FirstPersonController : CharacterBody3D
 
         GameEvents.LockPlayer += OnLockPlayer;
         GameEvents.UnlockPlayer += OnUnlockPlayer;
+    }
+
+    public void RotateCamera(float relativeX, float relativeY)
+    {
+        float mouseSensitivity = MouseSensitivity / 1000f;
+
+        float twistInput = relativeX * mouseSensitivity;
+        float pitchInput = relativeY * mouseSensitivity;
+
+        float targetRotationY = Rotation.Y - twistInput; // Body rotation
+        float targetRotationX = Head.Rotation.X - pitchInput; // Head & Neck rotation
+        targetRotationX = (float)Mathf.Clamp(targetRotationX, -CameraRotationLimit, CameraRotationLimit);
+
+        Rotation = Rotation with { Y = Mathf.LerpAngle(Rotation.Y, targetRotationY, CameraSensitivity) };
+        Head.Rotation = Head.Rotation with { X = Mathf.LerpAngle(Head.Rotation.X, targetRotationX, CameraSensitivity) };
     }
 
     public void SwitchMouseMode()
