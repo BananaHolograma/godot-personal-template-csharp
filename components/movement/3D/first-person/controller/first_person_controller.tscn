@@ -29,7 +29,3 @@ CurrentState = NodePath("Idle")
 [node name="Idle" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("3_ufsu1")
 Actor = NodePath("../..")
-
-[node name="Node2D" type="Node2D" parent="FiniteStateMachine"]
-
-[node name="Node3D" type="Node3D" parent="FiniteStateMachine"]
