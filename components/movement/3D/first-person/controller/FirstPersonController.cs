@@ -75,11 +75,9 @@ public partial class FirstPersonController : CharacterBody3D
             RotateCamera(motion.Relative.X, motion.Relative.Y);
         }
 
-        if (Input.IsActionJustPressed("ui_cancel"))
-        {
-            SwitchMouseMode();
-        }
+        if (Input.IsActionJustPressed("ui_cancel")) SwitchMouseMode();
     }
+
     public override void _Ready()
     {
         GameEvents = this.GetAutoloadNode<GameEvents>("GameEvents");
@@ -95,6 +93,23 @@ public partial class FirstPersonController : CharacterBody3D
 
         GameEvents.LockPlayer += OnLockPlayer;
         GameEvents.UnlockPlayer += OnUnlockPlayer;
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        if (Velocity.Y > 0) SmoothCameraJitter(delta);
+    }
+
+    public void SmoothCameraJitter(double delta)
+    {
+        Eyes.GlobalPosition = Eyes.GlobalPosition with
+        {
+            X = Head.GlobalPosition.X,
+            Y = (float)Mathf.Lerp(Eyes.GlobalPosition.Y, Head.GlobalPosition.Y, CameraJitterSmoothing * delta),
+            Z = Head.GlobalPosition.Z
+        };
+
+        Eyes.GlobalPosition = Eyes.GlobalPosition with { Y = Mathf.Clamp(Eyes.GlobalPosition.Y, -Head.GlobalPosition.Y - 1, Head.GlobalPosition.Y + 1) };
     }
 
     public void RotateCamera(float relativeX, float relativeY)
