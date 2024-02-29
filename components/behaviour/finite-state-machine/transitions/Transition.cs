@@ -3,7 +3,6 @@ namespace GameRoot;
 
 public abstract class Transition
 {
-	public readonly FiniteStateMachine FSM;
 	public State FromState { get; set; }
 	public State ToState { get; set; }
 

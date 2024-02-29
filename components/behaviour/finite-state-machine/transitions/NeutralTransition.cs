@@ -7,12 +7,6 @@ namespace GameRoot;
 /// </summary>
 public class NeutralTransition : Transition
 {
-    public override bool ShouldTransition()
-    {
-        return true;
-    }
-    public override void OnTransition()
-    {
-
-    }
+    public override bool ShouldTransition() => true;
+    public override void OnTransition() { }
 }

@@ -62,6 +62,8 @@ public partial class Motion : State
 
 	public override void PhysicsUpdate(double delta)
 	{
+		if (FSM == null) return;
+
 		WasGrounded = IsGrounded;
 		IsGrounded = Actor.IsOnFloor();
 

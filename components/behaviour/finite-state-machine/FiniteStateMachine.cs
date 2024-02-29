@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using GodotExtensions;
 
@@ -182,8 +180,7 @@ public partial class FiniteStateMachine : Node
     private void InitializeStateNodes(Node node = null)
     {
         List<State> states = new();
-
-        this.FindNodesRecursively<State>(states);
+        this.FindNodeClassesRecursively<State>(states);
 
         foreach (State state in states)
         {
@@ -191,11 +188,10 @@ public partial class FiniteStateMachine : Node
         }
     }
     /// <summary>
-    /// To register a new transition just use Transitions.Add("IdleToWalk", new NeutralTransition());
+    /// To register a new transition just use like this example: Transitions.Add("IdleToWalk", new NeutralTransition());
     /// </summary>
     private void RegisterTransitions()
     {
-
     }
 
     private string BuildTransitionName(State from, State to) => $"{from.Name}To{to.Name}";
