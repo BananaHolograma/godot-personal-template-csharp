@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace GameRoot;
+namespace GodotExtensions;
 
-public static class VectorWizard
+public static class VectorExtension
 {
 
 
@@ -52,7 +51,7 @@ public static class VectorWizard
     /// <param name="minAngleRange">The range of angles in degrees (default: 0 to 360).</param>
     /// <param name="maxAngleRange">The range of angles in degrees (default: 0 to 360).</param>
     /// <returns>An enumerable sequence of Vector2 representing the random directions.</returns>
-    public static IEnumerable<Vector2> Generate2DRandomDirectionsOnDegreesAngleRange(Vector2 origin, int numDirections = 10, float minAngleRange = 0, float maxAngleRange = 360f)
+    public static IEnumerable<Vector2> Generate2DRandomDirectionsOnDegreesAngleRange(this Vector2 origin, int numDirections = 10, float minAngleRange = 0, float maxAngleRange = 360f)
     {
         return Enumerable.Range(0, numDirections).Select(_ => origin.Rotated(GenerateRandomAngleInDegrees(minAngleRange, maxAngleRange)));
     }
@@ -73,7 +72,7 @@ public static class VectorWizard
     /// <param name="minAngleRange">The range of angles in radians (default: 0 to 2π).</param>
     /// <param name="maxAngleRange">The range of angles in radians (default: 0 to 2π).</param>
     /// <returns>An enumerable sequence of Vector2 representing the random directions.</returns>
-    public static IEnumerable<Vector2> Generate2DRandomDirectionsOnRadiansAngleRange(Vector2 origin, int numDirections = 10, float minAngleRange = 0, float maxAngleRange = 6.2831853072f)
+    public static IEnumerable<Vector2> Generate2DRandomDirectionsOnRadiansAngleRange(this Vector2 origin, int numDirections = 10, float minAngleRange = 0, float maxAngleRange = 6.2831853072f)
     {
         return Enumerable.Range(0, numDirections).Select(_ => origin.Rotated(GenerateRandomAngleInRadians(minAngleRange, maxAngleRange)));
     }
@@ -91,7 +90,7 @@ public static class VectorWizard
     /// <param name="minAngleRange">The range of angles in degrees (default: 0 to 360).</param>
     /// <param name="maxAngleRange">The range of angles in degrees (default: 0 to 360).</param>
     /// <returns>An enumerable sequence of Vector3 representing the random directions.</returns>
-    public static IEnumerable<Vector3> Generate3DRandomDirectionsOnDegreesAngleRange(Vector3 origin, int numDirections = 10, float minAngleRange = 0, float maxAngleRange = 360f)
+    public static IEnumerable<Vector3> Generate3DRandomDirectionsOnDegreesAngleRange(this Vector3 origin, int numDirections = 10, float minAngleRange = 0, float maxAngleRange = 360f)
     {
         return Enumerable.Range(0, numDirections).Select(_ => origin.Rotated(Vector3.Up, GenerateRandomAngleInDegrees(minAngleRange, maxAngleRange)));
     }
@@ -101,7 +100,7 @@ public static class VectorWizard
     /// 
     /// This function uses Vector3.Rotated with Vector3.Up as the rotation axis to create 
     /// random directions in 3D
-    public static IEnumerable<Vector3> Generate3DRandomDirectionsOnRadiansAngleRange(Vector3 origin, int numDirections = 10, float minAngleRange = 0, float maxAngleRange = 6.2831853072f)
+    public static IEnumerable<Vector3> Generate3DRandomDirectionsOnRadiansAngleRange(this Vector3 origin, int numDirections = 10, float minAngleRange = 0, float maxAngleRange = 6.2831853072f)
     {
         return Enumerable.Range(0, numDirections).Select(_ => origin.Rotated(Vector3.Up, GenerateRandomAngleInRadians(minAngleRange, maxAngleRange)));
     }
@@ -125,7 +124,7 @@ public static class VectorWizard
     /// a magnitude of 1 for the resulting vector.
     /// </summary>
     /// <returns>A random normalized 2D direction vector.</returns>
-    public static Vector2 Generate2DRandomDirection()
+    public static Vector2 Generate2DRandomDirection(this Vector2 _)
     {
         RandomNumberGenerator rng = new();
 
@@ -140,7 +139,7 @@ public static class VectorWizard
     /// the entire spectrum of directions due to the use of integer components.
     /// </summary>
     /// <returns>A random normalized 2D vector with integer components between -1 and 1.</returns>
-    public static Vector2 Generate2DRandomFixedDirection()
+    public static Vector2 Generate2DRandomFixedDirection(this Vector2 _)
     {
         RandomNumberGenerator rng = new();
 
@@ -155,7 +154,7 @@ public static class VectorWizard
     /// a magnitude of 1 for the resulting vector.
     /// </summary>
     /// <returns>A random normalized 3D direction vector.</returns>
-    public static Vector3 Generate3DRandomDirection()
+    public static Vector3 Generate3DRandomDirection(this Vector3 _)
     {
         RandomNumberGenerator rng = new();
 
@@ -170,7 +169,7 @@ public static class VectorWizard
     /// the entire spectrum of directions due to the use of integer components.
     /// </summary>
     /// <returns>A random normalized 3D vector with integer components between -1 and 1.</returns>
-    public static Vector3 Generate3DRandomFixedDirection()
+    public static Vector3 Generate3DRandomFixedDirection(this Vector3 _)
     {
         RandomNumberGenerator rng = new();
 
@@ -190,7 +189,7 @@ public static class VectorWizard
     /// <param name="axis">The X-axis value (-1.0f or 1.0f) to translate.</param>
     /// <returns>The corresponding 2D direction vector (Vector2.Left or Vector2.Right), 
     /// or a default value (optional) if the input is invalid.</returns>
-    public static Vector2 TranslateXAxisToVector(float axis)
+    public static Vector2 TranslateXAxisToVector(this Vector2 _, float axis)
     {
         if (Mathf.Abs(axis - 1.0f) < Mathf.Epsilon)
         {
@@ -206,7 +205,7 @@ public static class VectorWizard
         }
     }
 
-    public static Vector2 NormalizeVector2(Vector2 vector)
+    public static Vector2 NormalizeVector2(this Vector2 vector)
     {
         Vector2 result = NormalizeDiagonalVector2(vector);
 
@@ -218,7 +217,7 @@ public static class VectorWizard
         return result;
     }
 
-    public static Vector2 NormalizeDiagonalVector2(Vector2 vector)
+    public static Vector2 NormalizeDiagonalVector2(this Vector2 vector)
     {
         if (IsDiagonalDirection2D(vector))
         {
@@ -228,12 +227,12 @@ public static class VectorWizard
         return vector;
     }
 
-    private static bool IsDiagonalDirection2D(Vector2 direction)
+    private static bool IsDiagonalDirection2D(this Vector2 direction)
     {
         return direction.X != 0 && direction.Y != 0;
     }
 
-    public static Vector3 NormalizeVector3(Vector3 vector)
+    public static Vector3 NormalizeVector3(this Vector3 vector)
     {
         Vector3 result = NormalizeDiagonalVector3(vector);
 
@@ -245,7 +244,7 @@ public static class VectorWizard
         return result;
     }
 
-    public static Vector3 NormalizeDiagonalVector3(Vector3 vector)
+    public static Vector3 NormalizeDiagonalVector3(this Vector3 vector)
     {
         if (IsDiagonalDirection3D(vector))
         {
@@ -255,7 +254,7 @@ public static class VectorWizard
         return vector;
     }
 
-    private static bool IsDiagonalDirection3D(Vector3 direction)
+    private static bool IsDiagonalDirection3D(this Vector3 direction)
     {
         return direction.X != 0 && direction.Y != 0 && direction.Z != 0;
     }
@@ -269,7 +268,7 @@ public static class VectorWizard
     /// <param name="a">The first 2D point.</param>
     /// <param name="b">The second 2D point.</param>
     /// <returns>The Manhattan distance between the two points.</returns>
-    public static float DistanceManhattanV2(Vector2 a, Vector2 b)
+    public static float DistanceManhattanV2(this Vector2 a, Vector2 b)
     {
         return Mathf.Abs(a.X - b.X) + Mathf.Abs(a.Y - b.Y);
     }
@@ -283,7 +282,7 @@ public static class VectorWizard
     /// <param name="a">The first 2D point.</param>
     /// <param name="b">The second 2D point.</param>
     /// <returns>The Chebyshev distance between the two points.</returns>
-    public static float DistanceChebysevV2(Vector2 a, Vector2 b)
+    public static float DistanceChebysevV2(this Vector2 a, Vector2 b)
     {
         return Mathf.Max(Mathf.Abs(a.X - b.X), Mathf.Abs(a.Y - b.Y));
     }
@@ -296,7 +295,7 @@ public static class VectorWizard
     /// </summary>
     /// <param name="a">The 2D vector.</param>
     /// <returns>The Manhattan length of the vector.</returns>
-    public static float LengthManhattanV2(Vector2 a)
+    public static float LengthManhattanV2(this Vector2 a)
     {
         return Mathf.Abs(a.X) + Mathf.Abs(a.Y);
     }
@@ -306,7 +305,7 @@ public static class VectorWizard
     /// </summary>
     /// <param name="a">The 2D vector.</param>
     /// <returns>The Chebyshev length of the vector.</returns>
-    public static float LengthChebysevV2(Vector2 a)
+    public static float LengthChebysevV2(this Vector2 a)
     {
         return Mathf.Max(Mathf.Abs(a.X), Mathf.Abs(a.Y));
     }
@@ -323,7 +322,7 @@ public static class VectorWizard
     /// <param name="b">The second point defining the line segment.</param>
     /// <param name="c">The point to find the closest point to on the line segment.</param>
     /// <returns>The closest point on the line segment to point `c`, clamped to lie within the segment.</returns>
-    public static Vector2 ClosestPointOnLineClampedV2(Vector2 a, Vector2 b, Vector2 c)
+    public static Vector2 ClosestPointOnLineClampedV2(this Vector2 a, Vector2 b, Vector2 c)
     {
         b = (b - a).Normalized();
         c -= a;
@@ -341,7 +340,7 @@ public static class VectorWizard
     /// <param name="b">The second point defining the line segment.</param>
     /// <param name="c">The point to find the closest point to on the line segment.</param>
     /// <returns>The closest point on the line segment to point `c`.</returns>
-    public static Vector2 ClosestPointOnLineV2(Vector2 a, Vector2 b, Vector2 c)
+    public static Vector2 ClosestPointOnLineV2(this Vector2 a, Vector2 b, Vector2 c)
     {
         b = (b - a).Normalized();
         c -= a;
@@ -358,7 +357,7 @@ public static class VectorWizard
     /// <param name="a">The first 3D point.</param>
     /// <param name="b">The second 3D point.</param>
     /// <returns>The Manhattan distance between the two points.</returns>
-    public static float DistanceManhattanV3(Vector3 a, Vector3 b)
+    public static float DistanceManhattanV3(this Vector3 a, Vector3 b)
     {
         return Mathf.Abs(a.X - b.X) + Mathf.Abs(a.Y - b.Y) + Mathf.Abs(a.Z - b.Z);
     }
@@ -372,7 +371,7 @@ public static class VectorWizard
     /// <param name="a">The first 3D point.</param>
     /// <param name="b">The second 3D point.</param>
     /// <returns>The Chebyshev distance between the two points.</returns>
-    public static float DistanceChebysevV3(Vector3 a, Vector3 b)
+    public static float DistanceChebysevV3(this Vector3 a, Vector3 b)
     {
         return Mathf.Max(Mathf.Abs(a.X - b.X), Mathf.Max(Mathf.Abs(a.Y - b.Y), Mathf.Abs(a.Z - b.Z)));
     }
@@ -384,7 +383,7 @@ public static class VectorWizard
     /// </summary>
     /// <param name="a">The 3D vector.</param>
     /// <returns>The Manhattan length of the vector.</returns>
-    public static float LengthManhattanV3(Vector3 a)
+    public static float LengthManhattanV3(this Vector3 a)
     {
         return Mathf.Abs(a.X) + Mathf.Abs(a.Y) + Mathf.Abs(a.Z);
     }
@@ -396,7 +395,7 @@ public static class VectorWizard
     /// </summary>
     /// <param name="a">The 3D vector.</param>
     /// <returns>The Chebyshev length of the vector.</returns>
-    public static float LengthChebysevV3(Vector3 a, Vector3 b)
+    public static float LengthChebysevV3(this Vector3 a, Vector3 b)
     {
         return Mathf.Max(Mathf.Abs(a.X), Mathf.Max(Mathf.Abs(a.Y), Mathf.Abs(a.Z)));
     }
@@ -411,7 +410,7 @@ public static class VectorWizard
     /// <param name="b">The second point defining the line segment.</param>
     /// <param name="c">The point to project onto the line direction.</param>
     /// <returns>The projection of point `c` onto the line direction vector, representing the distance along the line from point `a`.</returns>
-    public static Vector3 ClosestPointOnLineClampedV3(Vector3 a, Vector3 b, Vector3 c)
+    public static Vector3 ClosestPointOnLineClampedV3(this Vector3 a, Vector3 b, Vector3 c)
     {
         b = (b - a).Normalized();
         c -= a;
@@ -429,7 +428,7 @@ public static class VectorWizard
     /// <param name="b">The second point defining the line segment.</param>
     /// <param name="c">The point to project onto the line direction.</param>
     /// <returns>The projection of point `c` onto the line direction vector, representing the distance along the line from point `a`.</returns>
-    public static Vector3 ClosestPointOnLineV3(Vector3 a, Vector3 b, Vector3 c)
+    public static Vector3 ClosestPointOnLineV3(this Vector3 a, Vector3 b, Vector3 c)
     {
         b = (b - a).Normalized();
         c -= a;
@@ -447,7 +446,7 @@ public static class VectorWizard
     /// <param name="b">The second point defining the line segment.</param>
     /// <param name="c">The point to project onto the line direction.</param>
     /// <returns>The normalized projection of point `c` onto the line direction vector, representing the distance along the line from point `a`.</returns>
-    public static float ClosestPointOnLineNormalizedV3(Vector3 a, Vector3 b, Vector3 c)
+    public static float ClosestPointOnLineNormalizedV3(this Vector3 a, Vector3 b, Vector3 c)
     {
         b -= a;
         c -= a;

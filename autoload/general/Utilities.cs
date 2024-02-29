@@ -12,6 +12,7 @@ public partial class Utilities : Node
 
     public async void StartFrameFreeze(double timeScale, double duration)
     {
+
         EmitSignal(SignalName.FrameFreeze);
 
         double originalTimeScaleValue = Engine.TimeScale;

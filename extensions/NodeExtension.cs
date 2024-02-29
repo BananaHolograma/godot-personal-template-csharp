@@ -1,10 +1,11 @@
-namespace GameRoot;
 
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public partial class NodeWizard : Node
+namespace GodotExtensions;
+
+public static class NodeExtension
 {
 
     /// <summary>
@@ -16,12 +17,12 @@ public partial class NodeWizard : Node
     /// <example>
     /// This example retrieves an autoloaded AudioManager node and casts it to the appropriate type:
     /// <code>csharp
-    /// AudioManager audioManager = NodeWizard.GetAutoloadNode<AudioManager>("AudioManager");
+    /// AudioManager audioManager = GetAutoloadNode<AudioManager>("AudioManager");
     /// </code>
     /// </example>
-    public T GetAutoloadNode<T>(string name) where T : class
+    public static T GetAutoloadNode<T>(this Node node, string name) where T : class
     {
-        return GetTree().Root.GetNode<T>(name);
+        return node.GetTree().Root.GetNode<T>(name);
     }
 
 
@@ -35,14 +36,11 @@ public partial class NodeWizard : Node
     /// This function traverses the entire sub-tree starting from the root node, searching for nodes of type T. 
     /// It adds any found nodes to the provided list. You must ensure that the list is of the appropriate type (e.g., List<T>).
     /// </remarks>
-    public static void FindNodesRecursively<T>(Node root, List<T> result) where T : Node
+    public static void FindNodesRecursively<T>(this Node node, List<T> result) where T : Node
     {
-        if (root.GetChildCount() == 0)
-        {
-            return;
-        }
+        if (node.GetChildCount() == 0) return;
 
-        foreach (Node child in root.GetChildren(true))
+        foreach (Node child in node.GetChildren(true))
         {
             if (child is T nodeFound)
             {
@@ -58,13 +56,13 @@ public partial class NodeWizard : Node
     /// <summary>
     /// Retrieves the last child node from the specified node.
     /// </summary>
-    /// <param name="target">The node from which to retrieve the last child.</param>
+    /// <param name="node">The node from which to retrieve the last child.</param>
     /// <returns>The last child node of the target node, or null if the target node has no children.</returns>
-    public static Node GetLastChild(Node target)
+    public static Node GetLastChild(this Node node)
     {
-        int count = target.GetChildCount();
+        int count = node.GetChildCount();
         if (count == 0) return null;
-        return target.GetChild(count - 1);
+        return node.GetChild(count - 1);
     }
 
 
@@ -80,9 +78,9 @@ public partial class NodeWizard : Node
     /// This function uses the Godot `GetFirstNodeInGroup` method and attempts to cast the returned value to the specified type T.
     /// If the cast fails, the function returns null.
     /// </remarks>
-    public T GetFirstNodeInGroup<T>(string group) where T : Node
+    public static T GetFirstNodeInGroup<T>(this Node node, string group) where T : Node
     {
-        return GetTree().GetFirstNodeInGroup(group) as T;
+        return node.GetTree().GetFirstNodeInGroup(group) as T;
     }
 
     /// <summary>
@@ -98,26 +96,26 @@ public partial class NodeWizard : Node
     /// This function uses the Godot `GetNodesInGroup` method and then casts each element in the returned array to the specified type T.
     /// Any element that cannot be cast is omitted from the resulting collection.
     /// </remarks>
-    public IEnumerable<T> GetNodesInGroup<T>(string group) where T : Node
+    public static IEnumerable<T> GetNodesInGroup<T>(this Node node, string group) where T : Node
     {
-        return GetTree().GetNodesInGroup(group).Cast<T>();
+        return node.GetTree().GetNodesInGroup(group).Cast<T>();
     }
 
 
     /// <summary>
     /// Removes all child nodes from the specified target node and queues them for freeing in Godot.
     /// </summary>
-    /// <param name="target">The target node from which to remove and free children.</param>
+    /// <param name="node">The target node from which to remove and free children.</param>
     /// <remarks>
     /// This function iterates through the children of the target node in reverse order, removing each child and queuing it for freeing.
     /// Using reverse iteration ensures that removing a child doesn't affect the index of remaining children.
     /// </remarks>
-    public static void RemoveAndQueueFreeChildren(Node target)
+    public static void RemoveAndQueueFreeChildren(this Node node)
     {
-        for (int i = target.GetChildCount() - 1; i >= 0; i--)
+        for (int i = node.GetChildCount() - 1; i >= 0; i--)
         {
-            Node child = target.GetChild(i);
-            target.RemoveChild(child);
+            Node child = node.GetChild(i);
+            node.RemoveChild(child);
             child.QueueFree();
         }
     }
@@ -125,17 +123,14 @@ public partial class NodeWizard : Node
     /// <summary>
     /// Queues all child nodes of the specified target node for freeing in Godot.
     /// </summary>
-    /// <param name="target">The target node whose children will be queued for freeing.</param>
+    /// <param name="node">The target node whose children will be queued for freeing.</param>
     /// <remarks>
     /// This function iterates through the children of the target node and queues each child for freeing.
     /// No type check is necessary as `GetChildren()` returns a collection of nodes.
     /// </remarks>
-    public static void QueueFreeChildren(Node target)
+    public static void QueueFreeChildren(this Node node)
     {
-        foreach (Node child in target.GetChildren())
+        foreach (Node child in node.GetChildren())
             child.QueueFree();
     }
-
-
-
 }

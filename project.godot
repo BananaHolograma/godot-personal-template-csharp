@@ -22,11 +22,18 @@ MusicManager="*res://autoload/audio/MusicManager.cs"
 Utilities="*res://autoload/general/Utilities.cs"
 GameEvents="*res://autoload/events/GameEvents.cs"
 SaveManager="*res://autoload/saves/SaveManager.cs"
-NodeWizard="*res://autoload/general/NodeWizard.cs"
 
 [dotnet]
 
 project/assembly_name="godot-personal-template-csharp"
+
+[file_customization]
+
+folder_colors={
+"res://autoload/": "purple",
+"res://components/": "red",
+"res://extensions/": "green"
+}
 
 [layer_names]
 
