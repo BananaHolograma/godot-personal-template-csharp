@@ -2,6 +2,7 @@ namespace GameRoot;
 
 using System.Collections.Generic;
 using Godot;
+using GodotExtensions;
 
 /// <summary>
 /// Manage the background music in the game, support cross fading and still plays when scenes are being changed or loading.
@@ -24,7 +25,8 @@ public partial class MusicManager : Node
 
     public override void _Ready()
     {
-        AudioManager = GetTree().Root.GetNode<AudioManager>("AudioManager");
+        AudioManager = this.GetAutoloadNode<AudioManager>("AudioManager");
+
         Player = new AudioStreamPlayer
         {
             Name = "AudioStreamPlayer",

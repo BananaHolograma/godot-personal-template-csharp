@@ -84,7 +84,7 @@ public partial class SavedGame : Resource
         Dictionary<string, SavedGame> savedGames = new();
         DirAccess directory = DirAccess.Open(DefaultPath);
 
-        if (directory != null)
+        if (directory is not null)
         {
             directory.ListDirBegin();
             string filename = directory.GetNext();
@@ -95,7 +95,7 @@ public partial class SavedGame : Resource
                 {
                     SavedGame savedGame = LoadSaveGame(filename.GetBaseName());
 
-                    if (savedGame != null)
+                    if (savedGame is not null)
                     {
                         savedGames.Add(savedGame.Filename, savedGame);
                     }

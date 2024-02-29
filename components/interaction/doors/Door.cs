@@ -28,17 +28,17 @@ public partial class Door : Node3D
         }
     }
 
-    public bool Locked
+    public bool IsLocked
     {
-        get => locked;
+        get => isLocked;
         set
         {
-            if (value != locked)
+            if (value != isLocked)
             {
                 EmitSignal(value ? SignalName.Locked : SignalName.Unlocked);
             }
 
-            locked = value;
+            isLocked = value;
         }
     }
 
@@ -50,7 +50,7 @@ public partial class Door : Node3D
 
 
     private bool isOpen;
-    private bool locked;
+    private bool isLocked;
     public virtual void Open()
     {
 
@@ -66,7 +66,7 @@ public partial class Door : Node3D
 
     }
 
-    public virtual void IsLocked()
+    public virtual void Lock()
     {
 
     }

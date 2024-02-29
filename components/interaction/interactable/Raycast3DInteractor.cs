@@ -24,7 +24,7 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        if (InputMap.HasAction("interact") && Input.IsActionJustPressed("interact") && CurrentInteractable != null && !Interacting)
+        if (InputMap.HasAction("interact") && Input.IsActionJustPressed("interact") && CurrentInteractable is not null && !Interacting)
         {
             Interact(CurrentInteractable);
         }
@@ -54,7 +54,7 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
     }
     public void Interact(Interactable3D interactable)
     {
-        if (interactable != null)
+        if (interactable is not null)
         {
             if (interactable.IsScannable())
             {
@@ -75,7 +75,7 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
         Interacting = false;
         interactable ??= CurrentInteractable;
 
-        if (interactable != null)
+        if (interactable is not null)
         {
             if (interactable.IsScannable())
             {
@@ -106,7 +106,7 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
     {
         interactable ??= CurrentInteractable;
 
-        if (interactable != null && interactable.HasSignal(Interactable3D.SignalName.UnFocused))
+        if (interactable is not null && interactable.HasSignal(Interactable3D.SignalName.UnFocused))
         {
             interactable.EmitSignal(Interactable3D.SignalName.UnFocused, this);
         }
