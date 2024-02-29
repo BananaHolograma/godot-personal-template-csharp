@@ -30,7 +30,7 @@ public static class NodeExtension
     /// Recursively finds all nodes of a specific type within a sub-tree of a given root node and adds them to a list.
     /// </summary>
     /// <typeparam name="T">The type of node to search for. Must inherit from the Godot.Node class.</typeparam>
-    /// <param name="root">The root node from which to start the search.</param>
+    /// <param name="node">The root node from which to start the search.</param>
     /// <param name="result">The list to which the found nodes of type T will be added.</param>
     /// <remarks>
     /// This function traverses the entire sub-tree starting from the root node, searching for nodes of type T. 

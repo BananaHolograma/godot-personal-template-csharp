@@ -14,7 +14,7 @@ public partial class DungeonGridMovement : Node
     [Export]
     public float MovementAnimationTime = .3f;
     #endregion
-    public Node3D target;
+    public Node3D Target;
     public Tween TweenMovement;
     public Dictionary<Vector2, Vector3> DirectionMap = new()
     {
@@ -26,25 +26,25 @@ public partial class DungeonGridMovement : Node
 
     public void Move(Vector2 direction)
     {
-        if (TweenIsRunning() || target == null) return;
+        if (TweenIsRunning() || Target == null) return;
 
         Vector3 localVector = DirectionMap[direction];
 
         TweenMovement = CreateTween();
-        TweenMovement.TweenProperty(target, "transform", target.Transform.TranslatedLocal(localVector * CellTravelSize), MovementAnimationTime)
+        TweenMovement.TweenProperty(Target, "transform", Target.Transform.TranslatedLocal(localVector * CellTravelSize), MovementAnimationTime)
             .SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
     }
 
     public void Rotate(Vector2 direction)
     {
-        if (TweenIsRunning()) return;
+        if (TweenIsRunning() || Target == null) return;
 
         bool isLeftOrRight = new[] { Vector2.Left, Vector2.Right }.Any(dir => dir == direction);
 
         if (isLeftOrRight)
         {
             TweenMovement = CreateTween();
-            TweenMovement.TweenProperty(target, "transform:basis", target.Transform.Basis.Rotated(Vector3.Up, -Mathf.Sign(direction.X) * (float)Math.PI / 2), MovementAnimationTime)
+            TweenMovement.TweenProperty(Target, "transform:basis", Target.Transform.Basis.Rotated(Vector3.Up, -Mathf.Sign(direction.X) * (float)Math.PI / 2), MovementAnimationTime)
                 .SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
         }
 
