@@ -35,6 +35,19 @@ public static class VectorExtension
     public static bool IsWithinDistanceSquaredV3(this Vector3 v1, Vector3 v2, float distance)
         => v1.DistanceSquaredTo(v2) <= distance * distance;
 
+    /// <summary>
+    /// The opposite version of isZeroApprox() for Vector2
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <returns></returns>
+    public static bool IsNotZeroApprox(this Vector2 vector) => !vector.IsZeroApprox();
+
+    /// <summary>
+    /// The opposite version of isZeroApprox() for Vector2
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <returns></returns>
+    public static bool IsNotZeroApprox(this Vector3 vector) => !vector.IsZeroApprox();
 
     /// <summary>
     /// Generates a sequence of random directions with angles in degrees, confined to a horizontal plane.

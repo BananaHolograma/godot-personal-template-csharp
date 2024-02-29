@@ -56,42 +56,78 @@ public partial class FiniteStateMachine : Node
 
     public void ChangeStateTo(State nextState)
     {
+        if (!StateExists(nextState))
+        {
+            GD.PushError($"The change of state cannot be done because the state {nextState} does not exits in this Finite State Machine");
+            return;
+        }
+
         if (CurrentStateIs(nextState)) return;
 
         if (CurrentState is not null)
         {
-            string transitionName = BuildTransitionName(CurrentState, nextState);
-
-            if (!Transitions.ContainsKey(transitionName))
-            {
-                Transitions[transitionName] = new NeutralTransition();
-            }
-
-            Transition transition = Transitions[transitionName];
-            transition.FromState = CurrentState;
-            transition.ToState = nextState;
-
-            if (transition.ShouldTransition())
-            {
-                transition.OnTransition();
-                EmitSignal(SignalName.StateChanged, transition.FromState, transition.ToState);
-                return;
-            }
-
-            EmitSignal(SignalName.StateChangeFailed, transition.FromState, transition.ToState);
+            RunTransition(CurrentState, nextState);
         }
     }
 
     public void ChangeStateTo(string nextState)
     {
+        if (!StateExists(nextState))
+        {
+            GD.PushError($"The change of state cannot be done because the state {nextState} does not exits in this Finite State Machine");
+            return;
+        }
+
         if (CurrentStateIs(nextState)) return;
 
         if (CurrentState is not null)
         {
-
-            EmitSignal(SignalName.StateChanged, CurrentState, GetStateByName(nextState));
+            RunTransition(CurrentState, GetStateByName(nextState));
         }
     }
+
+    public void RunTransition(State from, State to)
+    {
+        string transitionName = BuildTransitionName(CurrentState, to);
+
+        if (!Transitions.ContainsKey(transitionName))
+        {
+            Transitions[transitionName] = new NeutralTransition();
+        }
+
+        Transition transition = Transitions[transitionName];
+        transition.FromState = CurrentState;
+        transition.ToState = to;
+
+        if (transition.ShouldTransition())
+        {
+            transition.OnTransition();
+            EmitSignal(SignalName.StateChanged, transition.FromState, transition.ToState);
+            return;
+        }
+
+        EmitSignal(SignalName.StateChangeFailed, transition.FromState, transition.ToState);
+    }
+
+    public bool CurrentStateIs(string name)
+    {
+        return name.Trim().ToLower().Equals(CurrentState.Name.ToString().Trim().ToLower());
+    }
+
+    public bool CurrentStateIs(State state)
+    {
+        return state == CurrentState;
+    }
+
+    public bool StateExists(State state)
+    {
+        return States.ContainsKey(state.Name);
+    }
+    public bool StateExists(string name)
+    {
+        return States.ContainsKey(name);
+    }
+
 
     public void EnterState(State state)
     {
@@ -101,16 +137,6 @@ public partial class FiniteStateMachine : Node
     public void ExitState(State state)
     {
         state.Exit();
-    }
-
-    public bool CurrentStateIs(string name)
-    {
-        return name.ToLower().Equals(CurrentState.Name.ToString().ToLower());
-    }
-
-    public bool CurrentStateIs(State state)
-    {
-        return state == CurrentState;
     }
 
     public State GetStateByName(string name)

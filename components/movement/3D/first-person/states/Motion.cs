@@ -59,24 +59,21 @@ public partial class Motion : State
 	public bool WasGrounded = true;
 	public bool StairtStepping = false;
 
-
 	public override void PhysicsUpdate(double delta)
 	{
-		if (FSM == null) return;
-
 		WasGrounded = IsGrounded;
 		IsGrounded = Actor.IsOnFloor();
 
-		TransformedInput.UpdateInputDirection(Actor as FirstPersonController);
+		TransformedInput.UpdateInputDirection(Actor);
 
-		if (GravityActive && !Actor.IsOnFloor() && FSM.CurrentStateIs("Jump"))
+		if (GravityActive && !Actor.IsOnFloor() && !FSM.CurrentStateIs("Jump"))
 		{
-			Actor.Velocity -= Vector3.Down * (float)(Gravity * delta);
+			Actor.Velocity += Vector3.Down * (float)(Gravity * delta);
 		}
 
 		if (IsFalling() && !StairtStepping)
 		{
-			EmitSignal(SignalName.StateFinished, "Fall", new());
+			FSM.ChangeStateTo("Fall");
 		}
 
 	}
@@ -120,7 +117,7 @@ public class TransformedInput
 
 	public void UpdateInputDirection(FirstPersonController actor)
 	{
-		Vector2 inputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-		WorldCoordinateSpaceDirection = (actor.Transform.Basis * new Vector3(inputDirection.X, 0, inputDirection.Y)).Normalized();
+		InputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+		WorldCoordinateSpaceDirection = (actor.Transform.Basis * new Vector3(InputDirection.X, 0, InputDirection.Y)).Normalized();
 	}
 }

@@ -1,28 +1,26 @@
 using Godot;
+using GodotExtensions;
 
 namespace GameRoot;
 
 [GlobalClass]
 public partial class Idle : Motion
 {
-
     public override void Enter()
     {
-        if (Actor is not null)
-        {
-            Actor.Velocity = Vector3.Zero;
-
-        }
+        Actor.Velocity = Vector3.Zero;
+        GD.Print("ENTER IDLE ", Actor.Velocity);
     }
 
     public override void PhysicsUpdate(double delta)
     {
         base.PhysicsUpdate(delta);
 
-        /*  if (!TransformedInput.InputDirection.IsZeroApprox())
-         {
-             EmitSignal(SignalName.StateFinished, "Walk", new());
-         } */
+        if (TransformedInput.InputDirection.IsNotZeroApprox())
+        {
+            FSM.ChangeStateTo("Walk");
+            return;
+        }
 
         Actor.Velocity = Actor.Velocity.Lerp(Vector3.Zero, (float)delta * Friction);
         Actor.MoveAndSlide();

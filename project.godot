@@ -12,6 +12,7 @@ config_version=5
 
 config/name="godot-personal-template-csharp"
 config/description="My streamlined personal template for Godot, designed to kickstart new projects with all the repetitive groundwork already taken care of"
+run/main_scene="res://node.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -22,6 +23,13 @@ MusicManager="*res://autoload/audio/MusicManager.cs"
 Utilities="*res://autoload/general/Utilities.cs"
 GameEvents="*res://autoload/events/GameEvents.cs"
 SaveManager="*res://autoload/saves/SaveManager.cs"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
 
 [dotnet]
 
