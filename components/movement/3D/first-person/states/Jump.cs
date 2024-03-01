@@ -97,6 +97,8 @@ public partial class Jump : Motion
 
         if (IsInstanceValid(WallDetectionTimer))
             WallDetectionTimer.Start();
+
+        WallNormals = new() { };
     }
 
     public override void Exit(State _nextState)

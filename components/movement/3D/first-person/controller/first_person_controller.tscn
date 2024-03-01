@@ -118,6 +118,7 @@ _data = {
 }
 
 [node name="FirstPersonController" type="CharacterBody3D"]
+visible = false
 script = ExtResource("1_36y4q")
 Crawl = true
 
@@ -155,9 +156,11 @@ target_position = Vector3(0, 0, -0.6)
 debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
 
 [node name="Head" type="Node3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.615114, 0)
 
 [node name="Eyes" type="Node3D" parent="Head"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047397, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
