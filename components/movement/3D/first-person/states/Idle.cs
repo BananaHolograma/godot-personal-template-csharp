@@ -24,5 +24,7 @@ public partial class Idle : Motion
 
         Actor.Velocity = Actor.Velocity.Lerp(Vector3.Zero, (float)delta * Friction);
         Actor.MoveAndSlide();
+
+        DetectCrouch();
     }
 }

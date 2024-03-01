@@ -24,7 +24,7 @@ public partial class State : Node
 
     }
 
-    public virtual void Exit()
+    public virtual void Exit(State nextState)
     {
 
     }

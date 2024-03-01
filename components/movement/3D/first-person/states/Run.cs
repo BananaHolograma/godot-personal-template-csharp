@@ -6,7 +6,6 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Run : Motion
 {
-
     [Export]
     public float Speed = 5.5f;
 
@@ -22,7 +21,7 @@ public partial class Run : Motion
         CreateSpeedTimer();
     }
 
-    public override void Exit()
+    public override void Exit(State _nextState)
     {
         SpeedTimer.Stop();
     }
@@ -57,9 +56,7 @@ public partial class Run : Motion
         }
 
         if (Input.IsActionJustPressed("crouch") && Actor.Slide)
-        {
             FSM.ChangeStateTo("Slide");
-        }
 
         Actor.MoveAndSlide();
     }

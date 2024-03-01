@@ -20,7 +20,7 @@ public partial class Walk : Motion
     }
     public override void Enter()
     {
-        CatchingBreath();
+        // CatchingBreath();
         Actor.Velocity = Actor.Velocity with { Y = 0 };
         GD.Print("Entro walk");
     }
@@ -35,10 +35,12 @@ public partial class Walk : Motion
             FSM.ChangeStateTo("Idle");
 
 
-        if (Input.IsActionPressed("run") && CatchingBreathTimer.IsStopped() && Actor.Run)
+        if (Input.IsActionPressed("run"))
             FSM.ChangeStateTo("Run");
 
         Actor.MoveAndSlide();
+
+        DetectCrouch();
     }
 
     private void CatchingBreath()

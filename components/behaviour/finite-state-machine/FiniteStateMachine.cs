@@ -134,9 +134,9 @@ public partial class FiniteStateMachine : Node
         state.Enter();
     }
 
-    public void ExitState(State state)
+    public void ExitState(State state, State nextState)
     {
-        state.Exit();
+        state.Exit(nextState);
     }
 
     public State GetStateByName(string name)
@@ -219,9 +219,12 @@ public partial class FiniteStateMachine : Node
     /// </summary>
     private void RegisterTransitions()
     {
+        Transitions["WalkToRun"] = new WalkToRunTransition();
+        Transitions["RunToWalk"] = new RunToWalkTransition();
+
     }
 
-    private string BuildTransitionName(State from, State to) => $"{from.Name}To{to.Name}";
+    private string BuildTransitionName(State from, State to) => $"{from.Name.ToString().Trim()}To{to.Name.ToString().Trim()}";
 
     private void AddStateToDictionary(State state)
     {
@@ -236,7 +239,7 @@ public partial class FiniteStateMachine : Node
     public void OnStateChanged(State from, State to)
     {
         PushStateToStack(from);
-        ExitState(from);
+        ExitState(from, to);
         EnterState(to);
 
         CurrentState = to;

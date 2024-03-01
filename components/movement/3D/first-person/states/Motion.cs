@@ -99,6 +99,18 @@ public partial class Motion : State
 		}
 	}
 
+	public void DetectCrouch()
+	{
+		if (Input.IsActionPressed("crouch") && Actor.IsOnFloor() && Actor.Crouch)
+			FSM.ChangeStateTo("Crouch");
+	}
+
+	public void DetectCrawl()
+	{
+		if (Input.IsActionPressed("crawl") && Actor.IsOnFloor() && Actor.Crawl)
+			FSM.ChangeStateTo("Crawl");
+	}
+
 	public void EnableGravity()
 	{
 		GravityActive = true;
@@ -108,6 +120,8 @@ public partial class Motion : State
 	{
 		GravityActive = false;
 	}
+
+
 }
 
 public class TransformedInput
