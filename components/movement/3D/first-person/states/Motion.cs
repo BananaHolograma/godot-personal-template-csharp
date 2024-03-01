@@ -39,6 +39,7 @@ public partial class Motion : State
 	[ExportGroup("Motion")]
 	[Export]
 	public float Friction = 7f;
+	[ExportGroup("StairStepping")]
 	[Export]
 	public bool StairSteppingEnabled = true;
 	[Export]
@@ -46,10 +47,13 @@ public partial class Motion : State
 	[Export]
 	public float MaxStepDown = .5f;
 	[Export]
+	public float StepDistanceToCheck = .1f;
+	[Export]
+	public int FloorMaxAngleCheckInDegrees = 20;
+	[Export]
 	public Vector3 Vertical = new(0, 1, 0);
 	[Export]
 	public Vector3 Horizontal = new(1, 0, 1);
-
 	#endregion
 	private bool gravityActive = true;
 
@@ -112,7 +116,7 @@ public partial class Motion : State
 		PhysicsTestMotionParameters3D BodyTestParams = new();
 		PhysicsTestMotionResult3D BodyTestResult = new();
 		Transform3D TestTransform = Actor.GlobalTransform; // Storing current global_transform for testing
-		Vector3 distance = TransformedInput.WorldCoordinateSpaceDirection * .1f; // Distance forward we want to check
+		Vector3 distance = TransformedInput.WorldCoordinateSpaceDirection * StepDistanceToCheck; // Distance forward we want to check
 
 		BodyTestParams.From = Actor.GlobalTransform; // Actor (Character) as origin point
 		BodyTestParams.Motion = distance; // Go forward by current distance
@@ -167,7 +171,7 @@ public partial class Motion : State
 
 		// 5.5 Check floor normal for un-walkable slope
 		Vector3 surfaceNormal = BodyTestResult.GetCollisionNormal();
-		float tempFloorMaxAngle = Actor.FloorMaxAngle + Mathf.DegToRad(20);
+		float tempFloorMaxAngle = Actor.FloorMaxAngle + Mathf.DegToRad(FloorMaxAngleCheckInDegrees);
 
 		if (Mathf.Snapped(surfaceNormal.AngleTo(Vertical), 0.001f) > tempFloorMaxAngle)
 			return;
