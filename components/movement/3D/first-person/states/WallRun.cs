@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace GameRoot;
 
+[GlobalClass]
 public partial class WallRun : Motion
 {
 	#region Exports
@@ -59,6 +60,7 @@ public partial class WallRun : Motion
 		Actor.Velocity += InitialBoostSpeed * Vector3.Forward.Rotated(Vector3.Up, Actor.GlobalTransform.Basis.GetEuler().Y).Normalized();
 
 		if (CurrentWallSide.Equals(WallSide.FRONT))
+			//GO UP WHEN APPLIES A NEGATIVE GRAVITY ON THE PHYSICS PROCESS
 			CurrentGravity *= -1;
 
 		RotateCameraBasedOnNormal(CurrentWallNormal);
@@ -71,6 +73,8 @@ public partial class WallRun : Motion
 
 		CurrentGravity = WallGravity;
 		CurrentWallNormal = Vector3.Zero;
+
+		WallNormals = new() { };
 	}
 
 	public override void PhysicsUpdate(double delta)
@@ -79,7 +83,7 @@ public partial class WallRun : Motion
 
 		if (Actor.IsOnFloor())
 		{
-			if (TransformedInput.InputDirection.IsZeroApprox())
+			if (TransformedInput.WorldCoordinateSpaceDirection.IsZeroApprox())
 			{
 				FSM.ChangeStateTo("Idle");
 			}
@@ -87,6 +91,7 @@ public partial class WallRun : Motion
 			{
 				FSM.ChangeStateTo("Walk");
 			}
+			return;
 		}
 		else
 		{

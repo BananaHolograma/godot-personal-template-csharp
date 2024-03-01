@@ -40,6 +40,7 @@ project/assembly_name="godot-personal-template-csharp"
 folder_colors={
 "res://autoload/": "purple",
 "res://components/": "yellow",
+"res://debug/": "blue",
 "res://extensions/": "green"
 }
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bdnf7ahkyulgk"]
+[gd_scene load_steps=21 format=3 uid="uid://bdnf7ahkyulgk"]
 
 [ext_resource type="Script" path="res://components/movement/3D/first-person/controller/FirstPersonController.cs" id="1_36y4q"]
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Crawl.cs" id="8_x5pkh"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Fall.cs" id="9_n1u3a"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Jump.cs" id="10_0wpa6"]
+[ext_resource type="Script" path="res://components/movement/3D/first-person/states/WallRun.cs" id="11_cgut7"]
+[ext_resource type="Script" path="res://debug/DebugMenu.cs" id="12_n8g11"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5aglx"]
 radius = 0.287442
@@ -118,9 +120,10 @@ _data = {
 }
 
 [node name="FirstPersonController" type="CharacterBody3D"]
-visible = false
+collision_layer = 4
 script = ExtResource("1_36y4q")
-Crawl = true
+WallJump = true
+WallRun = true
 
 [node name="StandCollisionShape" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_5aglx")
@@ -139,20 +142,20 @@ shape = SubResource("CapsuleShape3D_ih7l3")
 
 [node name="RightWallDetector" type="RayCast3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.142421, 0)
-target_position = Vector3(0.6, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0859229, 0.142421, 0)
+target_position = Vector3(0.4, 0, 0)
 debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
 
 [node name="LeftWallDetector" type="RayCast3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.142421, 0)
-target_position = Vector3(-0.6, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.154977, 0.142421, 0)
+target_position = Vector3(-0.4, 0, 0)
 debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
 
 [node name="FrontWallDetector" type="RayCast3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.142421, 0)
-target_position = Vector3(0, 0, -0.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.142421, -0.132728)
+target_position = Vector3(0, 0, -0.5)
 debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
 
 [node name="Head" type="Node3D" parent="."]
@@ -165,6 +168,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047397, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.54866)
 current = true
 
 [node name="Raycast3DInteractor" type="RayCast3D" parent="Head/Eyes" node_paths=PackedStringArray("actor")]
@@ -210,3 +214,52 @@ Actor = NodePath("../..")
 [node name="Jump" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("10_0wpa6")
 Actor = NodePath("../..")
+
+[node name="WallRun" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
+script = ExtResource("11_cgut7")
+Actor = NodePath("../..")
+
+[node name="DebugMenu" type="Control" parent="." node_paths=PackedStringArray("Actor")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("12_n8g11")
+Actor = NodePath("..")
+
+[node name="Panel" type="Panel" parent="DebugMenu"]
+self_modulate = Color(1, 1, 1, 0.431373)
+layout_mode = 1
+offset_right = 385.0
+offset_bottom = 204.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugMenu/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="FpsLabel" type="Label" parent="DebugMenu/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "FPS:"
+
+[node name="StateLabel" type="Label" parent="DebugMenu/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "State:"
+
+[node name="VelocityLabel" type="Label" parent="DebugMenu/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Velocity:"
+
+[node name="VideoAdapterLabel" type="Label" parent="DebugMenu/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "VideoAdapter"

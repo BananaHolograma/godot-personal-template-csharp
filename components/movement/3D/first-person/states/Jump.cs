@@ -105,7 +105,9 @@ public partial class Jump : Motion
     {
         JumpCount = 1;
         WallDetectionActive = false;
-        WallDetectionTimer.Stop();
+
+        if (IsInstanceValid(WallDetectionTimer))
+            WallDetectionTimer.Stop();
     }
 
     public override void PhysicsUpdate(double delta)
@@ -168,9 +170,13 @@ public partial class Jump : Motion
 
     private void UpdateWallNormals()
     {
-        WallNormals[RightWallDetector.Name] = RightWallDetector.GetCollisionNormal();
-        WallNormals[LeftWallDetector.Name] = LeftWallDetector.GetCollisionNormal();
-        WallNormals[FrontWallDetector.Name] = FrontWallDetector.GetCollisionNormal();
+        RightWallDetector.ForceRaycastUpdate();
+        LeftWallDetector.ForceRaycastUpdate();
+        FrontWallDetector.ForceRaycastUpdate();
+
+        WallNormals[RightWallDetector.Name] = RightWallDetector.IsColliding() ? RightWallDetector.GetCollisionNormal() : Vector3.Zero;
+        WallNormals[LeftWallDetector.Name] = LeftWallDetector.IsColliding() ? LeftWallDetector.GetCollisionNormal() : Vector3.Zero;
+        WallNormals[FrontWallDetector.Name] = FrontWallDetector.IsColliding() ? FrontWallDetector.GetCollisionNormal() : Vector3.Zero;
     }
 
     private void CreateWallDetectionTimer()

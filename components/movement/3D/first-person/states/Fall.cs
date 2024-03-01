@@ -28,7 +28,7 @@ public partial class Fall : Motion
         if (JumpBufferCountIsActive())
             CurrentJumpBufferTimeFrames -= 1;
 
-        if (!WasGrounded && IsGrounded)
+        if ((!WasGrounded && IsGrounded) || Actor.IsOnFloor())
         {
             if (JumpBufferCountIsActive() && JumpRequested)
             {

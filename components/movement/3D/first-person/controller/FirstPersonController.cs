@@ -221,7 +221,6 @@ public partial class FirstPersonController : CharacterBody3D
             case "Idle":
             case "Walk":
             case "Run":
-            case "Jump":
                 StandCollisionShape.Disabled = false;
                 CrouchCollisionShape.Disabled = true;
                 CrawlCollisionShape.Disabled = true;
@@ -262,6 +261,7 @@ public partial class FirstPersonController : CharacterBody3D
                 FrontWallDetector.Enabled = true;
                 break;
         }
+
     }
 
     public void SwitchMouseMode()
