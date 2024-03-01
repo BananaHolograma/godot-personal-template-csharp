@@ -66,18 +66,18 @@ public partial class Motion : State
 
 		TransformedInput.UpdateInputDirection(Actor);
 
+		ApplyGravity(delta);
+
+		if (IsFalling() && !StairtStepping)
+			FSM.ChangeStateTo("Fall");
+	}
+	public void ApplyGravity(double delta)
+	{
 		if (GravityActive && !Actor.IsOnFloor() && !FSM.CurrentStateIs("Jump"))
 		{
 			Actor.Velocity += Vector3.Down * (float)(Gravity * delta);
 		}
-
-		/* if (IsFalling() && !StairtStepping)
-		{
-			FSM.ChangeStateTo("Fall");
-		} */
-
 	}
-
 	public bool IsFalling()
 	{
 		return Actor.Velocity.Y < 0 && WasGrounded && !IsGrounded && !FSM.CurrentStateIs("Fall");
