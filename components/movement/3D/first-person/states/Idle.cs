@@ -9,7 +9,6 @@ public partial class Idle : Motion
     public override void Enter()
     {
         Actor.Velocity = Vector3.Zero;
-        GD.Print("ENTER IDLE ", Actor.Velocity);
     }
 
     public override void PhysicsUpdate(double delta)

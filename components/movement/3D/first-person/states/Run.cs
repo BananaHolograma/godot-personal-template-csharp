@@ -32,9 +32,6 @@ public partial class Run : Motion
             SpeedTimer.Start();
 
         InRecovery = false;
-
-        GD.Print("Entro RUN ");
-
     }
 
     public override void PhysicsUpdate(double delta)

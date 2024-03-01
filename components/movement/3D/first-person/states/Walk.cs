@@ -22,7 +22,6 @@ public partial class Walk : Motion
     {
         // CatchingBreath();
         Actor.Velocity = Actor.Velocity with { Y = 0 };
-        GD.Print("Entro walk");
     }
 
     public override void PhysicsUpdate(double delta)

@@ -1,5 +1,6 @@
 namespace GameRoot;
 
+using System.Collections.Generic;
 using Godot;
 
 [GlobalClass]
@@ -74,13 +75,15 @@ public partial class Jump : Motion
     public RayCast3D LeftWallDetector;
     public RayCast3D FrontWallDetector;
 
+    public Dictionary<string, Vector3> WallNormals = new() { };
+
     public override void Ready()
     {
         CreateWallDetectionTimer();
 
-        RightWallDetector = Actor.RightWallDetector;
-        LeftWallDetector = Actor.LeftWallDetector;
-        FrontWallDetector = Actor.FrontWallDetector;
+        RightWallDetector = Actor.GetNode<RayCast3D>("%RightWallDetector");
+        LeftWallDetector = Actor.GetNode<RayCast3D>("%LeftWallDetector");
+        FrontWallDetector = Actor.GetNode<RayCast3D>("%FrontWallDetector");
     }
 
     public override void Enter()
@@ -147,7 +150,7 @@ public partial class Jump : Motion
 
             if (Actor.WallRun && WallDetectionActive && WallDetected())
             {
-
+                FSM.ChangeStateTo("WallRun");
             }
         }
 
@@ -156,7 +159,15 @@ public partial class Jump : Motion
 
     private bool WallDetected()
     {
+        UpdateWallNormals();
         return !Actor.IsOnFloor() && (RightWallDetector.IsColliding() || LeftWallDetector.IsColliding() || FrontWallDetector.IsColliding());
+    }
+
+    private void UpdateWallNormals()
+    {
+        WallNormals[RightWallDetector.Name] = RightWallDetector.GetCollisionNormal();
+        WallNormals[LeftWallDetector.Name] = LeftWallDetector.GetCollisionNormal();
+        WallNormals[FrontWallDetector.Name] = FrontWallDetector.GetCollisionNormal();
     }
 
     private void CreateWallDetectionTimer()
