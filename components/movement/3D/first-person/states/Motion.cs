@@ -99,6 +99,112 @@ public partial class Motion : State
 		}
 	}
 
+	public void StairStepUp()
+	{
+		if (!StairSteppingEnabled)
+			return;
+
+		if (TransformedInput.WorldCoordinateSpaceDirection.IsZeroApprox())
+			return;
+
+		StairtStepping = false;
+
+		PhysicsTestMotionParameters3D BodyTestParams = new();
+		PhysicsTestMotionResult3D BodyTestResult = new();
+		Transform3D TestTransform = Actor.GlobalTransform; // Storing current global_transform for testing
+		Vector3 distance = TransformedInput.WorldCoordinateSpaceDirection * .1f; // Distance forward we want to check
+
+		BodyTestParams.From = Actor.GlobalTransform; // Actor (Character) as origin point
+		BodyTestParams.Motion = distance; // Go forward by current distance
+
+		// Pre-check: Are we colliding?
+		if (!PhysicsServer3D.BodyTestMotion(Actor.GetRid(), BodyTestParams, BodyTestResult))
+			return;
+
+		// 1- Move tes transform to collision location
+		Vector3 remainder = BodyTestResult.GetRemainder();
+		TestTransform = TestTransform.Translated(BodyTestResult.GetTravel()); //  Move test_transform by distance traveled before collision
+
+		// 2 - Move TestTransform up to ceiling (if any)
+		Vector3 StepUp = MaxStepUp * Vertical;
+
+		BodyTestParams.From = TestTransform;
+		BodyTestParams.Motion = StepUp;
+
+		PhysicsServer3D.BodyTestMotion(Actor.GetRid(), BodyTestParams, BodyTestResult);
+		TestTransform = TestTransform.Translated(BodyTestResult.GetTravel());
+
+		// 3 - Move test_transform forward by remaining distance
+		BodyTestParams.From = TestTransform;
+		BodyTestParams.Motion = remainder;
+		PhysicsServer3D.BodyTestMotion(Actor.GetRid(), BodyTestParams, BodyTestResult);
+		TestTransform = TestTransform.Translated(BodyTestResult.GetTravel());
+
+		// 4 - Project remaining along wall normal (if any). So you can walk into a wall and up a step
+		if (BodyTestResult.GetCollisionCount() != 0)
+		{
+			float remainderLength = BodyTestResult.GetRemainder().Length();
+
+			Vector3 wallNormal = BodyTestResult.GetCollisionNormal();
+			float DotDivMagnitude = TransformedInput.WorldCoordinateSpaceDirection.Dot(wallNormal) / (wallNormal * wallNormal).Length();
+			Vector3 projectedVector = (TransformedInput.WorldCoordinateSpaceDirection - DotDivMagnitude * wallNormal).Normalized();
+
+			BodyTestParams.From = TestTransform;
+			BodyTestParams.Motion = remainderLength * projectedVector;
+			PhysicsServer3D.BodyTestMotion(Actor.GetRid(), BodyTestParams, BodyTestResult);
+			TestTransform = TestTransform.Translated(BodyTestResult.GetTravel());
+		}
+
+		// 5 -  Move test_transform down onto step
+		BodyTestParams.From = TestTransform;
+		BodyTestParams.Motion = MaxStepUp * -Vertical;
+
+		// Return if no collision
+		if (!PhysicsServer3D.BodyTestMotion(Actor.GetRid(), BodyTestParams, BodyTestResult))
+			return;
+
+		TestTransform = TestTransform.Translated(BodyTestResult.GetTravel());
+		Vector3 surfaceNormal = BodyTestResult.GetCollisionNormal();
+		float tempFloorMaxAngle = Actor.FloorMaxAngle * Mathf.DegToRad(20);
+
+		if (Mathf.Snapped(surfaceNormal.AngleTo(Vertical), 0.001f) > tempFloorMaxAngle)
+			return;
+
+		StairtStepping = true;
+
+		// 6 - Move player up
+		//float StepUpDistance = TestTransform.Origin.Y - Actor.GlobalPosition.Y;
+		Actor.GlobalPosition = Actor.GlobalPosition with { Y = TestTransform.Origin.Y };
+	}
+
+	public void StairStepDown()
+	{
+		if (!StairSteppingEnabled)
+			return;
+
+		StairtStepping = false;
+
+		if (Actor.Velocity.Y <= 0 && WasGrounded)
+		{
+			PhysicsTestMotionResult3D BodyTestResult = new();
+			PhysicsTestMotionParameters3D BodyTestParams = new()
+			{
+				From = Actor.GlobalTransform, // We get the characters's current global_transform
+				Motion = new Vector3(0, MaxStepDown, 0) // We project the player downward
+			};
+
+			if (PhysicsServer3D.BodyTestMotion(Actor.GetRid(), BodyTestParams, BodyTestResult))
+			{
+				StairtStepping = true;
+				//Enters if a collision is detected by BodyTestMotion
+				//Get distance to step and move character downward by that much
+				Actor.Position = Actor.Position with { Y = Actor.Position.Y + BodyTestResult.GetTravel().Y };
+				Actor.ApplyFloorSnap();
+				IsGrounded = true;
+			}
+		}
+	}
+
 	public void DetectJump()
 	{
 		if (Input.IsActionJustPressed("jump") && Actor.Jump && (Actor.IsOnFloor() || FSM.CurrentStateIs("WallRun")))
@@ -129,7 +235,6 @@ public partial class Motion : State
 
 
 }
-
 public class TransformedInput
 {
 	public Vector2 InputDirection { get; set; }

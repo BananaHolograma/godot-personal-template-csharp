@@ -37,7 +37,11 @@ public partial class Walk : Motion
         if (Input.IsActionPressed("run"))
             FSM.ChangeStateTo("Run");
 
+        StairStepUp();
+
         Actor.MoveAndSlide();
+
+        StairStepDown();
 
         DetectCrouch();
         DetectJump();

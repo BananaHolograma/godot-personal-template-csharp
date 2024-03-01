@@ -103,6 +103,7 @@ public partial class Jump : Motion
     {
         JumpCount = 1;
         WallDetectionActive = false;
+        WallDetectionTimer.Stop();
     }
 
     public override void PhysicsUpdate(double delta)
