@@ -38,7 +38,8 @@ public static class NodeExtension
     /// </remarks>
     public static void FindNodeClassesRecursively<T>(this Node node, List<T> result) where T : class
     {
-        if (node.GetChildCount() == 0) return;
+        if (node.GetChildCount() == 0)
+            return;
 
         foreach (Node child in node.GetChildren(true))
         {
@@ -53,7 +54,8 @@ public static class NodeExtension
 
     public static void FindNodesRecursively<T>(this Node node, List<T> result) where T : Node
     {
-        if (node.GetChildCount() == 0) return;
+        if (node.GetChildCount() == 0)
+            return;
 
         foreach (Node child in node.GetChildren(true))
         {

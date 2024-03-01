@@ -1,6 +1,3 @@
-
-
-using System.Collections.Generic;
 using Godot;
 
 namespace GameRoot;
@@ -13,11 +10,9 @@ public partial class State : Node
     public delegate void StateEnteredEventHandler();
 
     [Signal]
-    public delegate void StateFinishedEventHandler(string nextState, Godot.Collections.Dictionary<string, Variant> parameters);
+    public delegate void StateFinishedEventHandler(string nextState);
 
     public FiniteStateMachine FSM;
-    public List<State> PreviousStates = new();
-    public Godot.Collections.Dictionary<string, Variant> parameters = new();
 
     public virtual void Ready()
     {

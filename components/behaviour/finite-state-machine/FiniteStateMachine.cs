@@ -62,7 +62,8 @@ public partial class FiniteStateMachine : Node
             return;
         }
 
-        if (CurrentStateIs(nextState)) return;
+        if (CurrentStateIs(nextState))
+            return;
 
         if (CurrentState is not null)
         {
@@ -78,7 +79,8 @@ public partial class FiniteStateMachine : Node
             return;
         }
 
-        if (CurrentStateIs(nextState)) return;
+        if (CurrentStateIs(nextState))
+            return;
 
         if (CurrentState is not null)
         {
@@ -141,7 +143,8 @@ public partial class FiniteStateMachine : Node
 
     public State GetStateByName(string name)
     {
-        if (States.ContainsKey(name)) return States[name];
+        if (States.ContainsKey(name))
+            return States[name];
 
         return null;
     }

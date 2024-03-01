@@ -1,6 +1,7 @@
 namespace GameRoot;
 
 using System;
+using System.Linq;
 using Godot;
 using Godot.Collections;
 using GodotExtensions;
@@ -63,6 +64,13 @@ public partial class FirstPersonController : CharacterBody3D
     public Node3D Head;
     public Node3D Eyes;
 
+    #region Collisions
+    public CollisionShape3D StandCollisionShape;
+    public CollisionShape3D CrouchCollisionShape;
+    public CollisionShape3D CrawlCollisionShape;
+    public ShapeCast3D CeilShapeCast;
+    #endregion
+
     public Vector3 OriginalEyesPosition;
 
     public bool Locked = false;
@@ -87,20 +95,35 @@ public partial class FirstPersonController : CharacterBody3D
         Head = GetNode<Node3D>("Head");
         Eyes = GetNode<Node3D>("Head/Eyes");
 
+        StandCollisionShape = GetNode<CollisionShape3D>("StandCollisionShape");
+        CrouchCollisionShape = GetNode<CollisionShape3D>("CrouchCollisionShape");
+        CrawlCollisionShape = GetNode<CollisionShape3D>("CrawlCollisionShape");
+        CeilShapeCast = GetNode<ShapeCast3D>("CeilShapeCast");
+
         OriginalEyesPosition = Eyes.Transform.Origin;
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
 
         GameEvents.LockPlayer += OnLockPlayer;
         GameEvents.UnlockPlayer += OnUnlockPlayer;
+
+        FSM.StateChanged += OnStateChanged;
+    }
+
+    private void OnStateChanged(State _from, State _to)
+    {
+        UpdateCollisions();
     }
 
     public override void _PhysicsProcess(double delta)
     {
 
         HeadBobbing(delta);
+        CameraFov(delta);
+        SwingHead();
 
-        if (Velocity.Y > 0) SmoothCameraJitter(delta);
+        if (Velocity.Y > 0)
+            SmoothCameraJitter(delta);
     }
 
     public void HeadBobbing(double delta)
@@ -150,6 +173,68 @@ public partial class FirstPersonController : CharacterBody3D
         Eyes.GlobalPosition = Eyes.GlobalPosition with { Y = Mathf.Clamp(Eyes.GlobalPosition.Y, -Head.GlobalPosition.Y - 1, Head.GlobalPosition.Y + 1) };
     }
 
+    public void CameraFov(double delta)
+    {
+        Camera.Fov = (string)FSM.CurrentState.Name switch
+        {
+            "Run" => Mathf.Lerp(Camera.Fov, RunCameraFovRange[2], (float)delta * RunCameraFovRange[3]),
+            "WallRun" => Mathf.Lerp(Camera.Fov, WallRunCameraFovRange[2], (float)delta * WallRunCameraFovRange[3]),
+            _ => Mathf.Lerp(Camera.Fov, RunCameraFovRange[1], (float)delta * RunCameraFovRange[3]),
+        };
+    }
+
+    public void SwingHead()
+    {
+        if (SwingHeadEnabled)
+        {
+            if (FSM.CurrentState is Motion motion)
+            {
+                Vector2 direction = motion.TransformedInput.InputDirection;
+                bool isLeftOrRight = new[] { Vector2.Left, Vector2.Right }.Any(dir => dir == direction);
+
+                if (isLeftOrRight)
+                {
+                    Head.Rotation = Head.Rotation with { Z = Mathf.LerpAngle(Head.Rotation.Z, -Mathf.Sign(direction.X) * Mathf.DegToRad(SwingHeadRotation), SwingHeadRotationLerp) };
+                }
+                else
+                {
+                    Head.Rotation = Head.Rotation with { Z = Mathf.LerpAngle(Head.Rotation.Z, 0, SwingHeadRotationLerp) };
+                }
+
+            }
+        }
+    }
+
+    public void UpdateCollisions()
+    {
+        switch (FSM.CurrentState.Name)
+        {
+            case "Idle":
+            case "Walk":
+            case "Run":
+                StandCollisionShape.Disabled = false;
+                CrouchCollisionShape.Disabled = true;
+                CrawlCollisionShape.Disabled = true;
+                break;
+            case "Crouch":
+            case "Slide":
+                StandCollisionShape.Disabled = true;
+                CrouchCollisionShape.Disabled = false;
+                CrawlCollisionShape.Disabled = true;
+                break;
+            case "Crawl":
+                StandCollisionShape.Disabled = true;
+                CrouchCollisionShape.Disabled = true;
+                CrawlCollisionShape.Disabled = false;
+                break;
+            default:
+                StandCollisionShape.Disabled = false;
+                CrouchCollisionShape.Disabled = true;
+                CrawlCollisionShape.Disabled = true;
+                break;
+        }
+    }
+
     public void SwitchMouseMode()
     {
         if (Input.MouseMode.Equals(Input.MouseModeEnum.Captured))
@@ -165,12 +250,12 @@ public partial class FirstPersonController : CharacterBody3D
     public void OnUnlockPlayer()
     {
         Locked = false;
-        //FSM.UnlockStateMachine();
+        FSM.UnlockStateMachine();
     }
 
     public void OnLockPlayer()
     {
         Locked = true;
-        // FSM.LockStateMachine();
+        FSM.LockStateMachine();
     }
 }

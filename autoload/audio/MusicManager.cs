@@ -54,7 +54,8 @@ public partial class MusicManager : Node
 
             if (CurrentPlayer.Playing)
             {
-                if (stream == CurrentPlayer.Stream) return;
+                if (stream == CurrentPlayer.Stream)
+                    return;
 
                 if (crossfade)
                 {

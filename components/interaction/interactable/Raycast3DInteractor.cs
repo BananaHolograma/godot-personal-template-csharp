@@ -34,7 +34,7 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
     {
         Interactable3D detectedInteractable = IsColliding() ? (Interactable3D)GetCollider() : null;
 
-        if (detectedInteractable == null || detectedInteractable != CurrentInteractable)
+        if (detectedInteractable != null && detectedInteractable != CurrentInteractable)
         {
             CurrentInteractable = detectedInteractable;
 

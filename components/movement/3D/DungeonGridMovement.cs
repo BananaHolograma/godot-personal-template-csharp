@@ -26,7 +26,8 @@ public partial class DungeonGridMovement : Node
 
     public void Move(Vector2 direction)
     {
-        if (TweenIsRunning() || Target == null) return;
+        if (TweenIsRunning() || Target == null)
+            return;
 
         Vector3 localVector = DirectionMap[direction];
 
@@ -37,7 +38,8 @@ public partial class DungeonGridMovement : Node
 
     public void Rotate(Vector2 direction)
     {
-        if (TweenIsRunning() || Target == null) return;
+        if (TweenIsRunning() || Target == null)
+            return;
 
         bool isLeftOrRight = new[] { Vector2.Left, Vector2.Right }.Any(dir => dir == direction);
 
