@@ -99,6 +99,12 @@ public partial class Motion : State
 		}
 	}
 
+	public void DetectJump()
+	{
+		if (Input.IsActionJustPressed("jump") && Actor.Jump && (Actor.IsOnFloor() || FSM.CurrentStateIs("WallRun")))
+			FSM.ChangeStateTo("Jump");
+	}
+
 	public void DetectCrouch()
 	{
 		if (Input.IsActionPressed("crouch") && Actor.IsOnFloor() && Actor.Crouch)

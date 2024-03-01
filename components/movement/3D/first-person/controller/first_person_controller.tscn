@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bdnf7ahkyulgk"]
+[gd_scene load_steps=19 format=3 uid="uid://bdnf7ahkyulgk"]
 
 [ext_resource type="Script" path="res://components/movement/3D/first-person/controller/FirstPersonController.cs" id="1_36y4q"]
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Crouch.cs" id="7_hihor"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Crawl.cs" id="8_x5pkh"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Fall.cs" id="9_n1u3a"]
+[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Jump.cs" id="10_0wpa6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5aglx"]
 radius = 0.287442
@@ -135,6 +136,24 @@ shape = SubResource("CapsuleShape3D_kewt1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.701, 0)
 shape = SubResource("CapsuleShape3D_ih7l3")
 
+[node name="RightWallDetector" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.142421, 0)
+target_position = Vector3(0.6, 0, 0)
+debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
+
+[node name="LeftWallDetector" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.142421, 0)
+target_position = Vector3(-0.6, 0, 0)
+debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
+
+[node name="FrontWallDetector" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.142421, 0)
+target_position = Vector3(0, 0, -0.6)
+debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
+
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.615114, 0)
 
@@ -183,4 +202,8 @@ Actor = NodePath("../..")
 
 [node name="Fall" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("9_n1u3a")
+Actor = NodePath("../..")
+
+[node name="Jump" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
+script = ExtResource("10_0wpa6")
 Actor = NodePath("../..")

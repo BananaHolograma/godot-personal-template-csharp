@@ -69,6 +69,11 @@ public partial class FirstPersonController : CharacterBody3D
     public CollisionShape3D CrouchCollisionShape;
     public CollisionShape3D CrawlCollisionShape;
     public ShapeCast3D CeilShapeCast;
+
+    public RayCast3D RightWallDetector;
+    public RayCast3D LeftWallDetector;
+    public RayCast3D FrontWallDetector;
+
     #endregion
 
     public Vector3 OriginalEyesPosition;
@@ -99,6 +104,10 @@ public partial class FirstPersonController : CharacterBody3D
         CrouchCollisionShape = GetNode<CollisionShape3D>("CrouchCollisionShape");
         CrawlCollisionShape = GetNode<CollisionShape3D>("CrawlCollisionShape");
         CeilShapeCast = GetNode<ShapeCast3D>("CeilShapeCast");
+
+        RightWallDetector = GetNode<RayCast3D>("%RightWallDetector");
+        LeftWallDetector = GetNode<RayCast3D>("%LeftWallDetector");
+        FrontWallDetector = GetNode<RayCast3D>("%FrontWallDetector");
 
         OriginalEyesPosition = Eyes.Transform.Origin;
 
@@ -212,25 +221,45 @@ public partial class FirstPersonController : CharacterBody3D
             case "Idle":
             case "Walk":
             case "Run":
+            case "Jump":
                 StandCollisionShape.Disabled = false;
                 CrouchCollisionShape.Disabled = true;
                 CrawlCollisionShape.Disabled = true;
+
+                RightWallDetector.Enabled = true;
+                LeftWallDetector.Enabled = true;
+                FrontWallDetector.Enabled = true;
                 break;
+
             case "Crouch":
             case "Slide":
                 StandCollisionShape.Disabled = true;
                 CrouchCollisionShape.Disabled = false;
                 CrawlCollisionShape.Disabled = true;
+
+                RightWallDetector.Enabled = false;
+                LeftWallDetector.Enabled = false;
+                FrontWallDetector.Enabled = false;
                 break;
+
             case "Crawl":
                 StandCollisionShape.Disabled = true;
                 CrouchCollisionShape.Disabled = true;
                 CrawlCollisionShape.Disabled = false;
+
+                RightWallDetector.Enabled = false;
+                LeftWallDetector.Enabled = false;
+                FrontWallDetector.Enabled = false;
                 break;
+
             default:
                 StandCollisionShape.Disabled = false;
                 CrouchCollisionShape.Disabled = true;
                 CrawlCollisionShape.Disabled = true;
+
+                RightWallDetector.Enabled = true;
+                LeftWallDetector.Enabled = true;
+                FrontWallDetector.Enabled = true;
                 break;
         }
     }

@@ -26,5 +26,6 @@ public partial class Idle : Motion
         Actor.MoveAndSlide();
 
         DetectCrouch();
+        DetectJump();
     }
 }

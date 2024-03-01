@@ -59,6 +59,8 @@ public partial class Run : Motion
             FSM.ChangeStateTo("Slide");
 
         Actor.MoveAndSlide();
+
+        DetectJump();
     }
 
     private void CreateSpeedTimer()

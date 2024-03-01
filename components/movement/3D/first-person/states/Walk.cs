@@ -41,6 +41,7 @@ public partial class Walk : Motion
         Actor.MoveAndSlide();
 
         DetectCrouch();
+        DetectJump();
     }
 
     private void CatchingBreath()
