@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 
 namespace GameRoot;
@@ -5,14 +6,23 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Walk : Motion
 {
-
     [Export]
     public float Speed = 3.5f;
+    [Export]
+    public float CatchingBreathRecoveryTime = 3f;
 
+    public Timer CatchingBreathTimer;
+
+
+    public override void Ready()
+    {
+        CreateCatchingBreathTimer();
+    }
     public override void Enter()
     {
+        CatchingBreath();
         Actor.Velocity = Actor.Velocity with { Y = 0 };
-        GD.Print("ENTER WALK ", Actor.Velocity);
+        GD.Print("Entro walk");
     }
 
     public override void PhysicsUpdate(double delta)
@@ -22,11 +32,38 @@ public partial class Walk : Motion
         Move(Speed, delta);
 
         if (TransformedInput.WorldCoordinateSpaceDirection.IsZeroApprox() || Actor.Velocity.IsZeroApprox())
-        {
             FSM.ChangeStateTo("Idle");
-            return;
-        }
+
+
+        if (Input.IsActionPressed("run") && CatchingBreathTimer.IsStopped() && Actor.Run)
+            FSM.ChangeStateTo("Run");
 
         Actor.MoveAndSlide();
+    }
+
+    private void CatchingBreath()
+    {
+        if (IsInstanceValid(CatchingBreathTimer) && FSM.StatesStack.Count > 0)
+        {
+            if (FSM.StatesStack.Last() is Run runState && runState.InRecovery)
+                CatchingBreathTimer.Start();
+        }
+    }
+
+    private void CreateCatchingBreathTimer()
+    {
+        if (CatchingBreathTimer == null)
+        {
+            CatchingBreathTimer = new Timer
+            {
+                Name = "RunCatchingBreathTimer",
+                WaitTime = CatchingBreathRecoveryTime,
+                ProcessCallback = Timer.TimerProcessCallback.Physics,
+                Autostart = false,
+                OneShot = true
+            };
+
+            AddChild(CatchingBreathTimer);
+        }
     }
 }

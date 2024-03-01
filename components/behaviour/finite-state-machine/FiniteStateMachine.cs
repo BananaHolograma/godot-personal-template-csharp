@@ -66,9 +66,8 @@ public partial class FiniteStateMachine : Node
             return;
 
         if (CurrentState is not null)
-        {
             RunTransition(CurrentState, nextState);
-        }
+
     }
 
     public void ChangeStateTo(string nextState)
@@ -83,9 +82,8 @@ public partial class FiniteStateMachine : Node
             return;
 
         if (CurrentState is not null)
-        {
             RunTransition(CurrentState, GetStateByName(nextState));
-        }
+
     }
 
     public void RunTransition(State from, State to)
@@ -151,7 +149,7 @@ public partial class FiniteStateMachine : Node
 
     public void PushStateToStack(State state)
     {
-        if (EnableStack && StackCapacity > 0 && StatesStack.Count > 0)
+        if (EnableStack && StackCapacity > 0)
         {
             if (StatesStack.Count >= StackCapacity)
             {
