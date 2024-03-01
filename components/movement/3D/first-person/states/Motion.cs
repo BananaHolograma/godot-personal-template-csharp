@@ -57,7 +57,7 @@ public partial class Motion : State
 
 	public bool IsGrounded = true;
 	public bool WasGrounded = true;
-	public bool StairtStepping = false;
+	public bool StairStepping = false;
 
 	public override void PhysicsUpdate(double delta)
 	{
@@ -68,7 +68,7 @@ public partial class Motion : State
 
 		ApplyGravity(delta);
 
-		if (IsFalling() && !StairtStepping)
+		if (IsFalling() && !StairStepping)
 			FSM.ChangeStateTo("Fall");
 	}
 	public void ApplyGravity(double delta)
@@ -104,10 +104,10 @@ public partial class Motion : State
 		if (!StairSteppingEnabled)
 			return;
 
+		StairStepping = false;
+
 		if (TransformedInput.WorldCoordinateSpaceDirection.IsZeroApprox())
 			return;
-
-		StairtStepping = false;
 
 		PhysicsTestMotionParameters3D BodyTestParams = new();
 		PhysicsTestMotionResult3D BodyTestResult = new();
@@ -164,13 +164,15 @@ public partial class Motion : State
 			return;
 
 		TestTransform = TestTransform.Translated(BodyTestResult.GetTravel());
+
+		// 5.5 Check floor normal for un-walkable slope
 		Vector3 surfaceNormal = BodyTestResult.GetCollisionNormal();
-		float tempFloorMaxAngle = Actor.FloorMaxAngle * Mathf.DegToRad(20);
+		float tempFloorMaxAngle = Actor.FloorMaxAngle + Mathf.DegToRad(20);
 
 		if (Mathf.Snapped(surfaceNormal.AngleTo(Vertical), 0.001f) > tempFloorMaxAngle)
 			return;
 
-		StairtStepping = true;
+		StairStepping = true;
 
 		// 6 - Move player up
 		//float StepUpDistance = TestTransform.Origin.Y - Actor.GlobalPosition.Y;
@@ -182,7 +184,7 @@ public partial class Motion : State
 		if (!StairSteppingEnabled)
 			return;
 
-		StairtStepping = false;
+		StairStepping = false;
 
 		if (Actor.Velocity.Y <= 0 && WasGrounded)
 		{
@@ -195,7 +197,7 @@ public partial class Motion : State
 
 			if (PhysicsServer3D.BodyTestMotion(Actor.GetRid(), BodyTestParams, BodyTestResult))
 			{
-				StairtStepping = true;
+				StairStepping = true;
 				//Enters if a collision is detected by BodyTestMotion
 				//Get distance to step and move character downward by that much
 				Actor.Position = Actor.Position with { Y = Actor.Position.Y + BodyTestResult.GetTravel().Y };
