@@ -68,7 +68,7 @@ public partial class FirstPersonController : CharacterBody3D
     public CollisionShape3D StandCollisionShape;
     public CollisionShape3D CrouchCollisionShape;
     public CollisionShape3D CrawlCollisionShape;
-    public ShapeCast3D CeilShapeCast;
+    public ShapeCast3D CeilShapeDetector;
 
     public RayCast3D RightWallDetector;
     public RayCast3D LeftWallDetector;
@@ -103,7 +103,7 @@ public partial class FirstPersonController : CharacterBody3D
         StandCollisionShape = GetNode<CollisionShape3D>("StandCollisionShape");
         CrouchCollisionShape = GetNode<CollisionShape3D>("CrouchCollisionShape");
         CrawlCollisionShape = GetNode<CollisionShape3D>("CrawlCollisionShape");
-        CeilShapeCast = GetNode<ShapeCast3D>("CeilShapeCast");
+        CeilShapeDetector = GetNode<ShapeCast3D>("CeilShapeDetector");
 
         RightWallDetector = GetNode<RayCast3D>("%RightWallDetector");
         LeftWallDetector = GetNode<RayCast3D>("%LeftWallDetector");
@@ -139,7 +139,7 @@ public partial class FirstPersonController : CharacterBody3D
     {
         if (HeadBobbingEnabled && IsOnFloor())
         {
-            if (Velocity.IsNotZeroApprox())
+            if (Velocity.IsNotZeroApprox() && FSM.CurrentStateIsNot(new string[] { "Jump", "Slide", "Fall" }))
             {
                 HeadBobTimePassed += (float)delta * Velocity.Length() * (IsOnFloor() ? 1f : 0);
 

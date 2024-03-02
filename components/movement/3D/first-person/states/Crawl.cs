@@ -8,10 +8,12 @@ public partial class Crawl : Motion
     [Export]
     public float Speed = 1f;
     public AnimationPlayer AnimationPlayer;
-
+    public ShapeCast3D CeilShapeDetector;
     public override void Ready()
     {
         AnimationPlayer = Actor.GetNode<AnimationPlayer>("AnimationPlayer");
+        CeilShapeDetector = Actor.GetNode<ShapeCast3D>("CeilShapeDetector");
+
     }
 
     public override void Enter()
@@ -28,7 +30,7 @@ public partial class Crawl : Motion
     {
         base.PhysicsUpdate(delta);
 
-        if (!Input.IsActionPressed("crawl") && !Actor.CeilShapeCast.IsColliding())
+        if (!Input.IsActionPressed("crawl") && !CeilShapeDetector.IsColliding())
         {
             FSM.ChangeStateTo("Crouch");
         }

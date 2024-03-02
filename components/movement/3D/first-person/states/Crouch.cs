@@ -9,10 +9,12 @@ public partial class Crouch : Motion
     [Export]
     public float Speed = 2f;
     public AnimationPlayer AnimationPlayer;
+    public ShapeCast3D CeilShapeDetector;
 
     public override void Ready()
     {
         AnimationPlayer = Actor.GetNode<AnimationPlayer>("AnimationPlayer");
+        CeilShapeDetector = Actor.GetNode<ShapeCast3D>("CeilShapeDetector");
     }
 
     public override void Enter()
@@ -33,7 +35,7 @@ public partial class Crouch : Motion
     {
         base.PhysicsUpdate(delta);
 
-        if (!Input.IsActionPressed("crouch") && !Actor.CeilShapeCast.IsColliding())
+        if (!Input.IsActionPressed("crouch") && !CeilShapeDetector.IsColliding())
         {
             if (Actor.Velocity.IsZeroApprox())
             {

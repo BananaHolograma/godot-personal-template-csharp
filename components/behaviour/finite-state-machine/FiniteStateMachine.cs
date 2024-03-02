@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using GodotExtensions;
 
@@ -117,6 +119,11 @@ public partial class FiniteStateMachine : Node
     public bool CurrentStateIs(State state)
     {
         return state == CurrentState;
+    }
+
+    public bool CurrentStateIsNot(string[] states)
+    {
+        return !states.Any(state => CurrentStateIs(state));
     }
 
     public bool StateExists(State state)

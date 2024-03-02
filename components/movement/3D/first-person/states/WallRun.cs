@@ -133,13 +133,6 @@ public partial class WallRun : Motion
 
 		return wallNormal;
 	}
-	private Vector3 GetMoveDirectionOnWall()
-	{
-		Direction = TransformedInput.WorldCoordinateSpaceDirection.Slide(CurrentWallNormal);
-		Direction -= CurrentWallNormal;
-
-		return Direction;
-	}
 
 	private void RotateCameraBasedOnNormal(Vector3 wallNormal)
 	{

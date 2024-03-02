@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bdnf7ahkyulgk"]
+[gd_scene load_steps=22 format=3 uid="uid://bdnf7ahkyulgk"]
 
 [ext_resource type="Script" path="res://components/movement/3D/first-person/controller/FirstPersonController.cs" id="1_36y4q"]
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Idle.cs" id="3_ufsu1"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Walk.cs" id="4_so15b"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Run.cs" id="6_y21bt"]
+[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Slide.cs" id="7_g5ac5"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Crouch.cs" id="7_hihor"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Crawl.cs" id="8_x5pkh"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Fall.cs" id="9_n1u3a"]
@@ -29,34 +30,6 @@ height = 0.680724
 radius = 0.25
 height = 0.6
 
-[sub_resource type="Animation" id="Animation_j532y"]
-resource_name = "crouch"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Head:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 0.615114, 0), Vector3(0, 0.007, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CeilShapeCast:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 1.701, 0), Vector3(0, 1.065, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_4vmx0"]
 length = 0.001
 tracks/0/type = "value"
@@ -74,7 +47,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CeilShapeCast:position")
+tracks/1/path = NodePath("CeilShapeDetector:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -102,7 +75,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CeilShapeCast:position")
+tracks/1/path = NodePath("CeilShapeDetector:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -110,6 +83,34 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector3(0, 1.065, 0), Vector3(0, 0.511846, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_j532y"]
+resource_name = "crouch"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.615114, 0), Vector3(0, 0.007, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CeilShapeDetector:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.701, 0), Vector3(0, 1.065, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_174i1"]
@@ -124,6 +125,7 @@ collision_layer = 4
 script = ExtResource("1_36y4q")
 WallJump = true
 WallRun = true
+Slide = true
 
 [node name="StandCollisionShape" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_5aglx")
@@ -136,7 +138,7 @@ shape = SubResource("CapsuleShape3D_m10e2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.597462, 0)
 shape = SubResource("CapsuleShape3D_kewt1")
 
-[node name="CeilShapeCast" type="ShapeCast3D" parent="."]
+[node name="CeilShapeDetector" type="ShapeCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.701, 0)
 shape = SubResource("CapsuleShape3D_ih7l3")
 
@@ -168,7 +170,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047397, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.54866)
 current = true
 
 [node name="Raycast3DInteractor" type="RayCast3D" parent="Head/Eyes" node_paths=PackedStringArray("actor")]
@@ -199,6 +200,11 @@ Actor = NodePath("../..")
 script = ExtResource("6_y21bt")
 Actor = NodePath("../..")
 
+[node name="Slide" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
+script = ExtResource("7_g5ac5")
+ReduceSpeedGradually = false
+Actor = NodePath("../..")
+
 [node name="Crouch" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("7_hihor")
 Actor = NodePath("../..")
@@ -217,6 +223,7 @@ Actor = NodePath("../..")
 
 [node name="WallRun" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("11_cgut7")
+WallGravity = 1.0
 Actor = NodePath("../..")
 
 [node name="DebugMenu" type="Control" parent="." node_paths=PackedStringArray("Actor")]
