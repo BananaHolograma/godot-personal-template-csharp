@@ -127,13 +127,15 @@ public partial class Jump : Motion
         }
         else
         {
+            Vector3 oppositeUpDirection = GetCharacterUpDirectionOppositeVector(Actor);
+
             if (Actor.Velocity.Y > 0)
             {
-                Actor.Velocity += Vector3.Down * JumpGravity * (float)delta;
+                Actor.Velocity += oppositeUpDirection * JumpGravity * (float)delta;
             }
             else
             {
-                Actor.Velocity += Vector3.Down * FallGravity * (float)delta;
+                Actor.Velocity += oppositeUpDirection * FallGravity * (float)delta;
 
                 if (VelocityBarrierToFall < 0 && Actor.Velocity.Y < VelocityBarrierToFall)
                 {

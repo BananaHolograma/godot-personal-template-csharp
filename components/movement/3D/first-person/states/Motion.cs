@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 namespace GameRoot;
@@ -79,7 +80,7 @@ public partial class Motion : State
 	{
 		if (GravityActive && !Actor.IsOnFloor() && !FSM.CurrentStateIs("Jump"))
 		{
-			Actor.Velocity += Vector3.Down * (float)(Gravity * delta);
+			Actor.Velocity += GetCharacterUpDirectionOppositeVector(Actor) * (float)(Gravity * delta);
 		}
 	}
 	public bool IsFalling()
@@ -239,8 +240,31 @@ public partial class Motion : State
 		GravityActive = false;
 	}
 
+	/// <summary>
+	/// Retrieves the opposite direction of a given vector, considering gravity as the "up" direction.
+	/// This is useful for converting character-based directions to world space directions 
+	/// where gravity defines the "up" axis.
+	/// </summary>
+	/// <param name="direction">The vector to find the opposite of.</param>
+	/// <returns>The opposite direction based on the assumption that gravity defines "up".</returns>
+	protected Vector3 GetCharacterUpDirectionOppositeVector(CharacterBody3D character)
+	{
+		Dictionary<Vector3, Vector3> oppositeDirections = new(){
+			{ Vector3.Up, Vector3.Down },
+			{ Vector3.Down, Vector3.Up },
+			{ Vector3.Right, Vector3.Left },
+			{ Vector3.Left, Vector3.Right },
+			{ Vector3.Forward, Vector3.Back },
+			{ Vector3.Back, Vector3.Forward }
+		};
 
+		if (oppositeDirections.TryGetValue(character.UpDirection, out Vector3 opposite))
+			return opposite;
+
+		return Vector3.Zero;
+	}
 }
+
 public class TransformedInput
 {
 	public Vector2 InputDirection { get; set; }
