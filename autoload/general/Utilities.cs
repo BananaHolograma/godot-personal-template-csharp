@@ -87,4 +87,27 @@ public partial class Utilities : Node
         // Return the random enum value
         return values[randomIndex];
     }
+
+    public string IntegerToRomanNumber(int number)
+    {
+        string[] romanDigits = new string[] { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" };
+        string[] tensPlace = new string[] { "", "", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" };
+        string[] hundredsPlace = new string[] { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" };
+        string[] thousandsPlace = new string[] { "", "M", "MM", "MMM" };
+
+        // Extract digits from the number
+        int thousands = number / 1000;
+        int hundreds = number % 1000 / 100;
+        int tens = number % 100 / 10;
+        int ones = number % 10;
+
+        // Build the Roman numeral string
+        string romanNumber = string.Empty;
+        romanNumber += thousandsPlace[thousands];
+        romanNumber += hundredsPlace[hundreds];
+        romanNumber += tensPlace[tens];
+        romanNumber += romanDigits[ones];
+
+        return romanNumber;
+    }
 }
