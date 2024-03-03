@@ -66,7 +66,6 @@ public partial class Jump : Motion
 
     public RayCast3D RightWallDetector;
     public RayCast3D LeftWallDetector;
-    public RayCast3D FrontWallDetector;
 
     public Dictionary<string, Vector3> WallNormals = new() { };
 
@@ -78,7 +77,6 @@ public partial class Jump : Motion
 
         RightWallDetector = Actor.GetNode<RayCast3D>("%RightWallDetector");
         LeftWallDetector = Actor.GetNode<RayCast3D>("%LeftWallDetector");
-        FrontWallDetector = Actor.GetNode<RayCast3D>("%FrontWallDetector");
     }
 
     public override void Enter()

@@ -55,7 +55,11 @@ public partial class Run : Motion
         if (Input.IsActionJustPressed("crouch") && Actor.Slide)
             FSM.ChangeStateTo("Slide");
 
+        StairStepUp();
+
         Actor.MoveAndSlide();
+
+        StairStepDown();
 
         DetectJump();
     }

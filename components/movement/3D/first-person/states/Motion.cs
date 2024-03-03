@@ -1,5 +1,7 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using Godot;
+using Godot.Collections;
 using GodotExtensions;
 
 namespace GameRoot;
@@ -48,7 +50,20 @@ public partial class Motion : State
 	public bool WasGrounded = true;
 	public bool StairStepping = false;
 
+	public RayCast3D FrontWallDetector;
+	public Node3D RayCastLedgeChecker;
+	public RayCast3D RayCastLedge;
+	public MeshInstance3D LedgeMarker;
+
 	private bool gravityActive = true;
+
+	public override void _Ready()
+	{
+		FrontWallDetector = Actor.GetNode<RayCast3D>("%FrontWallDetector");
+		RayCastLedgeChecker = Actor.GetNode<Node3D>("%RayCastLedgeChecker");
+		RayCastLedge = RayCastLedgeChecker.GetNode<RayCast3D>("RayCastHead");
+		LedgeMarker = RayCastLedgeChecker.GetNode<MeshInstance3D>("LedgeMarker");
+	}
 
 	public override void PhysicsUpdate(double delta)
 	{
@@ -95,7 +110,6 @@ public partial class Motion : State
 			{
 				Actor.Velocity = Actor.Velocity.MoveToward(Actor.Velocity with { X = 0, Z = 0 }, speed);
 			}
-
 		}
 		else
 		{
@@ -109,6 +123,24 @@ public partial class Motion : State
 			{
 				Actor.Velocity = Actor.Velocity with { X = worldCoordinateSpaceDirection.X * speed, Z = worldCoordinateSpaceDirection.Z * speed };
 			}
+		}
+	}
+
+	public void LedgeDetect()
+	{
+		Vector3 hitPoint1 = FrontWallDetector.GetCollisionPoint();
+		Vector3 hitPoint2 = RayCastLedge.GetCollisionPoint();
+
+		Vector3 offset = new(0, 3, 0);
+
+		LedgeMarker.Visible = FrontWallDetector.IsColliding();
+		RayCastLedge.Enabled = FrontWallDetector.IsColliding();
+
+		if (RayCastLedge.Enabled)
+		{
+			Vector3 hitpointOffset = hitPoint1 + offset;
+			RayCastLedgeChecker.GlobalTransform = RayCastLedgeChecker.GlobalTransform with { Origin = hitpointOffset };
+			LedgeMarker.GlobalTransform = LedgeMarker.GlobalTransform with { Origin = hitPoint2 };
 		}
 	}
 

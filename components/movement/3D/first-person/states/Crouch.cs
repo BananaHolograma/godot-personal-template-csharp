@@ -48,7 +48,11 @@ public partial class Crouch : Motion
 
         Move(Speed, delta);
 
+        StairStepUp();
+
         Actor.MoveAndSlide();
+
+        StairStepDown();
 
         DetectCrawl();
     }

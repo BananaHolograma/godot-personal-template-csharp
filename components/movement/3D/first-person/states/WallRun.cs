@@ -24,9 +24,7 @@ public partial class WallRun : Motion
 
 	public RayCast3D RightWallDetector;
 	public RayCast3D LeftWallDetector;
-	public RayCast3D FrontWallDetector;
-
-	//This detectors are activated in order to not fall the player when rotate around the wall to select the jump direction
+	//This back walls detectors are activated in order to not fall the player when rotate around the wall to select the jump direction
 	public RayCast3D BackWallDetectorLeft;
 	public RayCast3D BackWallDetectorRight;
 

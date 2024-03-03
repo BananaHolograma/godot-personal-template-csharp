@@ -43,6 +43,8 @@ public partial class Walk : Motion
 
         DetectCrouch();
         DetectJump();
+
+        LedgeDetect();
     }
 
     private void CatchingBreath()

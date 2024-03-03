@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bdnf7ahkyulgk"]
+[gd_scene load_steps=24 format=3 uid="uid://bdnf7ahkyulgk"]
 
 [ext_resource type="Script" path="res://components/movement/3D/first-person/controller/FirstPersonController.cs" id="1_36y4q"]
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
@@ -29,6 +29,14 @@ height = 0.680724
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ih7l3"]
 radius = 0.25
 height = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_onj1w"]
+albedo_color = Color(1, 0.109804, 0.109804, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_mw70a"]
+material = SubResource("StandardMaterial3D_onj1w")
+radius = 0.15
+height = 0.3
 
 [sub_resource type="Animation" id="Animation_4vmx0"]
 length = 0.001
@@ -157,9 +165,19 @@ debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
 
 [node name="FrontWallDetector" type="RayCast3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0276185, 0.142421, -0.12149)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0276185, -0.184301, -0.12149)
 target_position = Vector3(0, 0, -0.6)
-debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
+debug_shape_custom_color = Color(1, 0.807843, 0.12549, 1)
+
+[node name="RayCastLedgeChecker" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.21594, 0)
+
+[node name="RayCastHead" type="RayCast3D" parent="RayCastLedgeChecker"]
+target_position = Vector3(0, -10, 0)
+
+[node name="LedgeMarker" type="MeshInstance3D" parent="RayCastLedgeChecker"]
+mesh = SubResource("SphereMesh_mw70a")
 
 [node name="BackWallDetectorLeft" type="RayCast3D" parent="."]
 unique_name_in_owner = true
@@ -185,7 +203,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047397, 0)
 unique_name_in_owner = true
 
 [node name="Raycast3DInteractor" type="RayCast3D" parent="Head/Eyes" node_paths=PackedStringArray("actor")]
-target_position = Vector3(0, 0, -2.5)
+visible = false
+target_position = Vector3(0, 0, -2)
 debug_shape_custom_color = Color(0, 0.878431, 0, 1)
 script = ExtResource("2_fxir6")
 actor = NodePath("../../..")
