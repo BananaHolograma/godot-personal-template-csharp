@@ -11,7 +11,8 @@ public partial class WallRun : Motion
 	[Export] public float CameraRotationAngle = .15f;
 	[Export] public float WallGravity = 1.5f;
 	[Export] public float Speed = 3f;
-	[Export] public float InitialBoostSpeed = 2f;
+	[Export] public float HorizontalBoostSpeed = 2.5f;
+	[Export] public float VerticalBoostSpeed = 1.5f;
 
 	#endregion
 	internal enum WallSide
@@ -62,11 +63,9 @@ public partial class WallRun : Motion
 		CurrentGravity = WallGravity;
 		CurrentWallNormal = GetWallNormal();
 
-		Actor.Velocity += InitialBoostSpeed * Vector3.Forward.Rotated(Vector3.Up, Actor.GlobalTransform.Basis.GetEuler().Y).Normalized();
-
-		if (CurrentWallSide.Equals(WallSide.FRONT))
-			//GO UP WHEN APPLIES A NEGATIVE GRAVITY ON THE PHYSICS PROCESS
-			CurrentGravity *= -1;
+		Actor.Velocity += CurrentWallSide.Equals(WallSide.FRONT) ?
+			HorizontalBoostSpeed * Vector3.Up.Rotated(Vector3.Right, Actor.GlobalTransform.Basis.GetEuler().X).Normalized() :
+			VerticalBoostSpeed * Vector3.Forward.Rotated(Vector3.Up, Actor.GlobalTransform.Basis.GetEuler().Y).Normalized();
 
 		RotateCameraBasedOnNormal(CurrentWallNormal);
 	}

@@ -218,7 +218,7 @@ Actor = NodePath("../..")
 
 [node name="Slide" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("7_g5ac5")
-Speed = 15.0
+Speed = 20.0
 RotateHead = false
 Actor = NodePath("../..")
 
@@ -247,7 +247,6 @@ Actor = NodePath("../..")
 [node name="WallRun" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("11_cgut7")
 WallGravity = 1.0
-InitialBoostSpeed = 1.0
 Actor = NodePath("../..")
 
 [node name="DebugMenu" type="Control" parent="." node_paths=PackedStringArray("Actor")]
