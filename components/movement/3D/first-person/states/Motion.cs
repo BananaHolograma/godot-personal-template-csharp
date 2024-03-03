@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using GodotExtensions;
 
@@ -70,7 +71,14 @@ public partial class Motion : State
 	}
 	public bool IsFalling()
 	{
-		return Actor.Velocity.Y < 0 && WasGrounded && !IsGrounded && !FSM.CurrentStateIs("Fall");
+		Vector3 oppositeUpDirection = Actor.UpDirectionOppositeVector();
+
+		bool oppositeToGravityVector = (oppositeUpDirection.IsEqualApprox(Vector3.Down) && Actor.Velocity.Y < 0) ||
+			(oppositeUpDirection.IsEqualApprox(Vector3.Up) && Actor.Velocity.Y > 0) ||
+			(oppositeUpDirection.IsEqualApprox(Vector3.Left) && Actor.Velocity.X < 0) ||
+			(oppositeUpDirection.IsEqualApprox(Vector3.Right) && Actor.Velocity.X > 0);
+
+		return oppositeToGravityVector && !Actor.IsOnFloor() && !FSM.CurrentStateIs("Fall");
 	}
 
 	public void Move(float speed, double delta)
@@ -224,6 +232,7 @@ public partial class Motion : State
 	{
 		GravityActive = false;
 	}
+
 }
 
 public class TransformedInput

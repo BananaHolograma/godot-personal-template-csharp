@@ -87,13 +87,13 @@ public partial class WallRun : Motion
 			{
 				FSM.ChangeStateTo("Walk");
 			}
+
 			return;
 		}
-		else
-		{
-			if (WallGravity > 0)
-				Actor.Velocity = Actor.Velocity with { Y = Actor.Velocity.Y - CurrentGravity * (float)delta };
-		}
+
+		if (WallGravity > 0)
+			ApplyGravity(CurrentGravity, delta);
+
 
 		if (!WallDetected())
 		{

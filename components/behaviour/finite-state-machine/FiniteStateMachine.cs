@@ -148,6 +148,11 @@ public partial class FiniteStateMachine : Node
         return null;
     }
 
+    public State LastState()
+    {
+        return StatesStack.Count > 0 ? StatesStack.Last() : null;
+    }
+
     public void PushStateToStack(State state)
     {
         if (EnableStack && StackCapacity > 0)

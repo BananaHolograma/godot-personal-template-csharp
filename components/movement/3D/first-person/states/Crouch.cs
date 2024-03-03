@@ -18,7 +18,7 @@ public partial class Crouch : Motion
 
     public override void Enter()
     {
-        bool lastStateWasNotCrawlingOrSliding = !new[] { "Crawl", "Slide" }.Any(stateName => stateName == FSM.StatesStack.Last().Name);
+        bool lastStateWasNotCrawlingOrSliding = !new[] { "Crawl", "Slide" }.Any(stateName => stateName == FSM.LastState()?.Name);
 
         if (FSM.StatesStack.Count > 0 && lastStateWasNotCrawlingOrSliding)
             AnimationPlayer.Play("crouch");

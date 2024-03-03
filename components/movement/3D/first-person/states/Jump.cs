@@ -61,7 +61,6 @@ public partial class Jump : Motion
     public float FallGravity;
 
     public int JumpCount = 1;
-
     public bool WallDetectionActive = false;
     public Timer WallDetectionTimer;
 
@@ -70,6 +69,8 @@ public partial class Jump : Motion
     public RayCast3D FrontWallDetector;
 
     public Dictionary<string, Vector3> WallNormals = new() { };
+
+    private bool JumpRequested;
 
     public override void Ready()
     {
@@ -108,6 +109,8 @@ public partial class Jump : Motion
     {
         base.PhysicsUpdate(delta);
 
+        JumpRequested = Input.IsActionJustPressed("jump");
+
         if (Actor.IsOnFloor())
         {
             if (TransformedInput.InputDirection.IsZeroApprox())
@@ -121,8 +124,6 @@ public partial class Jump : Motion
         }
         else
         {
-            Vector3 oppositeUpDirection = Actor.UpDirectionOppositeVector();
-
             if (Actor.Velocity.Y > 0)
             {
                 ApplyGravity(JumpGravity, delta);
@@ -143,7 +144,7 @@ public partial class Jump : Motion
                 Z = (float)Mathf.Lerp(Actor.Velocity.Z, TransformedInput.WorldCoordinateSpaceDirection.Z * AirControlSpeed, delta),
             };
 
-            if (Input.IsActionJustPressed("jump") && JumpTimes > 1 && JumpCount < JumpTimes)
+            if (JumpRequested && JumpTimes > 1 && JumpCount < JumpTimes)
             {
                 Actor.Velocity = Actor.Velocity with { Y = JumpVelocity };
                 JumpCount += 1;
