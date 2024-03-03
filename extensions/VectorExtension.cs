@@ -7,6 +7,20 @@ namespace GodotExtensions;
 public static class VectorExtension
 {
 
+    /// <summary>
+    /// Negates (flips) the sign of each component of a Vector2, resulting in a new vector pointing in the opposite direction.
+    /// </summary>
+    /// <param name="vector">The Vector2 to flip.</param>
+    /// <returns>A new Vector2 with the flipped components.</returns>
+    public static Vector2 Flip(this Vector2 vector) => -vector;
+
+    /// <summary>
+    /// Negates (flips) the sign of each component of a Vector3, resulting in a new vector pointing in the opposite direction.
+    /// </summary>
+    /// <param name="vector">The Vector3 to flip.</param>
+    /// <returns>A new Vector3 with the flipped components.</returns>
+    public static Vector3 Flip(this Vector3 vector) => -vector;
+
 
     /// <summary>
     /// Determines if two Vector2 objects are within a specified squared distance.
