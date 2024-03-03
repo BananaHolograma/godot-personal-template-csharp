@@ -1,9 +1,8 @@
-[gd_scene load_steps=26 format=3 uid="uid://bdnf7ahkyulgk"]
+[gd_scene load_steps=24 format=3 uid="uid://bdnf7ahkyulgk"]
 
 [ext_resource type="Script" path="res://components/movement/3D/first-person/controller/FirstPersonController.cs" id="1_36y4q"]
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
 [ext_resource type="Script" path="res://components/behaviour/finite-state-machine/FiniteStateMachine.cs" id="2_p4ob1"]
-[ext_resource type="Script" path="res://components/camera/3D/ShakeCamera3D.cs" id="3_02hct"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Idle.cs" id="3_ufsu1"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Walk.cs" id="4_so15b"]
 [ext_resource type="Script" path="res://components/camera/3D/TraumaCauser.cs" id="4_wwy7u"]
@@ -31,9 +30,6 @@ height = 0.680724
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ih7l3"]
 radius = 0.25
 height = 0.6
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_l57vy"]
-radius = 1.55446
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_borh7"]
 radius = 2.0
@@ -178,15 +174,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047397, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
 unique_name_in_owner = true
-
-[node name="ShakeCamera3D" type="Area3D" parent="Head/Eyes/Camera3D" node_paths=PackedStringArray("camera")]
-collision_layer = 64
-collision_mask = 0
-script = ExtResource("3_02hct")
-camera = NodePath("..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Eyes/Camera3D/ShakeCamera3D"]
-shape = SubResource("SphereShape3D_l57vy")
 
 [node name="Raycast3DInteractor" type="RayCast3D" parent="Head/Eyes" node_paths=PackedStringArray("actor")]
 target_position = Vector3(0, 0, -2.5)
