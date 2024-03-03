@@ -7,10 +7,11 @@ namespace GameRoot;
 public partial class Slide : Motion
 {
 	[Export] public float Speed = 4.5f;
-	[Export] public double SlideTime = 1.2f;
+	[Export] public double SlideTime = .9f;
 	[Export] public float FrictionMomentum = .1f;
-	[Export] public float SlideTilt = 5f;
+	[Export] public float SlideTilt = 7f;
 	[Export] public bool ReduceSpeedGradually = true;
+	[Export] public bool RotateHead = true;
 	public Timer SlideTimer;
 	public Vector3 LastDirection = Vector3.Zero;
 	public double DecreaseRate;
@@ -47,7 +48,6 @@ public partial class Slide : Motion
 			SlideTimer.Stop();
 
 		DecreaseRate = SlideTime;
-		Head.Rotation = Head.Rotation with { Z = 0 };
 
 		if (Head.Rotation.Z != 0)
 		{
@@ -73,7 +73,7 @@ public partial class Slide : Motion
 			Z = (float)(LastDirection.Z * momentum * Speed)
 		};
 
-		if (SlideTilt > 0)
+		if (RotateHead && SlideTilt > 0)
 			Head.Rotation = Head.Rotation with { Z = (float)Mathf.Lerp(Actor.Head.Rotation.Z, SlideSide * Mathf.DegToRad(SlideTilt), delta * 8d) };
 
 		if (!CeilShapeDetector.IsColliding())
