@@ -2,12 +2,12 @@ namespace GameRoot;
 
 using System.Collections.Generic;
 using Godot;
-
+using GodotExtensions;
 [GlobalClass]
 public partial class Jump : Motion
 {
     [Export]
-    public float VelocityBarrierToFall = -15f;
+    public float VelocityBarrierToFall = -5f;
     [Export]
     public float AirControlSpeed = 7.5f;
     [Export]
@@ -127,15 +127,15 @@ public partial class Jump : Motion
         }
         else
         {
-            Vector3 oppositeUpDirection = GetCharacterUpDirectionOppositeVector(Actor);
+            Vector3 oppositeUpDirection = Actor.UpDirectionOppositeVector();
 
             if (Actor.Velocity.Y > 0)
             {
-                Actor.Velocity += oppositeUpDirection * JumpGravity * (float)delta;
+                ApplyGravity(JumpGravity, delta);
             }
             else
             {
-                Actor.Velocity += oppositeUpDirection * FallGravity * (float)delta;
+                ApplyGravity(FallGravity, delta);
 
                 if (VelocityBarrierToFall < 0 && Actor.Velocity.Y < VelocityBarrierToFall)
                 {

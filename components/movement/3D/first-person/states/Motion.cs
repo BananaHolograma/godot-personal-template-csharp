@@ -1,7 +1,8 @@
-using System.Collections.Generic;
 using Godot;
+using GodotExtensions;
 
 namespace GameRoot;
+
 public partial class Motion : State
 {
 	#region Signals
@@ -17,7 +18,7 @@ public partial class Motion : State
 
 	[ExportGroup("Gravity")]
 	[Export]
-	public double Gravity = 30f;
+	public double Gravity = 15.8f;
 
 	[Export]
 	public bool GravityActive
@@ -26,9 +27,8 @@ public partial class Motion : State
 		set
 		{
 			if (value != gravityActive)
-			{
 				EmitSignal(value ? SignalName.GravityEnabled : SignalName.GravityDisabled);
-			}
+
 
 			gravityActive = value;
 		}
@@ -71,17 +71,15 @@ public partial class Motion : State
 
 		TransformedInput.UpdateInputDirection(Actor);
 
-		ApplyGravity(delta);
+		if (GravityActive && !Actor.IsOnFloor() && !FSM.CurrentStateIs("Jump"))
+			ApplyGravity(Gravity, delta);
 
 		if (IsFalling() && !StairStepping)
 			FSM.ChangeStateTo("Fall");
 	}
-	public void ApplyGravity(double delta)
+	public void ApplyGravity(double gravityForce, double delta)
 	{
-		if (GravityActive && !Actor.IsOnFloor() && !FSM.CurrentStateIs("Jump"))
-		{
-			Actor.Velocity += GetCharacterUpDirectionOppositeVector(Actor) * (float)(Gravity * delta);
-		}
+		Actor.Velocity += Actor.UpDirectionOppositeVector() * (float)(gravityForce * delta);
 	}
 	public bool IsFalling()
 	{
@@ -238,30 +236,6 @@ public partial class Motion : State
 	public void DisableGravity()
 	{
 		GravityActive = false;
-	}
-
-	/// <summary>
-	/// Retrieves the opposite direction of a given vector, considering gravity as the "up" direction.
-	/// This is useful for converting character-based directions to world space directions 
-	/// where gravity defines the "up" axis.
-	/// </summary>
-	/// <param name="direction">The vector to find the opposite of.</param>
-	/// <returns>The opposite direction based on the assumption that gravity defines "up".</returns>
-	protected Vector3 GetCharacterUpDirectionOppositeVector(CharacterBody3D character)
-	{
-		Dictionary<Vector3, Vector3> oppositeDirections = new(){
-			{ Vector3.Up, Vector3.Down },
-			{ Vector3.Down, Vector3.Up },
-			{ Vector3.Right, Vector3.Left },
-			{ Vector3.Left, Vector3.Right },
-			{ Vector3.Forward, Vector3.Back },
-			{ Vector3.Back, Vector3.Forward }
-		};
-
-		if (oppositeDirections.TryGetValue(character.UpDirection, out Vector3 opposite))
-			return opposite;
-
-		return Vector3.Zero;
 	}
 }
 
