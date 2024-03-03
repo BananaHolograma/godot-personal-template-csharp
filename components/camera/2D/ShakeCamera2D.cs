@@ -14,7 +14,7 @@ public partial class ShakeCamera2D : Camera2D
     private RandomNumberGenerator rng = new();
 
 
-    public override async void _Ready()
+    public override void _Ready()
     {
         SetProcess(false);
     }

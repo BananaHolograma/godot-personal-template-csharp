@@ -70,7 +70,7 @@ public partial class FirstPersonController : CharacterBody3D
             SwitchMouseMode();
     }
 
-    public override void _Ready()
+    public override async void _Ready()
     {
         GameEvents = this.GetAutoloadNode<GameEvents>("GameEvents");
 
