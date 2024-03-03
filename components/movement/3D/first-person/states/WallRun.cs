@@ -8,14 +8,10 @@ namespace GameRoot;
 public partial class WallRun : Motion
 {
 	#region Exports
-	[Export]
-	public float CameraRotationAngle = .15f;
-	[Export]
-	public float WallGravity = 1.5f;
-	[Export]
-	public float Speed = 3f;
-	[Export]
-	public float InitialBoostSpeed = 2f;
+	[Export] public float CameraRotationAngle = .15f;
+	[Export] public float WallGravity = 1.5f;
+	[Export] public float Speed = 3f;
+	[Export] public float InitialBoostSpeed = 2f;
 
 	#endregion
 	internal enum WallSide

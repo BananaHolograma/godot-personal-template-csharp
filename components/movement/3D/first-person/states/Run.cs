@@ -6,11 +6,8 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Run : Motion
 {
-    [Export]
-    public float Speed = 5.5f;
-
-    [Export]
-    public float SprintTime = 4f;
+    [Export] public float Speed = 5.5f;
+    [Export] public float SprintTime = 4f;
 
     public Timer SpeedTimer;
 

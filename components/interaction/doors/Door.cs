@@ -4,6 +4,7 @@ namespace GameRoot;
 
 public partial class Door : Node3D
 {
+    #region Signals
     [Signal]
     public delegate void OpenedEventHandler();
     [Signal]
@@ -13,6 +14,8 @@ public partial class Door : Node3D
     [Signal]
     public delegate void UnlockedEventHandler();
 
+    #endregion
+
     [ExportGroup("Interaction parameters")]
     public bool IsOpen
     {
@@ -20,9 +23,7 @@ public partial class Door : Node3D
         set
         {
             if (value != isOpen)
-            {
                 EmitSignal(value ? SignalName.Opened : SignalName.Closed);
-            }
 
             isOpen = value;
         }
@@ -34,40 +35,18 @@ public partial class Door : Node3D
         set
         {
             if (value != isLocked)
-            {
                 EmitSignal(value ? SignalName.Locked : SignalName.Unlocked);
-            }
 
             isLocked = value;
         }
     }
-
-    [Export]
-    public PackedScene Key;
-
-    [Export]
-    public float DelayBeforeClose = 0f;
-
+    [Export] public PackedScene Key;
+    [Export] public float DelayBeforeClose = 0f;
 
     private bool isOpen = false;
     private bool isLocked = false;
-    public virtual void Open()
-    {
-
-    }
-
-    public virtual void Close()
-    {
-
-    }
-
-    public virtual void Unlock()
-    {
-
-    }
-
-    public virtual void Lock()
-    {
-
-    }
+    public virtual void Open() { }
+    public virtual void Close() { }
+    public virtual void Unlock() { }
+    public virtual void Lock() { }
 }

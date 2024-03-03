@@ -7,12 +7,8 @@ public partial class SaveManager : Node
 {
     [Signal]
     public delegate void RemovedSavedGameEventHandler(string filename);
-
-    [Export]
-    public Dictionary<string, SavedGame> ListOfSavedGames;
-    [Export]
-    public SavedGame CurrentSavedGame;
-
+    [Export] public Dictionary<string, SavedGame> ListOfSavedGames;
+    [Export] public SavedGame CurrentSavedGame;
 
     public override void _Ready()
     {

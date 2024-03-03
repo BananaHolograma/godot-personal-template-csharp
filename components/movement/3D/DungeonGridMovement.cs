@@ -9,10 +9,8 @@ using Godot;
 public partial class DungeonGridMovement : Node
 {
     #region Exports
-    [Export]
-    public int CellTravelSize = 2;
-    [Export]
-    public float MovementAnimationTime = .3f;
+    [Export] public int CellTravelSize = 2;
+    [Export] public float MovementAnimationTime = .3f;
     #endregion
     public Node3D Target;
     public Tween TweenMovement;

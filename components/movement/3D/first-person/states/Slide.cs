@@ -10,10 +10,7 @@ public partial class Slide : Motion
 	[Export] public double SlideTime = 1.2f;
 	[Export] public float FrictionMomentum = .1f;
 	[Export] public float SlideTilt = 5f;
-
 	[Export] public bool ReduceSpeedGradually = true;
-
-
 	public Timer SlideTimer;
 	public Vector3 LastDirection = Vector3.Zero;
 	public double DecreaseRate;
@@ -22,7 +19,6 @@ public partial class Slide : Motion
 	public AnimationPlayer AnimationPlayer;
 	public Node3D Head;
 	public ShapeCast3D CeilShapeDetector;
-
 	RandomNumberGenerator rng = new();
 	public override void Ready()
 	{

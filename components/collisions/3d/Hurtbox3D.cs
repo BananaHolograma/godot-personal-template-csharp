@@ -20,6 +20,7 @@ public partial class Hurtbox3D : Area3D
 
     public void OnAreaEntered(Area3D area)
     {
-        if (area is Hitbox3D) EmitSignal(SignalName.Hitbox3DDetected, area);
+        if (area is Hitbox3D)
+            EmitSignal(SignalName.Hitbox3DDetected, area);
     }
 }

@@ -13,12 +13,10 @@ public partial class Motion : State
 	#endregion
 
 	#region Exports
-	[Export]
-	public FirstPersonController Actor;
+	[Export] public FirstPersonController Actor;
 
 	[ExportGroup("Gravity")]
-	[Export]
-	public double Gravity = 15.8f;
+	[Export] public double Gravity = 15.8f;
 
 	[Export]
 	public bool GravityActive
@@ -29,40 +27,29 @@ public partial class Motion : State
 			if (value != gravityActive)
 				EmitSignal(value ? SignalName.GravityEnabled : SignalName.GravityDisabled);
 
-
 			gravityActive = value;
 		}
 	}
 
-	[Export]
-	public float FallVelocityLimit = 300f;
+	[Export] public float FallVelocityLimit = 300f;
 
 	[ExportGroup("Motion")]
-	[Export]
-	public float Friction = 7f;
+	[Export] public float Friction = 7f;
 	[ExportGroup("StairStepping")]
-	[Export]
-	public bool StairSteppingEnabled = true;
-	[Export]
-	public float MaxStepUp = .5f;
-	[Export]
-	public float MaxStepDown = .5f;
-	[Export]
-	public float StepDistanceToCheck = .1f;
-	[Export]
-	public int FloorMaxAngleCheckInDegrees = 20;
-	[Export]
-	public Vector3 Vertical = new(0, 1, 0);
-	[Export]
-	public Vector3 Horizontal = new(1, 0, 1);
+	[Export] public bool StairSteppingEnabled = true;
+	[Export] public float MaxStepUp = .5f;
+	[Export] public float MaxStepDown = .5f;
+	[Export] public float StepDistanceToCheck = .1f;
+	[Export] public int FloorMaxAngleCheckInDegrees = 20;
+	[Export] public Vector3 Vertical = new(0, 1, 0);
+	[Export] public Vector3 Horizontal = new(1, 0, 1);
 	#endregion
-	private bool gravityActive = true;
-
 	public TransformedInput TransformedInput = new();
-
 	public bool IsGrounded = true;
 	public bool WasGrounded = true;
 	public bool StairStepping = false;
+
+	private bool gravityActive = true;
 
 	public override void PhysicsUpdate(double delta)
 	{

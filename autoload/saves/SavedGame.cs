@@ -7,20 +7,12 @@ using System.Linq;
 public partial class SavedGame : Resource
 {
     public static string DefaultPath = OS.GetUserDataDir();
-
-    [Export]
-    public string Filename;
-    [Export]
-    public string VersionControl = (string)ProjectSettings.GetSetting("application/config/version");
-
-    [Export]
-    public string EngineVersion;
-
-    [Export]
-    public string LastDatetime;
-    [Export]
-    public GameSettings GameSettings;
-
+    [Export] public string Filename;
+    [Export] public string VersionControl = (string)ProjectSettings.GetSetting("application/config/version");
+    [Export] public string EngineVersion;
+    [Export] public string LastDatetime;
+    [Export] public double Timestamp;
+    [Export] public GameSettings GameSettings;
 
     public void UpdateLastDatetime()
     {
@@ -30,6 +22,8 @@ public partial class SavedGame : Resource
                            $"{datetime["year"].ToString().PadZeros(2)} " +
                            $"{datetime["hour"].ToString().PadZeros(2)}:" +
                            $"{datetime["minute"].ToString().PadZeros(2)}";
+
+        Timestamp = Time.GetUnixTimeFromSystem();
     }
 
     public void WriteSavegame(string filename)
@@ -47,9 +41,8 @@ public partial class SavedGame : Resource
             Error error = DirAccess.RemoveAbsolute(GetSavePath(Filename));
 
             if (error != Error.Ok)
-            {
                 GD.PushError($"An error happened trying to delete the file {Filename} with code {error}");
-            }
+
         }
     }
     public static string GetSavePath(string filename)
@@ -96,9 +89,7 @@ public partial class SavedGame : Resource
                     SavedGame savedGame = LoadSaveGame(filename.GetBaseName());
 
                     if (savedGame is not null)
-                    {
                         savedGames.Add(savedGame.Filename, savedGame);
-                    }
                 }
 
                 filename = directory.GetNext();

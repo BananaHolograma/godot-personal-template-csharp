@@ -5,11 +5,8 @@ using Godot;
 [GlobalClass]
 public partial class ManualRotatorComponent3D : Node
 {
-    [Export]
-    public float MouseSensitivity = 3f;
-
-    [Export]
-    public Node3D Target;
+    [Export] public float MouseSensitivity = 3f;
+    [Export] public Node3D Target;
 
     public override void _Input(InputEvent @event)
     {

@@ -6,8 +6,7 @@ using System.Linq;
 
 public partial class DebugMenu : Control
 {
-	[Export]
-	public FirstPersonController Actor;
+	[Export] public FirstPersonController Actor;
 
 	public Label FpsLabel;
 	public Label StateLabel;

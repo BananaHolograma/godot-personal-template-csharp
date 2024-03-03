@@ -14,15 +14,10 @@ public partial class OrbitComponent2D : Node2D
     #endregion
 
     #region Exports
-    [Export]
-    public Node2D RotationReference;
-
-    [Export]
-    public float Radius = 40f;
-    [Export]
-    public double AngleInRadians = Math.PI / 4;
-    [Export]
-    public double AngularVelocity = Math.PI / 2;
+    [Export] public Node2D RotationReference;
+    [Export] public float Radius = 40f;
+    [Export] public double AngleInRadians = Math.PI / 4;
+    [Export] public double AngularVelocity = Math.PI / 2;
     #endregion
 
     public bool Active
@@ -31,9 +26,7 @@ public partial class OrbitComponent2D : Node2D
         set
         {
             if (value != active)
-            {
                 EmitSignal(value ? SignalName.Started : SignalName.Stopped);
-            }
 
             active = value;
         }
@@ -43,7 +36,8 @@ public partial class OrbitComponent2D : Node2D
 
     public override void _Process(double delta)
     {
-        if (active) Orbit(delta);
+        if (active)
+            Orbit(delta);
     }
 
     public void Orbit(double delta)

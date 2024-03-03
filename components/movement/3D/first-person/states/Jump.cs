@@ -6,16 +6,11 @@ using GodotExtensions;
 [GlobalClass]
 public partial class Jump : Motion
 {
-    [Export]
-    public float VelocityBarrierToFall = -5f;
-    [Export]
-    public float AirControlSpeed = 7.5f;
-    [Export]
-    public int JumpTimes = 1;
-    [Export]
-    public float OverrideJumpGravity = 0f;
-    [Export]
-    public float OverrideFallGravity = 0f;
+    [Export] public float VelocityBarrierToFall = -5f;
+    [Export] public float AirControlSpeed = 7.5f;
+    [Export] public int JumpTimes = 1;
+    [Export] public float OverrideJumpGravity = 0f;
+    [Export] public float OverrideFallGravity = 0f;
     [Export]
     public float JumpHeight
     {
@@ -55,8 +50,7 @@ public partial class Jump : Motion
     }
 
     [ExportGroup("Wall run")]
-    [Export]
-    public float WallDetectionAfterFrames = 25f;
+    [Export] public float WallDetectionAfterFrames = 25f;
 
     private float jumpHeight = 2f;
     private float jumpTimeToPeak = .45f;
@@ -156,9 +150,7 @@ public partial class Jump : Motion
             }
 
             if (Actor.WallRun && WallDetectionActive && WallDetected())
-            {
                 FSM.ChangeStateTo("WallRun");
-            }
         }
 
         Actor.MoveAndSlide();

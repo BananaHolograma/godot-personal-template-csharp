@@ -5,12 +5,10 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Raycast3DInteractor : RayCast3D, IInteractor
 {
-    [Export]
-    public CharacterBody3D actor;
+    [Export] public CharacterBody3D actor;
     public Interactable3D CurrentInteractable;
     public bool Focused = false;
     public bool Interacting = false;
-
 
     public override void _EnterTree()
     {
@@ -25,9 +23,8 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
     public override void _UnhandledInput(InputEvent @event)
     {
         if (InputMap.HasAction("interact") && Input.IsActionJustPressed("interact") && CurrentInteractable is not null && !Interacting)
-        {
             Interact(CurrentInteractable);
-        }
+
     }
 
     public override void _PhysicsProcess(double delta)
@@ -63,9 +60,8 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
             }
 
             if (interactable.HasSignal(Interactable3D.SignalName.Interacted))
-            {
                 interactable.EmitSignal(Interactable3D.SignalName.Interacted, this);
-            }
+
         }
 
     }
@@ -78,9 +74,8 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
         if (interactable is not null)
         {
             if (interactable.IsScannable())
-            {
                 Enabled = true;
-            }
+
 
             if (interactable.HasSignal(Interactable3D.SignalName.CanceledInteraction))
             {
@@ -94,12 +89,9 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
     public void Focus(Interactable3D interactable)
     {
         if (interactable.HasSignal(Interactable3D.SignalName.Focused))
-        {
             interactable.EmitSignal(Interactable3D.SignalName.Focused, this);
-        }
 
         Focused = true;
-
     }
 
     public void UnFocus(Interactable3D interactable)
@@ -107,9 +99,7 @@ public partial class Raycast3DInteractor : RayCast3D, IInteractor
         interactable ??= CurrentInteractable;
 
         if (interactable is not null && interactable.HasSignal(Interactable3D.SignalName.UnFocused))
-        {
             interactable.EmitSignal(Interactable3D.SignalName.UnFocused, this);
-        }
 
         Focused = false;
     }

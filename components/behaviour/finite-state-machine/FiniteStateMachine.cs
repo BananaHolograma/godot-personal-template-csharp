@@ -23,14 +23,10 @@ public partial class FiniteStateMachine : Node
     #endregion
 
     #region Exports
-    [Export]
-    public State CurrentState;
-    [Export]
-    public bool EnableStack = true;
-    [Export]
-    public int StackCapacity = 3;
-    [Export]
-    public bool FlushStackWhenReachCapacity = false;
+    [Export] public State CurrentState;
+    [Export] public bool EnableStack = true;
+    [Export] public int StackCapacity = 3;
+    [Export] public bool FlushStackWhenReachCapacity = false;
 
     #endregion
 
@@ -93,9 +89,7 @@ public partial class FiniteStateMachine : Node
         string transitionName = BuildTransitionName(CurrentState, to);
 
         if (!Transitions.ContainsKey(transitionName))
-        {
             Transitions[transitionName] = new NeutralTransition();
-        }
 
         Transition transition = Transitions[transitionName];
         transition.FromState = CurrentState;

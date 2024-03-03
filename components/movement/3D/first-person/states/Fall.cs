@@ -5,13 +5,9 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Fall : Motion
 {
-    [Export]
-    public bool JumpBuffer = true;
-    [Export]
-
-    public int JumpBufferTimeFrames = 15; // This the time to record the jump buffer on 60 fps, so 15/60 will be 1/4s
+    [Export] public bool JumpBuffer = true;
+    [Export] public int JumpBufferTimeFrames = 15; // This the time to record the jump buffer on 60 fps, so 15/60 will be 1/4s
     public int CurrentJumpBufferTimeFrames = 15;
-
     public bool JumpRequested = false;
     public override void Enter()
     {

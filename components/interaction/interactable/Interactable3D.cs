@@ -6,7 +6,7 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Interactable3D : Area3D
 {
-
+    #region Signals
     [Signal]
     public delegate void FocusedEventHandler(GodotObject interactor);
     [Signal]
@@ -16,14 +16,14 @@ public partial class Interactable3D : Area3D
     [Signal]
     public delegate void CanceledInteractionEventHandler(GodotObject interactor);
 
-    [ExportGroup("InteractionParameters")]
-    public InteractableParameters Parameters;
-    [ExportGroup("Pointers")]
-    public CompressedTexture2D FocusPointer;
-    public CompressedTexture2D InteractPointer;
+    #endregion
 
-    [Export]
-    public Node Target;
+    [ExportGroup("InteractionParameters")]
+    [Export] public InteractableParameters Parameters;
+    [ExportGroup("Pointers")]
+    [Export] public CompressedTexture2D FocusPointer;
+    [Export] public CompressedTexture2D InteractPointer;
+    [Export] public Node Target;
 
     public IInteractor actor;
 
@@ -79,9 +79,7 @@ public partial class Interactable3D : Area3D
             actor = interact;
 
             if (Parameters.LockPlayer)
-            {
                 EmitSignal(GameEvents.SignalName.LockPlayer, this);
-            }
 
             EmitSignal(GameEvents.SignalName.Interacted, this);
         }
@@ -91,9 +89,7 @@ public partial class Interactable3D : Area3D
         actor = null;
 
         if (Parameters.LockPlayer)
-        {
             EmitSignal(GameEvents.SignalName.UnlockPlayer, this);
-        }
 
         EmitSignal(GameEvents.SignalName.Interacted, this);
     }

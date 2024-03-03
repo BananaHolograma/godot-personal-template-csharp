@@ -56,20 +56,15 @@ public partial class AudioManager : Node
     public bool IsStreamLooped(AudioStream stream)
     {
         if (stream is AudioStreamMP3 mp3Stream)
-        {
             return mp3Stream.Loop;
-        }
+
 
         if (stream is AudioStreamOggVorbis oggStream)
-        {
             return oggStream.Loop;
-        }
+
 
         if (stream is AudioStreamWav wavStream)
-        {
             return wavStream.LoopMode.Equals(AudioStreamWav.LoopModeEnum.Disabled);
-        }
-
 
         return false;
     }

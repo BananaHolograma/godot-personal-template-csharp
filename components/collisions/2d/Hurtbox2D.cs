@@ -20,6 +20,7 @@ public partial class Hurtbox2D : Area2D
 
     public void OnAreaEntered(Area2D area)
     {
-        if (area is Hitbox2D) EmitSignal(SignalName.Hitbox2DDetected, area);
+        if (area is Hitbox2D)
+            EmitSignal(SignalName.Hitbox2DDetected, area);
     }
 }

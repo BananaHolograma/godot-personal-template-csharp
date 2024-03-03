@@ -6,8 +6,7 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Crouch : Motion
 {
-    [Export]
-    public float Speed = 2f;
+    [Export] public float Speed = 2f;
     public AnimationPlayer AnimationPlayer;
     public ShapeCast3D CeilShapeDetector;
 

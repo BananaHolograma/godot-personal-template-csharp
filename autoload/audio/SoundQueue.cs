@@ -12,11 +12,8 @@ namespace GameRoot;
 public partial class SoundQueue : Node, ISoundQueue
 {
     private int _next = 0;
-
     private readonly List<AudioStreamPlayer> _audioStreamPlayers = new();
-
-    [Export]
-    public int Count { get; set; } = 1;
+    [Export] public int Count { get; set; } = 1;
 
     public override void _Ready()
     {
@@ -68,14 +65,10 @@ public partial class SoundQueue : Node, ISoundQueue
     public override string[] _GetConfigurationWarnings()
     {
         if (GetChildCount() == 0)
-        {
             return new string[] { "No children found. Expected AudioStreamPlayer child." };
-        }
 
         if (GetChild(0) is not AudioStreamPlayer)
-        {
             return new string[] { "Expected child to be an AudioStreamPlayer" };
-        }
 
         return base._GetConfigurationWarnings();
     }

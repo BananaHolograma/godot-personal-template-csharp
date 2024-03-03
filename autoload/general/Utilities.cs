@@ -44,9 +44,7 @@ public partial class Utilities : Node
         int seconds = (int)(time % 60);
 
         if (!useMilliseconds)
-        {
             return string.Format("{0:00}:{1:00}", minutes, seconds);
-        }
 
         int milliseconds = (int)(Math.Floor(time * 100) % 100);
 
@@ -63,9 +61,7 @@ public partial class Utilities : Node
         if (IsValidUrl(url))
         {
             if (OS.GetName() == "Web")
-            {
                 url = url.URIEncode();
-            }
 
             OS.ShellOpen(url);
         }

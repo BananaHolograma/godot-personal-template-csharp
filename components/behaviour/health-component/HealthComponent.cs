@@ -21,10 +21,8 @@ public partial class HealthComponent : Node
     public delegate void DiedEventHandler();
 
     [ExportGroup("Health parameters")]
-    [Export]
-    public int MaxHealth = 100;
-    [Export]
-    public float HealthOverflowPercentage = 0.0f;
+    [Export] public int MaxHealth = 100;
+    [Export] public float HealthOverflowPercentage = 0.0f;
     [Export]
     public int CurrentHealth
     {
@@ -33,21 +31,15 @@ public partial class HealthComponent : Node
     }
 
     [ExportGroup("Additional behaviours")]
-    [Export]
-    public int HealthRegen = 0;
-    [Export]
-    public float HealthRegenTickTime = 1.0f;
-    [Export]
-    public bool IsInvulnerable = false;
-    [Export]
-    public float InvulnerabilityTime = 1.0f;
+    [Export] public int HealthRegen = 0;
+    [Export] public float HealthRegenTickTime = 1.0f;
+    [Export] public bool IsInvulnerable = false;
+    [Export] public float InvulnerabilityTime = 1.0f;
 
-
+    public int MaxHealthOverflow { get { return MaxHealth + (int)(MaxHealth * HealthOverflowPercentage / 100); } }
     public Timer InvulnerabilityTimer;
     public Timer HealthRegenTimer;
-
     private int _currentHealth = 100;
-    public int MaxHealthOverflow { get { return MaxHealth + (int)(MaxHealth * HealthOverflowPercentage / 100); } }
 
     public override void _Ready()
     {

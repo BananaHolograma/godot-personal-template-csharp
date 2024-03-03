@@ -6,13 +6,9 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Walk : Motion
 {
-    [Export]
-    public float Speed = 3.5f;
-    [Export]
-    public float CatchingBreathRecoveryTime = 3f;
-
+    [Export] public float Speed = 3.5f;
+    [Export] public float CatchingBreathRecoveryTime = 3f;
     public Timer CatchingBreathTimer;
-
 
     public override void Ready()
     {

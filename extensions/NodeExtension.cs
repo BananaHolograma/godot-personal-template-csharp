@@ -44,9 +44,8 @@ public static class NodeExtension
         foreach (Node child in node.GetChildren(true))
         {
             if (child is T nodeFound && typeof(T).IsAssignableFrom(child.GetType()))
-            {
                 result.Add(nodeFound);
-            }
+
 
             FindNodeClassesRecursively(child, result);
         }
@@ -60,9 +59,7 @@ public static class NodeExtension
         foreach (Node child in node.GetChildren(true))
         {
             if (child is T nodeFound && child.GetType() == typeof(T))
-            {
                 result.Add(nodeFound);
-            }
 
             FindNodesRecursively(child, result);
         }
@@ -76,7 +73,9 @@ public static class NodeExtension
     public static Node GetLastChild(this Node node)
     {
         int count = node.GetChildCount();
-        if (count == 0) return null;
+        if (count == 0)
+            return null;
+
         return node.GetChild(count - 1);
     }
 

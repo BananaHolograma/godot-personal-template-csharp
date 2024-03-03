@@ -223,9 +223,7 @@ public static class VectorExtension
         Vector2 result = NormalizeDiagonalVector2(vector);
 
         if (result.IsEqualApprox(vector))
-        {
             return vector.IsNormalized() ? vector : result.Normalized();
-        }
 
         return result;
     }
@@ -233,9 +231,7 @@ public static class VectorExtension
     public static Vector2 NormalizeDiagonalVector2(this Vector2 vector)
     {
         if (IsDiagonalDirection2D(vector))
-        {
             return vector * Mathf.Sqrt(2);
-        }
 
         return vector;
     }
@@ -250,9 +246,7 @@ public static class VectorExtension
         Vector3 result = NormalizeDiagonalVector3(vector);
 
         if (result.IsEqualApprox(vector))
-        {
             return vector.IsNormalized() ? vector : result.Normalized();
-        }
 
         return result;
     }
@@ -260,9 +254,7 @@ public static class VectorExtension
     public static Vector3 NormalizeDiagonalVector3(this Vector3 vector)
     {
         if (IsDiagonalDirection3D(vector))
-        {
             return vector * Mathf.Sqrt(3f);
-        }
 
         return vector;
     }
