@@ -25,6 +25,8 @@ public partial class ShakeCamera3D : Area3D, IShakeable
     public Timer TraumaTimer;
     public Vector3 InitialRotation;
 
+    private double CurrentTrauma = 0f;
+
     public override void _Ready()
     {
         SetProcess(false);
@@ -38,8 +40,12 @@ public partial class ShakeCamera3D : Area3D, IShakeable
     }
     public override void _Process(double delta)
     {
+        // Reset trauma amount when the timer is still running
+        if (TraumaTimer.TimeLeft > 0 && Trauma == 0)
+            Trauma = CurrentTrauma;
+
         Time += delta;
-        Trauma = Mathf.Max(Trauma - delta * TraumaReductionRate, 0f);
+        Trauma = Mathf.Max(0f, Trauma - delta * TraumaReductionRate);
 
         camera.RotationDegrees = camera.RotationDegrees with
         {
@@ -51,8 +57,9 @@ public partial class ShakeCamera3D : Area3D, IShakeable
 
     public void AddTrauma(float amount, float time = 1f)
     {
-        GD.Print("Camera trauma");
         Trauma = Mathf.Clamp(Trauma + amount, 0, 1f);
+
+        CurrentTrauma = Trauma;
 
         if (IsInstanceValid(TraumaTimer))
         {
@@ -67,6 +74,7 @@ public partial class ShakeCamera3D : Area3D, IShakeable
     public void FinishTrauma()
     {
         Time = 0;
+        CurrentTrauma = 0;
         SetProcess(false);
     }
 
