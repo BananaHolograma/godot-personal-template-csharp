@@ -6,6 +6,8 @@ namespace GameRoot;
 [GlobalClass]
 public partial class Idle : Motion
 {
+    [Export] public float Friction = 7f;
+
     public override void Enter()
     {
         Actor.Velocity = Vector3.Zero;

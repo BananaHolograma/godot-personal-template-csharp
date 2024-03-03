@@ -7,7 +7,10 @@ namespace GameRoot;
 public partial class Run : Motion
 {
     [Export] public float Speed = 5.5f;
+    [Export] public float Acceleration = 25f;
+    [Export] public float Friction = 0;
     [Export] public float SprintTime = 4f;
+
 
     public Timer SpeedTimer;
 
@@ -35,7 +38,7 @@ public partial class Run : Motion
     {
         base.PhysicsUpdate(delta);
 
-        Move(Speed, delta);
+        Move(Speed, delta, Acceleration);
 
         if (Input.IsActionJustReleased("run"))
         {

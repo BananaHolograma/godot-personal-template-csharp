@@ -146,20 +146,32 @@ shape = SubResource("CapsuleShape3D_ih7l3")
 [node name="RightWallDetector" type="RayCast3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0859229, 0.142421, 0)
-target_position = Vector3(0.4, 0, 0)
+target_position = Vector3(0.5, 0, 0)
 debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
 
 [node name="LeftWallDetector" type="RayCast3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.154977, 0.142421, 0)
-target_position = Vector3(-0.4, 0, 0)
+target_position = Vector3(-0.5, 0, 0)
 debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
 
 [node name="FrontWallDetector" type="RayCast3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.142421, -0.132728)
-target_position = Vector3(0, 0, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0276185, 0.142421, -0.12149)
+target_position = Vector3(0, 0, -0.6)
 debug_shape_custom_color = Color(1, 0.345098, 0.12549, 1)
+
+[node name="BackWallDetectorLeft" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -0.0656474, 0.142882, 0.0943921)
+target_position = Vector3(0, 0, 0.6)
+debug_shape_custom_color = Color(1, 0.145098, 0.933333, 1)
+
+[node name="BackWallDetectorRight" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 0.0182389, 0.142882, 0.0940525)
+target_position = Vector3(0, 0, 0.6)
+debug_shape_custom_color = Color(1, 0.145098, 0.933333, 1)
 
 [node name="Head" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -194,36 +206,48 @@ Actor = NodePath("../..")
 
 [node name="Walk" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("4_so15b")
+Speed = 10.0
+Acceleration = 0.0
 Actor = NodePath("../..")
 
 [node name="Run" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("6_y21bt")
+Speed = 15.0
+Acceleration = 0.0
 Actor = NodePath("../..")
 
 [node name="Slide" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("7_g5ac5")
-ReduceSpeedGradually = false
+Speed = 15.0
+RotateHead = false
 Actor = NodePath("../..")
 
 [node name="Crouch" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("7_hihor")
+Speed = 4.0
 Actor = NodePath("../..")
 
 [node name="Crawl" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("8_x5pkh")
+Speed = 2.5
 Actor = NodePath("../..")
 
 [node name="Fall" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("9_n1u3a")
+AirControlSpeed = 10.0
+Acceleration = 20.0
 Actor = NodePath("../..")
 
 [node name="Jump" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("10_0wpa6")
+AirControlSpeed = 12.0
+Acceleration = 25.0
 Actor = NodePath("../..")
 
 [node name="WallRun" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("11_cgut7")
 WallGravity = 1.0
+InitialBoostSpeed = 1.0
 Actor = NodePath("../..")
 
 [node name="DebugMenu" type="Control" parent="." node_paths=PackedStringArray("Actor")]

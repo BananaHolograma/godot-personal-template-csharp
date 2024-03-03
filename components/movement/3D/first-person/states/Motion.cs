@@ -34,8 +34,6 @@ public partial class Motion : State
 
 	[Export] public float FallVelocityLimit = 300f;
 
-	[ExportGroup("Motion")]
-	[Export] public float Friction = 7f;
 	[ExportGroup("StairStepping")]
 	[Export] public bool StairSteppingEnabled = true;
 	[Export] public float MaxStepUp = .5f;
@@ -81,19 +79,36 @@ public partial class Motion : State
 		return oppositeToGravityVector && !Actor.IsOnFloor() && !FSM.CurrentStateIs("Fall");
 	}
 
-	public void Move(float speed, double delta)
+	public void Move(float speed, double delta, double acceleration = 0, double friction = 0)
 	{
 		Vector3 worldCoordinateSpaceDirection = TransformedInput.WorldCoordinateSpaceDirection;
 
 		if (worldCoordinateSpaceDirection.IsZeroApprox())
 		{
-			Actor.Velocity = Actor.Velocity.Lerp(
-				new Vector3(worldCoordinateSpaceDirection.X * speed, Actor.Velocity.Y, worldCoordinateSpaceDirection.Z * speed)
-				, (float)delta * Friction);
+			if (friction > 0)
+			{
+				Actor.Velocity = Actor.Velocity.MoveToward(
+									new Vector3(worldCoordinateSpaceDirection.X * speed, Actor.Velocity.Y, worldCoordinateSpaceDirection.Z * speed)
+								, (float)(delta * friction));
+			}
+			else
+			{
+				Actor.Velocity = Actor.Velocity.MoveToward(Actor.Velocity with { X = 0, Z = 0 }, speed);
+			}
+
 		}
 		else
 		{
-			Actor.Velocity = Actor.Velocity with { X = worldCoordinateSpaceDirection.X * speed, Z = worldCoordinateSpaceDirection.Z * speed };
+			if (acceleration > 0)
+			{
+				Actor.Velocity = Actor.Velocity.MoveToward(
+							Actor.Velocity with { X = worldCoordinateSpaceDirection.X * speed, Z = worldCoordinateSpaceDirection.Z * speed },
+							(float)(acceleration * delta));
+			}
+			else
+			{
+				Actor.Velocity = Actor.Velocity with { X = worldCoordinateSpaceDirection.X * speed, Z = worldCoordinateSpaceDirection.Z * speed };
+			}
 		}
 	}
 

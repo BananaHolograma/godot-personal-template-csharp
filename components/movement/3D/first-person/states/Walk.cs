@@ -7,6 +7,8 @@ namespace GameRoot;
 public partial class Walk : Motion
 {
     [Export] public float Speed = 3.5f;
+    [Export] public float Acceleration = 10f;
+    [Export] public float Friction = 0;
     [Export] public float CatchingBreathRecoveryTime = 3f;
     public Timer CatchingBreathTimer;
 
@@ -24,7 +26,7 @@ public partial class Walk : Motion
     {
         base.PhysicsUpdate(delta);
 
-        Move(Speed, delta);
+        Move(Speed, delta, Acceleration);
 
         if (TransformedInput.WorldCoordinateSpaceDirection.IsZeroApprox() || Actor.Velocity.IsZeroApprox())
             FSM.ChangeStateTo("Idle");

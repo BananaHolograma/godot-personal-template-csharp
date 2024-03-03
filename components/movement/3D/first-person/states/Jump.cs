@@ -2,12 +2,12 @@ namespace GameRoot;
 
 using System.Collections.Generic;
 using Godot;
-using GodotExtensions;
 [GlobalClass]
 public partial class Jump : Motion
 {
-    [Export] public float VelocityBarrierToFall = -5f;
-    [Export] public float AirControlSpeed = 7.5f;
+    [Export] public float VelocityBarrierToFall = -10f;
+    [Export] public float AirControlSpeed = 7f;
+    [Export] public float Acceleration = 12.5f;
     [Export] public int JumpTimes = 1;
     [Export] public float OverrideJumpGravity = 0f;
     [Export] public float OverrideFallGravity = 0f;
@@ -138,11 +138,12 @@ public partial class Jump : Motion
                 }
             }
 
-            Actor.Velocity = Actor.Velocity with
-            {
-                X = (float)Mathf.Lerp(Actor.Velocity.X, TransformedInput.WorldCoordinateSpaceDirection.X * AirControlSpeed, delta),
-                Z = (float)Mathf.Lerp(Actor.Velocity.Z, TransformedInput.WorldCoordinateSpaceDirection.Z * AirControlSpeed, delta),
-            };
+            Move(AirControlSpeed, delta, Acceleration);
+            /*    Actor.Velocity = Actor.Velocity with
+               {
+                   X = (float)Mathf.Lerp(Actor.Velocity.X, TransformedInput.WorldCoordinateSpaceDirection.X * AirControlSpeed, delta),
+                   Z = (float)Mathf.Lerp(Actor.Velocity.Z, TransformedInput.WorldCoordinateSpaceDirection.Z * AirControlSpeed, delta),
+               }; */
 
             if (JumpRequested && JumpTimes > 1 && JumpCount < JumpTimes)
             {

@@ -1,6 +1,25 @@
-[gd_scene load_steps=6 format=3 uid="uid://uirp2yubi5o6"]
+[gd_scene load_steps=9 format=3 uid="uid://uirp2yubi5o6"]
 
 [ext_resource type="PackedScene" uid="uid://bdnf7ahkyulgk" path="res://components/movement/3D/first-person/controller/first_person_controller.tscn" id="1_0w1lh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ad5vo"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_r64lx"]
+sky_material = SubResource("ProceduralSkyMaterial_ad5vo")
+
+[sub_resource type="Environment" id="Environment_0j03u"]
+background_mode = 2
+sky = SubResource("Sky_r64lx")
+ambient_light_source = 3
+ambient_light_color = Color(0.85098, 0.654902, 0.34902, 1)
+ambient_light_sky_contribution = 0.58
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_exposure = 1.5
+tonemap_white = 2.5
+glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_33dri"]
 albedo_color = Color(0.0313726, 0.0313726, 0.0313726, 1)
@@ -16,6 +35,13 @@ data = PackedVector3Array(-20, 0.5, 20, 20, 0.5, 20, -20, -0.5, 20, 20, 0.5, 20,
 albedo_color = Color(1, 0.388235, 1, 1)
 
 [node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0j03u")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
 
 [node name="FirstPersonController" parent="." instance=ExtResource("1_0w1lh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.96406, 1.45113, -8.02239)

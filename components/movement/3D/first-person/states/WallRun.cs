@@ -25,6 +25,10 @@ public partial class WallRun : Motion
 	public RayCast3D LeftWallDetector;
 	public RayCast3D FrontWallDetector;
 
+	//This detectors are activated in order to not fall the player when rotate around the wall to select the jump direction
+	public RayCast3D BackWallDetectorLeft;
+	public RayCast3D BackWallDetectorRight;
+
 	public Node3D Eyes;
 
 	public Dictionary<string, Vector3> WallNormals = new() { };
@@ -40,6 +44,8 @@ public partial class WallRun : Motion
 		RightWallDetector = Actor.GetNode<RayCast3D>("%RightWallDetector");
 		LeftWallDetector = Actor.GetNode<RayCast3D>("%LeftWallDetector");
 		FrontWallDetector = Actor.GetNode<RayCast3D>("%FrontWallDetector");
+		BackWallDetectorLeft = Actor.GetNode<RayCast3D>("%BackWallDetectorLeft");
+		BackWallDetectorRight = Actor.GetNode<RayCast3D>("%BackWallDetectorRight");
 
 		Eyes = Actor.GetNode<Node3D>("%Eyes");
 
@@ -50,6 +56,9 @@ public partial class WallRun : Motion
 
 	public override void Enter()
 	{
+		BackWallDetectorLeft.Enabled = true;
+		BackWallDetectorRight.Enabled = true;
+
 		CurrentGravity = WallGravity;
 		CurrentWallNormal = GetWallNormal();
 
@@ -64,6 +73,9 @@ public partial class WallRun : Motion
 
 	public override void Exit(State _nextState)
 	{
+		BackWallDetectorLeft.Enabled = false;
+		BackWallDetectorRight.Enabled = false;
+
 		Tween tween = CreateTween();
 		tween.TweenProperty(Eyes, "rotation:z", 0, .3f).SetTrans(Tween.TransitionType.Cubic);
 
@@ -159,6 +171,11 @@ public partial class WallRun : Motion
 
 	private bool WallDetected()
 	{
-		return !Actor.IsOnFloor() && (RightWallDetector.IsColliding() || LeftWallDetector.IsColliding() || FrontWallDetector.IsColliding());
+		return !Actor.IsOnFloor() &&
+				(RightWallDetector.IsColliding() ||
+				LeftWallDetector.IsColliding() ||
+				FrontWallDetector.IsColliding() ||
+				BackWallDetectorLeft.IsColliding() ||
+				BackWallDetectorRight.IsColliding());
 	}
 }
