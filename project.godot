@@ -121,4 +121,5 @@ vault={
 3d_physics/layer_5="Hitboxes"
 2d_physics/layer_6="Grabbables"
 3d_physics/layer_6="Grabbables"
+2d_physics/layer_7="Shakeable"
 3d_physics/layer_7="Shakeable"

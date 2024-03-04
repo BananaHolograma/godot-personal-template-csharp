@@ -36,7 +36,7 @@ public partial class Motion : State
 	[ExportGroup("StairStepping")]
 	[Export] public bool StairSteppingEnabled = true;
 	[Export] public float MaxStepUp = .5f;
-	[Export] public float MaxStepDown = .5f;
+	[Export] public float MaxStepDown = -.5f;
 	[Export] public float StepDistanceToCheck = .1f;
 	[Export] public int FloorMaxAngleCheckInDegrees = 20;
 	[Export] public Vector3 Vertical = new(0, 1, 0);
