@@ -19,7 +19,7 @@ public partial class Interactable3D : Area3D
     #endregion
 
     [ExportGroup("InteractionParameters")]
-    [Export] public InteractableParameters Parameters;
+    [Export(PropertyHint.ResourceType, nameof(InteractableParameters))] public InteractableParameters Parameters;
     [ExportGroup("Pointers")]
     [Export] public CompressedTexture2D FocusPointer;
     [Export] public CompressedTexture2D InteractPointer;

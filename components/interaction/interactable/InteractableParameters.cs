@@ -14,26 +14,40 @@ public partial class InteractableParameters : Resource
 	}
 
 	[ExportGroup("Information")]
-	public string title;
-	public string description;
-	public CATEGORY Category;
+	[Export] public string Title;
+	[Export] public string Description;
+	[Export] public CATEGORY Category;
 
 	[ExportGroup("Scan")]
-	public bool Scannable = false;
+	[Export] public bool Scannable = false;
 
 	[ExportGroup("Pickup")]
-	public bool Pickable = false;
-	public string PickupMessage;
-	public float PullPower = 20f;
-	public float ThrowPower = 10f;
+	[Export] public bool Pickable = false;
+	[Export] public string PickupMessage;
+	[Export] public float PullPower = 20f;
+	[Export] public float ThrowPower = 10f;
 
 	[ExportGroup("Usable")]
-	public bool Usable = false;
-	public string UsableMessage;
+	[Export] public bool Usable = false;
+	[Export] public string UsableMessage;
+
 	[ExportGroup("Inventory")]
-	public bool CanBeSaved = false;
-	public string InventorySaveMessage;
+	[Export] public bool CanBeSaved = false;
+	[Export] public string InventorySaveMessage;
 
 	[ExportGroup("Player")]
-	public bool LockPlayer = false;
+	[Export] public bool LockPlayer = false;
+
+	// Make sure you provide a parameterless constructor.
+	// In C#, a parameterless constructor is different from a
+	// constructor with all default values.
+	// Without a parameterless constructor, Godot will have problems
+	// creating and editing your resource via the inspector.
+	public InteractableParameters() : this("", "", CATEGORY.OBJECT) { }
+	public InteractableParameters(string title, string description, CATEGORY category)
+	{
+		Title = title;
+		Description = description;
+		Category = category;
+	}
 }
