@@ -60,7 +60,7 @@ public partial class Run : Motion
         Actor.MoveAndSlide();
 
         StairStepDown();
-
+        LedgeDetect();
         DetectJump();
     }
 

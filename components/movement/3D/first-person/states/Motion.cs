@@ -1,7 +1,4 @@
-using System;
-using System.Security.Cryptography.X509Certificates;
 using Godot;
-using Godot.Collections;
 using GodotExtensions;
 
 namespace GameRoot;
@@ -44,6 +41,10 @@ public partial class Motion : State
 	[Export] public int FloorMaxAngleCheckInDegrees = 20;
 	[Export] public Vector3 Vertical = new(0, 1, 0);
 	[Export] public Vector3 Horizontal = new(1, 0, 1);
+	[ExportGroup("Vaulting")]
+	[Export] public Vector3 VaultOffset = new(0, 3, 0);
+	[Export] public float VaultMaxObstacleSize = 1.1f;
+	[Export] public float VaultMaxObstacleHeight = 1.1f;
 	#endregion
 	public TransformedInput TransformedInput = new();
 	public bool IsGrounded = true;
@@ -131,16 +132,17 @@ public partial class Motion : State
 		Vector3 hitPoint1 = FrontWallDetector.GetCollisionPoint();
 		Vector3 hitPoint2 = RayCastLedge.GetCollisionPoint();
 
-		Vector3 offset = new(0, 3, 0);
-
 		LedgeMarker.Visible = FrontWallDetector.IsColliding();
 		RayCastLedge.Enabled = FrontWallDetector.IsColliding();
 
 		if (RayCastLedge.Enabled)
 		{
-			Vector3 hitpointOffset = hitPoint1 + offset;
+			Vector3 hitpointOffset = hitPoint1 + VaultOffset;
 			RayCastLedgeChecker.GlobalTransform = RayCastLedgeChecker.GlobalTransform with { Origin = hitpointOffset };
 			LedgeMarker.GlobalTransform = LedgeMarker.GlobalTransform with { Origin = hitPoint2 };
+
+			if (Input.IsActionJustPressed("vault") && Actor.IsOnFloor())
+				FSM.ChangeStateTo("Vault");
 		}
 	}
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bdnf7ahkyulgk"]
+[gd_scene load_steps=25 format=3 uid="uid://bdnf7ahkyulgk"]
 
 [ext_resource type="Script" path="res://components/movement/3D/first-person/controller/FirstPersonController.cs" id="1_36y4q"]
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Jump.cs" id="10_0wpa6"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/WallRun.cs" id="11_cgut7"]
 [ext_resource type="Script" path="res://debug/DebugMenu.cs" id="12_n8g11"]
+[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Vault.cs" id="13_ttkwj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5aglx"]
 radius = 0.287442
@@ -266,6 +267,10 @@ Actor = NodePath("../..")
 [node name="WallRun" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
 script = ExtResource("11_cgut7")
 WallGravity = 1.0
+Actor = NodePath("../..")
+
+[node name="Vault" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("Actor")]
+script = ExtResource("13_ttkwj")
 Actor = NodePath("../..")
 
 [node name="DebugMenu" type="Control" parent="." node_paths=PackedStringArray("Actor")]

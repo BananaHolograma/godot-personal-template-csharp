@@ -40,11 +40,9 @@ public partial class Walk : Motion
         Actor.MoveAndSlide();
 
         StairStepDown();
-
         DetectCrouch();
-        DetectJump();
-
         LedgeDetect();
+        DetectJump();
     }
 
     private void CatchingBreath()

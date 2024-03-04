@@ -228,6 +228,8 @@ public partial class FiniteStateMachine : Node
         Transitions["WalkToRun"] = new WalkToRunTransition();
         Transitions["RunToWalk"] = new RunToWalkTransition();
         Transitions["JumpToWallRun"] = new JumpToWallRunTransition();
+        Transitions["WalkToVault"] = new AnyToVaultTransition();
+        Transitions["RunToVault"] = new AnyToVaultTransition();
 
     }
 

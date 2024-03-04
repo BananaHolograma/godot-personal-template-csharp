@@ -137,11 +137,6 @@ public partial class Jump : Motion
             }
 
             Move(AirControlSpeed, delta, Acceleration);
-            /*    Actor.Velocity = Actor.Velocity with
-               {
-                   X = (float)Mathf.Lerp(Actor.Velocity.X, TransformedInput.WorldCoordinateSpaceDirection.X * AirControlSpeed, delta),
-                   Z = (float)Mathf.Lerp(Actor.Velocity.Z, TransformedInput.WorldCoordinateSpaceDirection.Z * AirControlSpeed, delta),
-               }; */
 
             if (JumpRequested && JumpTimes > 1 && JumpCount < JumpTimes)
             {
