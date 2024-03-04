@@ -17,10 +17,11 @@ public partial class Slide : Motion
 	public double DecreaseRate;
 	public int SlideSide;
 
-	public AnimationPlayer AnimationPlayer;
 	public Node3D Head;
+	public AnimationPlayer AnimationPlayer;
 	public ShapeCast3D CeilShapeDetector;
 	RandomNumberGenerator rng = new();
+
 	public override void Ready()
 	{
 		CeilShapeDetector = Actor.GetNode<ShapeCast3D>("CeilShapeDetector");
