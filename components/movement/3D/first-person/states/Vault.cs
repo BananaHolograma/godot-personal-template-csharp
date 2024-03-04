@@ -9,7 +9,6 @@ public partial class Vault : Motion
     [Export] float VaultTilt = 7f;
     public Vector3 MovementAmount = Vector3.Zero;
     public Vector3 TargetPosition = Vector3.Zero;
-
     public Node3D Head;
     private RandomNumberGenerator rng = new();
 
@@ -20,14 +19,7 @@ public partial class Vault : Motion
 
     public override void Enter()
     {
-        Vector3 originalHeadPosition = Head.Position;
-
-        Tween tween = CreateTween();
-        tween.SetParallel(true);
-        tween.TweenProperty(Head, "rotation:z", (rng.Randf() <= .5f ? 1 : -1) * Mathf.DegToRad(VaultTilt), .2f).SetEase(Tween.EaseType.In);
-        tween.TweenProperty(Head, "position:y", Head.Position.Y + .5f, .25f).SetEase(Tween.EaseType.Out);
-        tween.Chain().TweenProperty(Head, "position", originalHeadPosition, .2f).SetEase(Tween.EaseType.Out);
-
+        HeadAnimation();
         TargetPosition = Actor.GlobalPosition + MovementAmount;
     }
 
@@ -37,16 +29,26 @@ public partial class Vault : Motion
         TargetPosition = Vector3.Zero;
 
         Tween tween = CreateTween();
-        tween.TweenProperty(Head, "rotation:z", 0, .5f).SetEase(Tween.EaseType.Out);
+        tween.TweenProperty(Head, "rotation:z", 0, .35f).SetEase(Tween.EaseType.Out);
     }
 
     public override void PhysicsUpdate(double delta)
     {
         if (Actor.GlobalPosition.DistanceTo(TargetPosition) <= Mathf.Epsilon)
-        {
             FSM.ChangeStateTo("Walk");
-        }
 
         Actor.GlobalPosition = Actor.GlobalPosition.MoveToward(TargetPosition, (float)(Speed * delta));
+    }
+
+    private void HeadAnimation()
+    {
+        Vector3 originalHeadPosition = Head.Position;
+        float headRotationAngle = (rng.Randf() <= .5f ? 1 : -1) * Mathf.DegToRad(VaultTilt);
+
+        Tween tween = CreateTween();
+        tween.SetParallel(true);
+        tween.TweenProperty(Head, "rotation:z", headRotationAngle, .2f).SetEase(Tween.EaseType.In);
+        tween.TweenProperty(Head, "position:y", Head.Position.Y + .5f, .25f).SetEase(Tween.EaseType.Out);
+        tween.Chain().TweenProperty(Head, "position", originalHeadPosition, .2f).SetEase(Tween.EaseType.Out);
     }
 }
