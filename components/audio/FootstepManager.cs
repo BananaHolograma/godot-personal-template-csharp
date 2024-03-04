@@ -17,7 +17,7 @@ public partial class FootstepManager : Node3D
     public override string[] _GetConfigurationWarnings()
     {
         if (GetChildCount() == 0)
-            return new string[] { "No children found. Expected RayCast3D child." };
+            return new string[] { "No children found. Expected RayCast3D child to detect the floor material." };
 
         if (GetChild(0) is not RayCast3D)
             return new string[] { "Expected child to be a RayCast3D" };
@@ -43,6 +43,7 @@ public partial class FootstepManager : Node3D
 
             if (collider is StaticBody3D floor)
             {
+                // This are normal node groups so the StaticBody must be in a specific group to play the related sound
                 Array<StringName> groups = floor.GetGroups();
 
                 if (groups.Count > 0)
@@ -50,7 +51,7 @@ public partial class FootstepManager : Node3D
                     switch (groups[0])
                     {
                         case "dirt":
-                            // placeholder [Access the SoundQueue related to Dirt sounds and play the sound]
+                            // IMPORTANT: group as a placeholder example [Access the SoundQueue related to Dirt sounds and play the sound]
                             // Example: DirtSoundQueue.PlaySound()
                             IntervalTimer.Start(interval);
                             SfxPlaying = true;
