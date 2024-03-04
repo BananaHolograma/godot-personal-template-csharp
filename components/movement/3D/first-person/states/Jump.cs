@@ -63,10 +63,6 @@ public partial class Jump : Motion
     public int JumpCount = 1;
     public bool WallDetectionActive = false;
     public Timer WallDetectionTimer;
-
-    public RayCast3D RightWallDetector;
-    public RayCast3D LeftWallDetector;
-
     public Dictionary<string, Vector3> WallNormals = new() { };
 
     private bool JumpRequested;
@@ -74,9 +70,6 @@ public partial class Jump : Motion
     public override void Ready()
     {
         CreateWallDetectionTimer();
-
-        RightWallDetector = Actor.GetNode<RayCast3D>("%RightWallDetector");
-        LeftWallDetector = Actor.GetNode<RayCast3D>("%LeftWallDetector");
     }
 
     public override void Enter()

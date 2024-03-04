@@ -18,8 +18,13 @@ public partial class Walk : Motion
     }
     public override void Enter()
     {
-        // CatchingBreath();
+        FootstepManager.FloorDetectorRaycast.Enabled = true;
         Actor.Velocity = Actor.Velocity with { Y = 0 };
+    }
+
+    public override void Exit(State _nextState)
+    {
+        FootstepManager.FloorDetectorRaycast.Enabled = false;
     }
 
     public override void PhysicsUpdate(double delta)
@@ -31,6 +36,7 @@ public partial class Walk : Motion
         if (TransformedInput.WorldCoordinateSpaceDirection.IsZeroApprox() || Actor.Velocity.IsZeroApprox())
             FSM.ChangeStateTo("Idle");
 
+        Actor.GetNode<FootstepManager>("FootstepManager").Footstep(this);
 
         if (Input.IsActionPressed("run"))
             FSM.ChangeStateTo("Run");

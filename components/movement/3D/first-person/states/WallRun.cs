@@ -22,8 +22,6 @@ public partial class WallRun : Motion
 		FRONT
 	}
 
-	public RayCast3D RightWallDetector;
-	public RayCast3D LeftWallDetector;
 	//This back walls detectors are activated in order to not fall the player when rotate around the wall to select the jump direction
 	public RayCast3D BackWallDetectorLeft;
 	public RayCast3D BackWallDetectorRight;
@@ -40,9 +38,6 @@ public partial class WallRun : Motion
 
 	public override void Ready()
 	{
-		RightWallDetector = Actor.GetNode<RayCast3D>("%RightWallDetector");
-		LeftWallDetector = Actor.GetNode<RayCast3D>("%LeftWallDetector");
-		FrontWallDetector = Actor.GetNode<RayCast3D>("%FrontWallDetector");
 		BackWallDetectorLeft = Actor.GetNode<RayCast3D>("%BackWallDetectorLeft");
 		BackWallDetectorRight = Actor.GetNode<RayCast3D>("%BackWallDetectorRight");
 

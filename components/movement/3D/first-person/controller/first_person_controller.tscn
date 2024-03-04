@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bdnf7ahkyulgk"]
+[gd_scene load_steps=26 format=3 uid="uid://bdnf7ahkyulgk"]
 
 [ext_resource type="Script" path="res://components/movement/3D/first-person/controller/FirstPersonController.cs" id="1_36y4q"]
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/WallRun.cs" id="11_cgut7"]
 [ext_resource type="Script" path="res://debug/DebugMenu.cs" id="12_n8g11"]
 [ext_resource type="Script" path="res://components/movement/3D/first-person/states/Vault.cs" id="13_ttkwj"]
+[ext_resource type="Script" path="res://components/audio/FootstepManager.cs" id="15_3u82d"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5aglx"]
 radius = 0.287442
@@ -209,6 +210,15 @@ target_position = Vector3(0, 0, -2)
 debug_shape_custom_color = Color(0, 0.878431, 0, 1)
 script = ExtResource("2_fxir6")
 actor = NodePath("../../..")
+
+[node name="FootstepManager" type="Node3D" parent="." node_paths=PackedStringArray("FloorDetectorRaycast")]
+script = ExtResource("15_3u82d")
+FloorDetectorRaycast = NodePath("FloorDetectorRaycast")
+
+[node name="FloorDetectorRaycast" type="RayCast3D" parent="FootstepManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.765866, 0)
+target_position = Vector3(0, -0.3, 0)
+debug_shape_custom_color = Color(0.0823529, 0.207843, 0.85098, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

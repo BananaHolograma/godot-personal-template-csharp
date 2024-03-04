@@ -21,17 +21,19 @@ public partial class Run : Motion
         CreateSpeedTimer();
     }
 
-    public override void Exit(State _nextState)
-    {
-        SpeedTimer.Stop();
-    }
-
     public override void Enter()
     {
         if (SprintTime > 0 && IsInstanceValid(SpeedTimer))
             SpeedTimer.Start();
 
         InRecovery = false;
+        FootstepManager.FloorDetectorRaycast.Enabled = true;
+    }
+
+    public override void Exit(State _nextState)
+    {
+        SpeedTimer.Stop();
+        FootstepManager.FloorDetectorRaycast.Enabled = false;
     }
 
     public override void PhysicsUpdate(double delta)

@@ -52,18 +52,28 @@ public partial class Motion : State
 	public bool StairStepping = false;
 
 	public RayCast3D FrontWallDetector;
+	public RayCast3D RightWallDetector;
+	public RayCast3D LeftWallDetector;
+
 	public Node3D RayCastLedgeChecker;
 	public RayCast3D RayCastLedge;
 	public MeshInstance3D LedgeMarker;
+
+	public FootstepManager FootstepManager;
 
 	private bool gravityActive = true;
 
 	public override void _Ready()
 	{
 		FrontWallDetector = Actor.GetNode<RayCast3D>("%FrontWallDetector");
+		RightWallDetector = Actor.GetNode<RayCast3D>("%RightWallDetector");
+		LeftWallDetector = Actor.GetNode<RayCast3D>("%LeftWallDetector");
+
 		RayCastLedgeChecker = Actor.GetNode<Node3D>("%RayCastLedgeChecker");
 		RayCastLedge = RayCastLedgeChecker.GetNode<RayCast3D>("RayCastHead");
 		LedgeMarker = RayCastLedgeChecker.GetNode<MeshInstance3D>("LedgeMarker");
+
+		FootstepManager = Actor.GetNode<FootstepManager>("FootstepManager");
 	}
 
 	public override void PhysicsUpdate(double delta)

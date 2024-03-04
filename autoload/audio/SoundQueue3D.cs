@@ -62,11 +62,11 @@ public partial class SoundQueue3D : Node3D, ISoundQueue
     public override string[] _GetConfigurationWarnings()
     {
         if (GetChildCount() == 0)
-            return new string[] { "No children found. Expected AudioStreamPlayer2D child." };
+            return new string[] { "No children found. Expected AudioStreamPlayer3D child." };
 
 
-        if (GetChild(0) is not AudioStreamPlayer2D)
-            return new string[] { "Expected child to be an AudioStreamPlayer2D" };
+        if (GetChild(0) is not AudioStreamPlayer3D)
+            return new string[] { "Expected child to be an AudioStreamPlayer3D" };
 
         return base._GetConfigurationWarnings();
     }

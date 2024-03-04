@@ -109,7 +109,6 @@ public partial class ShakeCamera3D : Area3D, IShakeable
 
     private void OnTraumaTimerTimeout()
     {
-        GD.Print("Camera FINISH trauma");
         FinishTrauma();
     }
 }

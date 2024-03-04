@@ -60,8 +60,6 @@ public partial class SoundQueue : Node, ISoundQueue
             _next %= _audioStreamPlayers.Count;
         }
     }
-
-
     public override string[] _GetConfigurationWarnings()
     {
         if (GetChildCount() == 0)
