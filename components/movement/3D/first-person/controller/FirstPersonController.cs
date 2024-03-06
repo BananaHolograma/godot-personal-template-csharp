@@ -76,6 +76,14 @@ public partial class FirstPersonController : CharacterBody3D
         GameEvents = this.GetAutoloadNode<GameEvents>("GameEvents");
 
         FSM = GetNode<FiniteStateMachine>("FiniteStateMachine");
+        FSM.RegisterTransition("WalkToRun", new WalkToRunTransition());
+        FSM.RegisterTransition("RunToWalk", new RunToWalkTransition());
+        FSM.RegisterTransition("JumpToWallRun", new AnyToWallRunTransition());
+        FSM.RegisterTransition("FallToWallRun", new AnyToWallRunTransition());
+        FSM.RegisterTransition("WallRunToJump", new WallRunToJumpTransition());
+        FSM.RegisterTransition("WalkToVault", new AnyToVaultTransition());
+        FSM.RegisterTransition("RunToVault", new AnyToVaultTransition());
+
         Camera = GetNode<Camera3D>("%Camera3D");
         Head = GetNode<Node3D>("Head");
         Eyes = GetNode<Node3D>("Head/Eyes");

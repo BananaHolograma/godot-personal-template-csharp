@@ -41,7 +41,6 @@ public partial class FiniteStateMachine : Node
         StateChanged += OnStateChanged;
 
         InitializeStateNodes();
-        RegisterTransitions();
 
         if (CurrentState == null)
         {
@@ -223,16 +222,9 @@ public partial class FiniteStateMachine : Node
     /// <summary>
     /// To register a new transition just use like this example: Transitions.Add("IdleToWalk", new NeutralTransition());
     /// </summary>
-    private void RegisterTransitions()
+    public void RegisterTransition(string name, Transition transition)
     {
-        Transitions["WalkToRun"] = new WalkToRunTransition();
-        Transitions["RunToWalk"] = new RunToWalkTransition();
-        Transitions["JumpToWallRun"] = new AnyToWallRunTransition();
-        Transitions["WallRunToJump"] = new WallRunToJumpTransition();
-        Transitions["FallToWallRun"] = new AnyToWallRunTransition();
-        Transitions["WalkToVault"] = new AnyToVaultTransition();
-        Transitions["RunToVault"] = new AnyToVaultTransition();
-
+        Transitions.Add(name, transition);
     }
 
     private string BuildTransitionName(State from, State to) => $"{from.Name.ToString().Trim()}To{to.Name.ToString().Trim()}";
