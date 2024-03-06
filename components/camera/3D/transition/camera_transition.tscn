@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c06701dmwl0fu"]
+
+[ext_resource type="Script" path="res://components/camera/3D/transition/CameraTransition.cs" id="1_6vok6"]
+
+[node name="CameraTransition" type="Node" node_paths=PackedStringArray("GlobalTransitionCamera")]
+script = ExtResource("1_6vok6")
+GlobalTransitionCamera = NodePath("GlobalTransitionCamera")
+
+[node name="GlobalTransitionCamera" type="Camera3D" parent="."]

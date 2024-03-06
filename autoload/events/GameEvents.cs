@@ -19,4 +19,7 @@ public partial class GameEvents : Node
 
 	[Signal]
 	public delegate void UnFocusedEventHandler(GodotObject interactor);
+
+	[Signal]
+	public delegate void GlobalTransitionCamera3DRequestedEventHandler(Camera3D from, Camera3D to);
 }

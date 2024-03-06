@@ -3,7 +3,7 @@ namespace GameRoot;
 using Godot;
 
 [GlobalClass]
-public partial class ManualRotatorComponent3D : Node
+public partial class MouseRotatorComponent3D : Node
 {
     [Export] public float MouseSensitivity = 3f;
     [Export] public Node3D Target;
