@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using GameRoot;
 using Godot;
 using Godot.Collections;
 using GodotExtensions;
+
+namespace GameRoot;
 
 public partial class Telekinesis : Node3D
 {
@@ -45,6 +46,7 @@ public partial class Telekinesis : Node3D
     {
         if (Input.IsActionJustPressed("pull") && ThereAreFreeSlots())
         {
+            // TODO - REVISIT THIS BEHAVIOUR AS CAN BE USED IN A MORE OPTIMAL WAY COMBINING RAYCAST & AREA OR NOT
             if (Interactor.IsColliding())
             {
                 Throwable3D body = Interactor.GetCollider() as Throwable3D;
@@ -70,7 +72,7 @@ public partial class Telekinesis : Node3D
     public override void _Ready()
     {
         PrepareInteractor();
-        PrepareObjectDetector();
+        PrepareThrowableDetector();
         AvailableSlots = new() { RightSlot, LeftSlot };
     }
 
@@ -150,12 +152,12 @@ public partial class Telekinesis : Node3D
         if (Interactor != null)
         {
             Interactor.CollisionMask = 128; // Throwable layer
-            Interactor.TargetPosition = new Vector3(0, 0, InteractorDistance);
+            Interactor.TargetPosition = new Vector3(0, 0, -InteractorDistance);
         }
     }
-    private void PrepareObjectDetector()
+    private void PrepareThrowableDetector()
     {
-        ObjectDetector = GetNode<Area3D>("%ObjectDetector");
+        ObjectDetector = GetNode<Area3D>("%ThrowableDetector");
         ObjectDetector.Monitorable = false;
         ObjectDetector.Monitoring = true;
         ObjectDetector.Priority = 2;

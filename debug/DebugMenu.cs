@@ -1,13 +1,10 @@
-using GameRoot;
 using Godot;
-using System;
-using System.Diagnostics;
-using System.Linq;
 
+
+namespace GameRoot;
 public partial class DebugMenu : Control
 {
 	[Export] public FirstPersonController Actor;
-
 	public Label FpsLabel;
 	public Label StateLabel;
 	public Label VelocityLabel;

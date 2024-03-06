@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dw5dwamautnnx"]
+
+[ext_resource type="Script" path="res://components/interaction/telekinesis/Telekinesis.cs" id="1_eg8jq"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ngalj"]
+radius = 2.62965
+
+[node name="Telekinesis" type="Node3D"]
+script = ExtResource("1_eg8jq")
+
+[node name="ThrowableDetector" type="Area3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ThrowableDetector"]
+shape = SubResource("SphereShape3D_ngalj")
