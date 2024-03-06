@@ -91,7 +91,7 @@ public partial class Destructible : Node
         // The mesh scale is important to be modified before adding the mesh to the scene tree
         MeshInstance3D _mesh = new() { Scale = GenerateRandomShardScale() };
 
-        if (_mesh.Scale.X < 0.2f && _mesh.Scale.Y < 0.2f && _mesh.Scale.Z < 0.2f)
+        if (_mesh.Scale.X < 0.25f && _mesh.Scale.Y < 0.25f && _mesh.Scale.Z < 0.25f)
             body.ContinuousCd = true;
 
         body.GravityScale = ShardsGravityScale;
