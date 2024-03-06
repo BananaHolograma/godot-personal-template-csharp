@@ -53,13 +53,13 @@ albedo_color = Color(1, 1, 0.0235294, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3n8vi"]
 material = SubResource("StandardMaterial3D_v8yct")
-size = Vector3(10, 3, 1.5)
+size = Vector3(10, 6, 1.5)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0p4px"]
-data = PackedVector3Array(-2.5, 1.5, 0.2, 2.5, 1.5, 0.2, -2.5, -1.5, 0.2, 2.5, 1.5, 0.2, 2.5, -1.5, 0.2, -2.5, -1.5, 0.2, 2.5, 1.5, -0.2, -2.5, 1.5, -0.2, 2.5, -1.5, -0.2, -2.5, 1.5, -0.2, -2.5, -1.5, -0.2, 2.5, -1.5, -0.2, 2.5, 1.5, 0.2, 2.5, 1.5, -0.2, 2.5, -1.5, 0.2, 2.5, 1.5, -0.2, 2.5, -1.5, -0.2, 2.5, -1.5, 0.2, -2.5, 1.5, -0.2, -2.5, 1.5, 0.2, -2.5, -1.5, -0.2, -2.5, 1.5, 0.2, -2.5, -1.5, 0.2, -2.5, -1.5, -0.2, 2.5, 1.5, 0.2, -2.5, 1.5, 0.2, 2.5, 1.5, -0.2, -2.5, 1.5, 0.2, -2.5, 1.5, -0.2, 2.5, 1.5, -0.2, -2.5, -1.5, 0.2, 2.5, -1.5, 0.2, -2.5, -1.5, -0.2, 2.5, -1.5, 0.2, 2.5, -1.5, -0.2, -2.5, -1.5, -0.2)
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0pf4e"]
+data = PackedVector3Array(-5, 3, 0.75, 5, 3, 0.75, -5, -3, 0.75, 5, 3, 0.75, 5, -3, 0.75, -5, -3, 0.75, 5, 3, -0.75, -5, 3, -0.75, 5, -3, -0.75, -5, 3, -0.75, -5, -3, -0.75, 5, -3, -0.75, 5, 3, 0.75, 5, 3, -0.75, 5, -3, 0.75, 5, 3, -0.75, 5, -3, -0.75, 5, -3, 0.75, -5, 3, -0.75, -5, 3, 0.75, -5, -3, -0.75, -5, 3, 0.75, -5, -3, 0.75, -5, -3, -0.75, 5, 3, 0.75, -5, 3, 0.75, 5, 3, -0.75, -5, 3, 0.75, -5, 3, -0.75, 5, 3, -0.75, -5, -3, 0.75, 5, -3, 0.75, -5, -3, -0.75, 5, -3, 0.75, 5, -3, -0.75, -5, -3, -0.75)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_lm5ho"]
-size = Vector3(4.64503, 2.77789, 3.20306)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_llmmn"]
+points = PackedVector3Array(5, 3, 0.75, 5, 3, -0.75, -5, 3, 0.75, 5, -3, 0.75, 5, -3, -0.75, -5, 3, -0.75, -5, -3, 0.75, -5, -3, -0.75)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mr5ho"]
 transparency = 1
@@ -164,29 +164,28 @@ script = ExtResource("3_qdmy2")
 shape = SubResource("BoxShape3D_vrteh")
 
 [node name="DestructibleMeshInstance" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.02823, -9.18363)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.48189, -9.18363)
 mesh = SubResource("BoxMesh_3n8vi")
 script = ExtResource("3_jin00")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="DestructibleMeshInstance"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DestructibleMeshInstance/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_0p4px")
+shape = SubResource("ConcavePolygonShape3D_0pf4e")
 
 [node name="Hurtbox3D" type="Area3D" parent="DestructibleMeshInstance"]
 script = ExtResource("4_36alg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DestructibleMeshInstance/Hurtbox3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0685427, 0.0769958, 0.0799866)
-shape = SubResource("BoxShape3D_lm5ho")
+shape = SubResource("ConvexPolygonShape3D_llmmn")
 
 [node name="Destructible" type="Node" parent="DestructibleMeshInstance" node_paths=PackedStringArray("Target")]
 script = ExtResource("5_ml8f5")
 Target = NodePath("..")
-ShardType = 0
-AmountOfShards = 350
-MinShardSize = 0.1
-MaxShardSize = 0.15
+ShardType = 2
+AmountOfShards = 300
+MinShardSize = 0.5
+MaxShardSize = 0.7
 MinExplosionPower = 3.0
 MaxExplosionPower = 4.5
 ShardsGravityScale = 1.0
@@ -220,7 +219,7 @@ script = ExtResource("3_jin00")
 [node name="Destructible" type="Node" parent="DestructibleMeshInstance3" node_paths=PackedStringArray("Target")]
 script = ExtResource("5_ml8f5")
 Target = NodePath("..")
-AmountOfShards = 500
+AmountOfShards = 400
 MinShardSize = 0.2
 MaxShardSize = 0.35
 MinExplosionPower = 6.0

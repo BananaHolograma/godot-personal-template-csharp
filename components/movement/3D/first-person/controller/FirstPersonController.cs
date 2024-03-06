@@ -202,7 +202,6 @@ public partial class FirstPersonController : CharacterBody3D
             }
         }
     }
-
     public void UpdateCollisions()
     {
         switch (FSM.CurrentState.Name)

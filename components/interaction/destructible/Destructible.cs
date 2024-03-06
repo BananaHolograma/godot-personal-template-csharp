@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -31,7 +32,8 @@ public partial class Destructible : Node
     public enum ShardTypes
     {
         BOX,
-        BRICK
+        BRICK,
+        WALL_BREAKAGE
     }
     public enum ExplosionModes
     {
@@ -45,13 +47,31 @@ public partial class Destructible : Node
         LANDSLIDE
     }
 
-    public CollisionShape3D cachedCollision;
     public Mesh cachedMesh;
     public StandardMaterial3D TargetMaterial;
 
     private readonly RandomNumberGenerator rng = new();
     private Array<Mesh> MeshShapes = new() { new BoxMesh(), new CapsuleMesh(), new SphereMesh(), new CylinderMesh() };
     private readonly Array<Shard> Pool = new();
+
+    #region WallParts
+    private readonly Array<PackedScene> WallParts = new(){
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_1_part_3.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_2_part_1.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_2_part_2.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_2_part_3.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_3_part_1.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_3_part_2.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_4_part_1.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_4_part_2.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_4_part_3.tscn"),
+        ResourceLoader.Load<PackedScene>("res://components/interaction/destructible/parts/wall-breakage/scenes/wall_part_1.tscn")
+    };
+
+    //As the wall parts are all almost similar we can generate the collision just one time and reuse across the other parts
+    private readonly Godot.Collections.Dictionary<string, CollisionShape3D> cachedWallPartCollisionShapes = new();
+
+    #endregion
     public override void _Ready()
     {
         Destroyed += OnDestroyed;
@@ -88,28 +108,42 @@ public partial class Destructible : Node
         Shard body = Pool.First();
         Pool.RemoveAt(0);
 
-        // The mesh scale is important to be modified before adding the mesh to the scene tree
-        MeshInstance3D _mesh = new() { Scale = GenerateRandomShardScale() };
+        if (ShardType.Equals(ShardTypes.WALL_BREAKAGE))
+        {
+            Node3D wallPart = ObtainRandomWallBreakedPart();
+            MeshInstance3D _mesh = wallPart.FirstNodeOfType<MeshInstance3D>();
+            _mesh.Scale = GenerateRandomShardScale();
 
-        if (_mesh.Scale.X < 0.25f && _mesh.Scale.Y < 0.25f && _mesh.Scale.Z < 0.25f)
-            body.ContinuousCd = true;
+            body.AddChild(wallPart);
+            body.ContinuousCd = ContinuosCdOnMeshNeedsToBeApplied(_mesh);
+
+            if (TargetMaterial != null)
+                _mesh.Mesh.SurfaceSetMaterial(0, TargetMaterial);
+
+            CreateWallPartMeshCollision(body, _mesh);
+        }
+        else
+        {
+            // The mesh scale is important to be modified before adding the mesh to the scene tree
+            MeshInstance3D _mesh = new() { Scale = GenerateRandomShardScale() };
+            body.AddChild(_mesh);
+            body.ContinuousCd = ContinuosCdOnMeshNeedsToBeApplied(_mesh);
+            CreateMeshShape(_mesh);
+
+            if (TargetMaterial != null)
+                _mesh.Mesh.SurfaceSetMaterial(0, TargetMaterial);
+
+            CreateMeshCollision(body, _mesh);
+        }
 
         body.GravityScale = ShardsGravityScale;
-        body.AddChild(_mesh);
-
-        CreateMeshShape(_mesh);
-
-        if (TargetMaterial != null)
-            _mesh.Mesh.SurfaceSetMaterial(0, TargetMaterial);
 
         if (ShardsContainer == null)
             GetTree().Root.AddChild(body);
         else
             ShardsContainer.AddChild(body);
 
-        CreateMeshCollision(body, _mesh);
-
-        Vector3 spawnPosition = body.Position + GenerateRandomMeshSurfacePosition(_mesh);
+        Vector3 spawnPosition = body.Position + GenerateRandomMeshSurfacePosition(Target);
 
         body.GlobalPosition = Target.GlobalPosition + spawnPosition;
         body.GlobalRotation = Target.GlobalRotation;
@@ -141,7 +175,7 @@ public partial class Destructible : Node
             return Vector3.Zero;
 
         Vector3[] faces = _mesh.Mesh.GetFaces();
-        Vector3 randomFace = faces[rng.Randi() % faces.Length] * 2;
+        Vector3 randomFace = faces[rng.Randi() % faces.Length];
         randomFace = randomFace with { X = Mathf.Abs(randomFace.X), Y = Mathf.Abs(randomFace.Y), Z = Mathf.Abs(randomFace.Z) };
 
         return new Vector3(rng.RandfRange(-randomFace.X, randomFace.X), rng.RandfRange(-randomFace.Y, randomFace.Y), rng.RandfRange(-randomFace.Z, randomFace.Z));
@@ -161,39 +195,25 @@ public partial class Destructible : Node
     private void CreateMeshCollision(RigidBody3D body, MeshInstance3D mesh)
     {
         CollisionShape3D collision = new();
-
-        /*  switch (Target.Mesh.GetType())
-         {
-             case Type tubeType when tubeType == typeof(TubeTrailMesh):
-
-                 TubeTrailMesh tubeTrailMesh = Target.Mesh as TubeTrailMesh;
-                 SphereShape3D tubeTrailShape = new()
-                 {
-                     Radius = tubeTrailMesh.Radius * (mesh.Scale.X / 2)
-                 };
-
-                 collision.Shape = tubeTrailShape;
-                 break;
-
-             case Type capsuleType when capsuleType == typeof(CylinderMesh):
-                 CylinderMesh cylinderMesh = Target.Mesh as CylinderMesh;
-                 CylinderShape3D cylinderShape = new();
-                 cylinderMesh.TopRadius *= mesh.Scale.X / 2;
-                 cylinderMesh.BottomRadius *= mesh.Scale.X / 2;
-                 cylinderMesh.Height *= mesh.Scale.Y / 2;
-
-                 collision.Shape = cylinderShape;
-                 break;
-             default:
-                 BoxShape3D defaultShape = new() { Size = mesh.Scale };
-                 collision.Shape = defaultShape;
-                 break;
-         } */
-
         BoxShape3D shape = new() { Size = mesh.Scale * 1.15f };
 
         collision.Shape = shape;
         body.AddChild(collision);
+    }
+
+    private void CreateWallPartMeshCollision(RigidBody3D body, MeshInstance3D mesh)
+    {
+        if (!cachedWallPartCollisionShapes.TryGetValue(mesh.Name, out CollisionShape3D collision))
+        {
+            collision = new CollisionShape3D
+            {
+                Shape = mesh.Mesh.CreateConvexShape(false, false),
+                Scale = new Vector3(MaxShardSize, MaxShardSize, MaxShardSize)
+            };
+            cachedWallPartCollisionShapes.Add(mesh.Name, collision);
+        }
+
+        body.AddChild(collision.Duplicate());
     }
 
     private void CreateMeshShape(MeshInstance3D mesh)
@@ -201,6 +221,15 @@ public partial class Destructible : Node
         cachedMesh ??= new BoxMesh();
         mesh.Mesh = cachedMesh;
     }
+
+    private bool ContinuosCdOnMeshNeedsToBeApplied(MeshInstance3D _mesh)
+    {
+        return _mesh.Scale.X < 0.25f && _mesh.Scale.Y < 0.25f && _mesh.Scale.Z < 0.25f;
+    }
+
+    private Node3D ObtainRandomWallBreakedPart() => WallParts.PickRandom().Instantiate() as Node3D;
+
+
 
     private void OnDestroyed(int amount)
     {

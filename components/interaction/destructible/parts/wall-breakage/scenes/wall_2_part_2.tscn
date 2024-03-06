@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cgnb4omtutgb7"]
+
+[ext_resource type="PackedScene" uid="uid://d3gbqubdgombo" path="res://components/interaction/destructible/parts/wall-breakage/gtlf/Wall2_Part2.gltf" id="1_hwfbw"]
+
+[node name="Wall2_Part2" instance=ExtResource("1_hwfbw")]
