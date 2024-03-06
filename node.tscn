@@ -183,7 +183,7 @@ shape = SubResource("ConvexPolygonShape3D_llmmn")
 script = ExtResource("5_ml8f5")
 Target = NodePath("..")
 ShardType = 2
-AmountOfShards = 300
+AmountOfShards = 450
 MinShardSize = 0.5
 MaxShardSize = 0.7
 MinExplosionPower = 3.0
@@ -206,6 +206,7 @@ shape = SubResource("ConvexPolygonShape3D_4d1kp")
 [node name="Destructible" type="Node" parent="DestructibleMeshInstance2" node_paths=PackedStringArray("Target")]
 script = ExtResource("5_ml8f5")
 Target = NodePath("..")
+AmountOfShards = 480
 MinShardSize = 0.1
 MaxShardSize = 0.2
 MinExplosionPower = 2.0
@@ -219,7 +220,7 @@ script = ExtResource("3_jin00")
 [node name="Destructible" type="Node" parent="DestructibleMeshInstance3" node_paths=PackedStringArray("Target")]
 script = ExtResource("5_ml8f5")
 Target = NodePath("..")
-AmountOfShards = 400
+AmountOfShards = 480
 MinShardSize = 0.2
 MaxShardSize = 0.35
 MinExplosionPower = 6.0
