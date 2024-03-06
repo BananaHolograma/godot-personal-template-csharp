@@ -6,6 +6,7 @@ using GodotExtensions;
 
 namespace GameRoot;
 
+[GlobalClass]
 public partial class Telekinesis : Node3D
 {
     #region Signals
@@ -19,8 +20,10 @@ public partial class Telekinesis : Node3D
     #region Exports
     [Export] public CharacterBody3D Actor;
     [ExportGroup("Interactor ray")]
-    [Export] public RayCast3D Interactor;
-    [Export] public float InteractorDistance = 5f;
+    [Export] public RayCast3D ThrowableInteractor;
+    [ExportGroup("Detector area")]
+    [Export] public float ThrowableInteractorDistance = 5f;
+    [Export] public Area3D ThrowableDetector;
     [ExportGroup("Slots")]
     [Export] public Marker3D RightSlot;
     [Export] public Marker3D LeftSlot;
@@ -31,7 +34,6 @@ public partial class Telekinesis : Node3D
     [Export] public float MassLiftForce = 1.5f;
 
     #endregion
-    public Area3D ObjectDetector;
     public Array<Marker3D> AvailableSlots = new();
     public Array<Throwable3D> ActiveBodies = new();
 
@@ -47,9 +49,9 @@ public partial class Telekinesis : Node3D
         if (Input.IsActionJustPressed("pull") && ThereAreFreeSlots())
         {
             // TODO - REVISIT THIS BEHAVIOUR AS CAN BE USED IN A MORE OPTIMAL WAY COMBINING RAYCAST & AREA OR NOT
-            if (Interactor.IsColliding())
+            if (ThrowableInteractor.IsColliding())
             {
-                Throwable3D body = Interactor.GetCollider() as Throwable3D;
+                Throwable3D body = ThrowableInteractor.GetCollider() as Throwable3D;
 
                 if (CanBeLifted(body))
                     PullBody(body);
@@ -73,6 +75,7 @@ public partial class Telekinesis : Node3D
     {
         PrepareInteractor();
         PrepareThrowableDetector();
+
         AvailableSlots = new() { RightSlot, LeftSlot };
     }
 
@@ -96,7 +99,7 @@ public partial class Telekinesis : Node3D
 
     public IEnumerable<Throwable3D> RetrieveNearThrowables()
     {
-        return ObjectDetector.GetOverlappingBodies()
+        return ThrowableDetector.GetOverlappingBodies()
             .Where(body => body is Throwable3D)
             .OrderBy(body => body.GlobalDistanceTo(Actor))
             .Cast<Throwable3D>();
@@ -114,7 +117,7 @@ public partial class Telekinesis : Node3D
     {
         if (!ThereAreFreeSlots() || TotalSlotPoints + body.SlotPoints > UsableSlots)
         {
-            ObjectDetector.Monitoring = false;
+            ThrowableDetector.Monitoring = false;
             return;
         }
 
@@ -136,7 +139,7 @@ public partial class Telekinesis : Node3D
         body.Throw(impulse);
         ActiveBodies.Remove(body);
 
-        ObjectDetector.Monitoring = true;
+        ThrowableDetector.Monitoring = true;
         TotalSlotPoints -= body.SlotPoints;
 
         EmitSignal(SignalName.ThrowedThrowable, body);
@@ -149,19 +152,22 @@ public partial class Telekinesis : Node3D
 
     private void PrepareInteractor()
     {
-        if (Interactor != null)
+        if (ThrowableInteractor != null)
         {
-            Interactor.CollisionMask = 128; // Throwable layer
-            Interactor.TargetPosition = new Vector3(0, 0, -InteractorDistance);
+            ThrowableInteractor.CollisionMask = 128; // Throwable layer
+            ThrowableInteractor.TargetPosition = new Vector3(0, 0, -ThrowableInteractorDistance);
         }
     }
     private void PrepareThrowableDetector()
     {
-        ObjectDetector = GetNode<Area3D>("%ThrowableDetector");
-        ObjectDetector.Monitorable = false;
-        ObjectDetector.Monitoring = true;
-        ObjectDetector.Priority = 2;
-        ObjectDetector.CollisionLayer = 0;
-        ObjectDetector.CollisionMask = 128; // Throwable layer
+        if (ThrowableDetector != null)
+        {
+            ThrowableDetector.Monitorable = false;
+            ThrowableDetector.Monitoring = true;
+            ThrowableDetector.Priority = 2;
+            ThrowableDetector.CollisionLayer = 0;
+            ThrowableDetector.CollisionMask = 128; // Throwable layer
+        }
+
     }
 }

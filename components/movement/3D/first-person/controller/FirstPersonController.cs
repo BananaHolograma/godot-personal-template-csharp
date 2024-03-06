@@ -83,6 +83,7 @@ public partial class FirstPersonController : CharacterBody3D
         FSM.RegisterTransition("WallRunToJump", new WallRunToJumpTransition());
         FSM.RegisterTransition("WalkToVault", new AnyToVaultTransition());
         FSM.RegisterTransition("RunToVault", new AnyToVaultTransition());
+        FSM.StateChanged += OnStateChanged;
 
         Camera = GetNode<Camera3D>("%Camera3D");
         Head = GetNode<Node3D>("Head");

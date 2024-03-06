@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bdnf7ahkyulgk"]
+[gd_scene load_steps=29 format=3 uid="uid://bdnf7ahkyulgk"]
 
 [ext_resource type="Script" path="res://components/movement/3D/first-person/controller/FirstPersonController.cs" id="1_36y4q"]
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bg7fl862i33ty" path="res://components/interaction/crosshair/interaction_pointer.tscn" id="3_l6v66"]
 [ext_resource type="Script" path="res://components/movement/3D/states/Idle.cs" id="3_ufsu1"]
 [ext_resource type="Script" path="res://components/movement/3D/states/Walk.cs" id="4_so15b"]
+[ext_resource type="Script" path="res://components/interaction/telekinesis/Telekinesis.cs" id="5_qorpt"]
 [ext_resource type="Script" path="res://components/movement/3D/states/Run.cs" id="6_y21bt"]
 [ext_resource type="Script" path="res://components/movement/3D/states/Slide.cs" id="7_g5ac5"]
 [ext_resource type="Script" path="res://components/movement/3D/states/Crouch.cs" id="7_hihor"]
@@ -40,6 +41,9 @@ albedo_color = Color(1, 0.109804, 0.109804, 1)
 material = SubResource("StandardMaterial3D_onj1w")
 radius = 0.15
 height = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_l2c70"]
+radius = 3.23472
 
 [sub_resource type="Animation" id="Animation_4vmx0"]
 length = 0.001
@@ -270,12 +274,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047397, 0)
 [node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
 unique_name_in_owner = true
 
-[node name="Raycast3DInteractor" type="RayCast3D" parent="Head/Eyes" node_paths=PackedStringArray("actor")]
+[node name="RayCast3DInteractor" type="RayCast3D" parent="Head/Eyes" node_paths=PackedStringArray("actor")]
 visible = false
 target_position = Vector3(0, 0, -2)
 debug_shape_custom_color = Color(0, 0.878431, 0, 1)
+debug_shape_thickness = 3
 script = ExtResource("2_fxir6")
 actor = NodePath("../../..")
+
+[node name="ThrowableInteractor" type="RayCast3D" parent="Head/Eyes"]
+target_position = Vector3(0, 0, -5)
+collision_mask = 0
+debug_shape_custom_color = Color(1, 0, 0, 1)
+debug_shape_thickness = 1
+
+[node name="Telekinesis" type="Node3D" parent="." node_paths=PackedStringArray("Actor", "ThrowableInteractor", "ThrowableDetector", "RightSlot", "LeftSlot")]
+script = ExtResource("5_qorpt")
+Actor = NodePath("..")
+ThrowableInteractor = NodePath("../Head/Eyes/ThrowableInteractor")
+ThrowableDetector = NodePath("ThrowableDetector")
+RightSlot = NodePath("RightSlot")
+LeftSlot = NodePath("LeftSlot")
+UsableSlots = 2
+
+[node name="ThrowableDetector" type="Area3D" parent="Telekinesis"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Telekinesis/ThrowableDetector"]
+shape = SubResource("SphereShape3D_l2c70")
+
+[node name="RightSlot" type="Marker3D" parent="Telekinesis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.748713, 0.736061, -1.212)
+
+[node name="LeftSlot" type="Marker3D" parent="Telekinesis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.498909, 0.736061, -1.212)
 
 [node name="FootstepManager" type="Node3D" parent="." node_paths=PackedStringArray("FloorDetectorRaycast")]
 script = ExtResource("15_3u82d")
