@@ -1,11 +1,48 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 
 namespace GodotExtensions;
 
 public static class VectorExtension
 {
+
+    private static readonly RandomNumberGenerator rng = new();
+
+    /// <summary>
+    /// Rotates the given vector3 randomly around a horizontal arc (either upwards or downwards).
+    /// </summary>
+    /// <param name="vector3">The vector3 to be rotated.</param>
+    /// <returns>The rotated vector3.</returns>
+    /// <remarks>
+    /// The rotation angle is randomly generated between -90 and 90 degrees, resulting in a horizontal arc.
+    /// The direction of rotation (upwards or downwards) is also randomly chosen.
+    /// </remarks>
+    public static Vector3 RotateHorizontalRandom(this Vector3 vector3)
+    {
+        Vector3 arcDirection = new Array<Vector3>() { Vector3.Down, Vector3.Up }.PickRandom();
+
+        return vector3.Rotated(arcDirection, rng.RandfRange(-MathF.PI / 2, MathF.PI / 2));
+    }
+
+    /// <summary>
+    /// Rotates the given vector3 randomly around a vertical arc (either left or right).
+    /// </summary>
+    /// <param name="vector3">The vector3 to be rotated.</param>
+    /// <returns>The rotated vector3.</returns>
+    /// <remarks>
+    /// The rotation angle is randomly generated between -90 and 90 degrees, resulting in a vertical arc.
+    /// The direction of rotation (left or right) is also randomly chosen.
+    /// </remarks>
+    public static Vector3 RotateVerticalRandom(this Vector3 vector3)
+    {
+        Vector3 arcDirection = new Array<Vector3>() { Vector3.Left, Vector3.Right }.PickRandom();
+
+        return vector3.Rotated(arcDirection, rng.RandfRange(-MathF.PI / 2, MathF.PI / 2));
+    }
+
 
     /// <summary>
     /// Negates (flips) the sign of each component of a Vector2, resulting in a new vector pointing in the opposite direction.

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using GodotExtensions;
 
@@ -45,6 +46,7 @@ public partial class Motion : State
 	[Export] public Vector3 VaultOffset = new(0, 3, 0);
 	[Export] public float VaultMaxObstacleSize = 1.1f;
 	[Export] public float VaultMaxObstacleHeight = 1.1f;
+
 	#endregion
 	public TransformedInput TransformedInput = new();
 	public bool IsGrounded = true;
@@ -52,20 +54,25 @@ public partial class Motion : State
 	public bool StairStepping = false;
 
 	public RayCast3D FrontWallDetector;
+	public RayCast3D TopFrontWallDetector;
+
 	public RayCast3D RightWallDetector;
 	public RayCast3D LeftWallDetector;
 
 	public Node3D RayCastLedgeChecker;
 	public RayCast3D RayCastLedge;
 	public MeshInstance3D LedgeMarker;
-
 	public FootstepManager FootstepManager;
+	public Dictionary<string, Vector3> WallNormals = new() { };
 
 	private bool gravityActive = true;
+
 
 	public override void _Ready()
 	{
 		FrontWallDetector = Actor.GetNode<RayCast3D>("%FrontWallDetector");
+		TopFrontWallDetector = Actor.GetNode<RayCast3D>("%TopFrontWallDetector");
+
 		RightWallDetector = Actor.GetNode<RayCast3D>("%RightWallDetector");
 		LeftWallDetector = Actor.GetNode<RayCast3D>("%LeftWallDetector");
 
@@ -89,6 +96,7 @@ public partial class Motion : State
 		if (IsFalling() && !StairStepping)
 			FSM.ChangeStateTo("Fall");
 	}
+
 	public void ApplyGravity(double gravityForce, double delta)
 	{
 		Actor.Velocity += Actor.UpDirectionOppositeVector() * (float)(gravityForce * delta);
@@ -282,6 +290,12 @@ public partial class Motion : State
 			FSM.ChangeStateTo("Crawl");
 	}
 
+	public void DetectWallRun()
+	{
+		if (Actor.WallRun && WallDetected())
+			FSM.ChangeStateTo("WallRun");
+	}
+
 	public void EnableGravity()
 	{
 		GravityActive = true;
@@ -290,6 +304,23 @@ public partial class Motion : State
 	public void DisableGravity()
 	{
 		GravityActive = false;
+	}
+
+	public virtual bool WallDetected()
+	{
+		UpdateWallNormals();
+		return RightWallDetector.IsColliding() || LeftWallDetector.IsColliding() || (FrontWallDetector.IsColliding() && TopFrontWallDetector.IsColliding());
+	}
+
+	public void UpdateWallNormals()
+	{
+		RightWallDetector.ForceRaycastUpdate();
+		LeftWallDetector.ForceRaycastUpdate();
+		FrontWallDetector.ForceRaycastUpdate();
+
+		WallNormals[RightWallDetector.Name] = RightWallDetector.IsColliding() ? RightWallDetector.GetCollisionNormal() : Vector3.Zero;
+		WallNormals[LeftWallDetector.Name] = LeftWallDetector.IsColliding() ? LeftWallDetector.GetCollisionNormal() : Vector3.Zero;
+		WallNormals[FrontWallDetector.Name] = FrontWallDetector.IsColliding() ? FrontWallDetector.GetCollisionNormal() : Vector3.Zero;
 	}
 
 }

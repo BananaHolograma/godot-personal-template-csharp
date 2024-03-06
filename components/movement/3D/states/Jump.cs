@@ -9,6 +9,7 @@ public partial class Jump : Motion
     [Export] public float AirControlSpeed = 7f;
     [Export] public float Acceleration = 12.5f;
     [Export] public int JumpTimes = 1;
+    [Export] public float HeightReducedByJump = .2f;
     [Export] public float OverrideJumpGravity = 0f;
     [Export] public float OverrideFallGravity = 0f;
     [Export]
@@ -17,7 +18,7 @@ public partial class Jump : Motion
         get => jumpHeight;
         set
         {
-            jumpHeight = value;
+            jumpHeight = Mathf.Max(0, value);
 
             if (IsNodeReady())
                 JumpVelocity = CalculateJumpVelocity(jumpHeight, jumpTimeToPeak);
@@ -51,6 +52,8 @@ public partial class Jump : Motion
 
     [ExportGroup("Wall run")]
     [Export] public float WallDetectionAfterFrames = 25f;
+    public Timer WallDetectionTimer;
+    public bool WallDetectionActive = false;
 
     private float jumpHeight = 2f;
     private float jumpTimeToPeak = .45f;
@@ -61,10 +64,9 @@ public partial class Jump : Motion
     public float FallGravity;
 
     public int JumpCount = 1;
-    public bool WallDetectionActive = false;
-    public Timer WallDetectionTimer;
-    public Dictionary<string, Vector3> WallNormals = new() { };
 
+    public float JumpHorizontalBoost = 0;
+    public float JumpVerticalBoost = 0;
     private bool JumpRequested;
 
     public override void Ready()
@@ -78,7 +80,7 @@ public partial class Jump : Motion
         JumpGravity = CalculateJumpGravity(JumpHeight, JumpTimeToPeak);
         FallGravity = CalculateFallGravity(JumpHeight, JumpTimeToFall);
 
-        Actor.Velocity = Actor.Velocity with { Y = JumpVelocity };
+        Actor.Velocity = Actor.Velocity with { Y = JumpVelocity + JumpHorizontalBoost, Z = Actor.Velocity.Z + JumpHorizontalBoost };
         Actor.MoveAndSlide();
 
         if (IsInstanceValid(WallDetectionTimer))
@@ -90,6 +92,8 @@ public partial class Jump : Motion
     public override void Exit(State _nextState)
     {
         JumpCount = 1;
+        JumpHorizontalBoost = 0;
+        JumpVerticalBoost = 0;
         WallDetectionActive = false;
 
         if (IsInstanceValid(WallDetectionTimer))
@@ -133,32 +137,14 @@ public partial class Jump : Motion
 
             if (JumpRequested && JumpTimes > 1 && JumpCount < JumpTimes)
             {
-                Actor.Velocity = Actor.Velocity with { Y = JumpVelocity };
+                Actor.Velocity = Actor.Velocity with { Y = CalculateJumpVelocity(JumpHeight - (JumpTimes * HeightReducedByJump), JumpTimeToPeak) };
                 JumpCount += 1;
             }
 
-            if (Actor.WallRun && WallDetectionActive && WallDetected())
-                FSM.ChangeStateTo("WallRun");
+            DetectWallRun();
         }
 
         Actor.MoveAndSlide();
-    }
-
-    private bool WallDetected()
-    {
-        UpdateWallNormals();
-        return !Actor.IsOnFloor() && (RightWallDetector.IsColliding() || LeftWallDetector.IsColliding() || FrontWallDetector.IsColliding());
-    }
-
-    private void UpdateWallNormals()
-    {
-        RightWallDetector.ForceRaycastUpdate();
-        LeftWallDetector.ForceRaycastUpdate();
-        FrontWallDetector.ForceRaycastUpdate();
-
-        WallNormals[RightWallDetector.Name] = RightWallDetector.IsColliding() ? RightWallDetector.GetCollisionNormal() : Vector3.Zero;
-        WallNormals[LeftWallDetector.Name] = LeftWallDetector.IsColliding() ? LeftWallDetector.GetCollisionNormal() : Vector3.Zero;
-        WallNormals[FrontWallDetector.Name] = FrontWallDetector.IsColliding() ? FrontWallDetector.GetCollisionNormal() : Vector3.Zero;
     }
 
     private void CreateWallDetectionTimer()
@@ -182,16 +168,16 @@ public partial class Jump : Motion
 
     private float CalculateJumpVelocity(float jumpHeight, float timeToPeak)
     {
-        return 2f * jumpHeight / (timeToPeak * Actor.UpDirection.Y);
+        return 2f * Mathf.Max(0, jumpHeight) / (timeToPeak * Actor.UpDirection.Y);
     }
 
     private float CalculateJumpGravity(float jumpHeight, float timeToPeak)
     {
-        return OverrideJumpGravity > 0 ? OverrideJumpGravity : 2f * jumpHeight / Mathf.Pow(timeToPeak, 2);
+        return OverrideJumpGravity > 0 ? OverrideJumpGravity : 2f * Mathf.Max(0, jumpHeight) / Mathf.Pow(timeToPeak, 2);
     }
 
     private float CalculateFallGravity(float jumpHeight, float timeToFall)
     {
-        return OverrideFallGravity > 0 ? OverrideFallGravity : 2f * jumpHeight / Mathf.Pow(timeToFall, 2);
+        return OverrideFallGravity > 0 ? OverrideFallGravity : 2f * Mathf.Max(0, jumpHeight) / Mathf.Pow(timeToFall, 2);
     }
 }

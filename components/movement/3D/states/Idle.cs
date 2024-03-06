@@ -11,6 +11,7 @@ public partial class Idle : Motion
     public override void Enter()
     {
         Actor.Velocity = Vector3.Zero;
+        FrontWallDetector.Enabled = true;
     }
 
     public override void PhysicsUpdate(double delta)

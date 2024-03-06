@@ -51,6 +51,16 @@ public static class NodeExtension
         }
     }
 
+    /// <summary>
+    /// Recursively finds all nodes of a specific type within a sub-tree of a given root node and adds them to a list.
+    /// </summary>
+    /// <typeparam name="T">The type of node to search for. Must inherit from the Godot.Node class.</typeparam>
+    /// <param name="node">The root node from which to start the search.</param>
+    /// <param name="result">The list to which the found nodes of type T will be added.</param>
+    /// <remarks>
+    /// This function traverses the entire sub-tree starting from the root node, searching for nodes of type T. 
+    /// It adds any found nodes to the provided list. You must ensure that the list is of the appropriate type").
+    /// </remarks>
     public static void FindNodesRecursively<T>(this Node node, List<T> result) where T : Node
     {
         if (node.GetChildCount() == 0)
@@ -63,6 +73,54 @@ public static class NodeExtension
 
             FindNodesRecursively(child, result);
         }
+    }
+
+    /// <summary>
+    /// Finds the first child node of the given node that is of the specified type `T`.
+    /// </summary>
+    /// <typeparam name="T">The type of child node to search for.</typeparam>
+    /// <param name="node">The node to search within.</param>
+    /// <returns>The first child node of type `T`, or null if no such child is found.</returns>
+    /// <remarks>
+    /// This method uses type equality (`==`) to check if the child node's runtime type is exactly equal to `T`.
+    /// If you require a more flexible search that includes derived types of `T`, use the `FirstNodeOfClass` method instead.
+    /// </remarks>
+    public static T FirstNodeOfType<T>(this Node node) where T : Node
+    {
+        if (node.GetChildCount() == 0)
+            return null;
+
+        foreach (Node child in node.GetChildren(true))
+        {
+            if (child is T nodeFound && child.GetType() == typeof(T))
+                return nodeFound;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Finds the first child node of the given node that is of the same class or a derived class of the specified type `T`.
+    /// </summary>
+    /// <typeparam name="T">The base type of the child node to search for.</typeparam>
+    /// <param name="node">The node to search within.</param>
+    /// <returns>The first child node of type `T` or a derived type, or null if no such child is found.</returns>
+    /// <remarks>
+    /// This method uses `IsAssignableFrom` to check if the child node's type is assignable from `T`. 
+    /// This allows finding both instances of `T` and its derived classes.
+    /// </remarks>
+    public static T FirstNodeOfClass<T>(this Node node) where T : Node
+    {
+        if (node.GetChildCount() == 0)
+            return null;
+
+        foreach (Node child in node.GetChildren(true))
+        {
+            if (child is T nodeFound && typeof(T).IsAssignableFrom(child.GetType()))
+                return nodeFound;
+        }
+
+        return null;
     }
 
     /// <summary>

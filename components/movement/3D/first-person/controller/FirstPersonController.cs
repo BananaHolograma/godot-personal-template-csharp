@@ -1,6 +1,7 @@
 namespace GameRoot;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -54,8 +55,8 @@ public partial class FirstPersonController : CharacterBody3D
     public RayCast3D LeftWallDetector;
     public RayCast3D FrontWallDetector;
 
+    public RayCast3D FloorDetectorRayCast;
     #endregion
-
     public Vector3 OriginalEyesPosition;
 
     public bool Locked = false;
@@ -70,7 +71,7 @@ public partial class FirstPersonController : CharacterBody3D
             SwitchMouseMode();
     }
 
-    public override async void _Ready()
+    public override void _Ready()
     {
         GameEvents = this.GetAutoloadNode<GameEvents>("GameEvents");
 
@@ -88,14 +89,14 @@ public partial class FirstPersonController : CharacterBody3D
         LeftWallDetector = GetNode<RayCast3D>("%LeftWallDetector");
         FrontWallDetector = GetNode<RayCast3D>("%FrontWallDetector");
 
+        FloorDetectorRayCast = GetNode<RayCast3D>("FootstepManager/FloorDetectorRayCast");
+
         OriginalEyesPosition = Eyes.Transform.Origin;
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
 
         GameEvents.LockPlayer += OnLockPlayer;
         GameEvents.UnlockPlayer += OnUnlockPlayer;
-
-        FSM.StateChanged += OnStateChanged;
     }
 
     private void OnStateChanged(State _from, State _to)
@@ -204,9 +205,17 @@ public partial class FirstPersonController : CharacterBody3D
                 CrouchCollisionShape.Disabled = true;
                 CrawlCollisionShape.Disabled = true;
 
-                RightWallDetector.Enabled = true;
-                LeftWallDetector.Enabled = true;
+                RightWallDetector.Enabled = false;
+                LeftWallDetector.Enabled = false;
                 FrontWallDetector.Enabled = true;
+
+                FloorDetectorRayCast.Enabled = true;
+                break;
+
+            case "Jump":
+            case "WallRun":
+            case "Fall":
+                FloorDetectorRayCast.Enabled = false;
                 break;
 
             case "Crouch":
@@ -235,9 +244,11 @@ public partial class FirstPersonController : CharacterBody3D
                 CrouchCollisionShape.Disabled = true;
                 CrawlCollisionShape.Disabled = true;
 
-                RightWallDetector.Enabled = true;
-                LeftWallDetector.Enabled = true;
-                FrontWallDetector.Enabled = true;
+                RightWallDetector.Enabled = WallRun;
+                LeftWallDetector.Enabled = WallRun;
+                FrontWallDetector.Enabled = WallRun;
+
+                FloorDetectorRayCast.Enabled = true;
                 break;
         }
 

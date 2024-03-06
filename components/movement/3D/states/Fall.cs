@@ -50,6 +50,8 @@ public partial class Fall : Motion
         Move(AirControlSpeed, delta, Acceleration);
 
         Actor.MoveAndSlide();
+
+        DetectWallRun();
     }
 
     private bool JumpBufferCountIsActive()

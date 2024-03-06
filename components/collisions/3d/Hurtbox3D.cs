@@ -6,14 +6,14 @@ using Godot;
 public partial class Hurtbox3D : Area3D
 {
     [Signal]
-    public delegate void Hitbox3DDetectedEventHandler();
+    public delegate void Hitbox3DDetectedEventHandler(Hitbox3D hitbox);
 
     public override void _Ready()
     {
         Monitoring = true;
         Monitorable = false;
         CollisionLayer = 0;
-        CollisionMask = 16;
+        CollisionMask = 16; // Hitboxes layer
 
         AreaEntered += OnAreaEntered;
     }

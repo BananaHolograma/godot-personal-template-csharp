@@ -6,7 +6,7 @@ using Godot;
 public partial class Hurtbox2D : Area2D
 {
     [Signal]
-    public delegate void Hitbox2DDetectedEventHandler();
+    public delegate void Hitbox2DDetectedEventHandler(Hitbox2D hitbox);
 
     public override void _Ready()
     {

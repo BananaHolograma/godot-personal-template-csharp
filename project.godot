@@ -123,3 +123,5 @@ vault={
 3d_physics/layer_6="Grabbables"
 2d_physics/layer_7="Shakeable"
 3d_physics/layer_7="Shakeable"
+3d_physics/layer_8="Throwable"
+3d_physics/layer_9="Shards"

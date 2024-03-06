@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg7fl862i33ty"]
+
+[ext_resource type="Script" path="res://components/interaction/crosshair/InteractionPointer.cs" id="1_2wp1d"]
+
+[node name="InteractionPointer" type="Control" groups=["crosshair"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2wp1d")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Pointer" type="TextureRect" parent="CenterContainer"]
+unique_name_in_owner = true
+layout_mode = 2

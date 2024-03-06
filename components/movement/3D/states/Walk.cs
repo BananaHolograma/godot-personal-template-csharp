@@ -19,6 +19,7 @@ public partial class Walk : Motion
     public override void Enter()
     {
         FootstepManager.FloorDetectorRaycast.Enabled = true;
+        FrontWallDetector.Enabled = true;
         Actor.Velocity = Actor.Velocity with { Y = 0 };
     }
 

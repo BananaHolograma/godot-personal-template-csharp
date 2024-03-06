@@ -28,6 +28,7 @@ public partial class Run : Motion
 
         InRecovery = false;
         FootstepManager.FloorDetectorRaycast.Enabled = true;
+        FrontWallDetector.Enabled = true;
     }
 
     public override void Exit(State _nextState)
@@ -39,8 +40,6 @@ public partial class Run : Motion
     public override void PhysicsUpdate(double delta)
     {
         base.PhysicsUpdate(delta);
-
-        Move(Speed, delta, Acceleration);
 
         if (Input.IsActionJustReleased("run"))
         {
@@ -59,6 +58,7 @@ public partial class Run : Motion
 
         StairStepUp();
 
+        Move(Speed, delta, Acceleration);
         Actor.MoveAndSlide();
 
         StairStepDown();

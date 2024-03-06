@@ -10,9 +10,12 @@ public partial class WallRun : Motion
 	#region Exports
 	[Export] public float CameraRotationAngle = .15f;
 	[Export] public float WallGravity = 1.5f;
-	[Export] public float Speed = 3f;
-	[Export] public float HorizontalBoostSpeed = 2.5f;
+	[Export] public float Speed = 5f;
+	[Export] public float HorizontalBoostSpeed = 1.5f;
 	[Export] public float VerticalBoostSpeed = 1.5f;
+
+	[Export] public float JumpHorizontalBoost = 1f;
+	[Export] public float JumpVerticalBoost = .5f;
 
 	#endregion
 	internal enum WallSide
@@ -27,8 +30,6 @@ public partial class WallRun : Motion
 	public RayCast3D BackWallDetectorRight;
 
 	public Node3D Eyes;
-
-	public Dictionary<string, Vector3> WallNormals = new() { };
 	public Vector3 CurrentWallNormal = Vector3.Zero;
 	private WallSide CurrentWallSide = WallSide.LEFT;
 	public Vector3 Direction = Vector3.Zero;
@@ -60,7 +61,11 @@ public partial class WallRun : Motion
 			HorizontalBoostSpeed * Vector3.Up.Rotated(Vector3.Right, Actor.GlobalTransform.Basis.GetEuler().X).Normalized() :
 			VerticalBoostSpeed * Vector3.Forward.Rotated(Vector3.Up, Actor.GlobalTransform.Basis.GetEuler().Y).Normalized();
 
+		Actor.Velocity = Actor.Velocity with { Y = Actor.Velocity.Y / 2f };
+
 		RotateCameraBasedOnNormal(CurrentWallNormal);
+
+		Actor.MoveAndSlide();
 	}
 
 	public override void Exit(State _nextState)
@@ -110,6 +115,8 @@ public partial class WallRun : Motion
 				FSM.ChangeStateTo("Fall");
 			}
 		}
+
+		Move(Speed, delta, 0, 10d);
 
 		Actor.MoveAndSlide();
 
@@ -161,13 +168,8 @@ public partial class WallRun : Motion
 		tween.TweenProperty(Eyes, "rotation:z", Rotation, .3f).SetTrans(Tween.TransitionType.Cubic);
 	}
 
-	private bool WallDetected()
+	public override bool WallDetected()
 	{
-		return !Actor.IsOnFloor() &&
-				(RightWallDetector.IsColliding() ||
-				LeftWallDetector.IsColliding() ||
-				FrontWallDetector.IsColliding() ||
-				BackWallDetectorLeft.IsColliding() ||
-				BackWallDetectorRight.IsColliding());
+		return !Actor.IsOnFloor() && base.WallDetected() || BackWallDetectorLeft.IsColliding() || BackWallDetectorRight.IsColliding();
 	}
 }
