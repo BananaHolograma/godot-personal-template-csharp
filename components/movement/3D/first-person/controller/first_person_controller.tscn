@@ -4,17 +4,17 @@
 [ext_resource type="Script" path="res://components/interaction/interactable/Raycast3DInteractor.cs" id="2_fxir6"]
 [ext_resource type="Script" path="res://components/behaviour/finite-state-machine/FiniteStateMachine.cs" id="2_p4ob1"]
 [ext_resource type="PackedScene" uid="uid://bg7fl862i33ty" path="res://components/interaction/crosshair/interaction_pointer.tscn" id="3_l6v66"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Idle.cs" id="3_ufsu1"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Walk.cs" id="4_so15b"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Run.cs" id="6_y21bt"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Slide.cs" id="7_g5ac5"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Crouch.cs" id="7_hihor"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Crawl.cs" id="8_x5pkh"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Fall.cs" id="9_n1u3a"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Jump.cs" id="10_0wpa6"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/WallRun.cs" id="11_cgut7"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Idle.cs" id="3_ufsu1"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Walk.cs" id="4_so15b"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Run.cs" id="6_y21bt"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Slide.cs" id="7_g5ac5"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Crouch.cs" id="7_hihor"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Crawl.cs" id="8_x5pkh"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Fall.cs" id="9_n1u3a"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Jump.cs" id="10_0wpa6"]
+[ext_resource type="Script" path="res://components/movement/3D/states/WallRun.cs" id="11_cgut7"]
 [ext_resource type="Script" path="res://debug/DebugMenu.cs" id="12_n8g11"]
-[ext_resource type="Script" path="res://components/movement/3D/first-person/states/Vault.cs" id="13_ttkwj"]
+[ext_resource type="Script" path="res://components/movement/3D/states/Vault.cs" id="13_ttkwj"]
 [ext_resource type="Script" path="res://components/audio/FootstepManager.cs" id="15_3u82d"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5aglx"]
@@ -279,9 +279,9 @@ actor = NodePath("../../..")
 
 [node name="FootstepManager" type="Node3D" parent="." node_paths=PackedStringArray("FloorDetectorRaycast")]
 script = ExtResource("15_3u82d")
-FloorDetectorRaycast = NodePath("FloorDetectorRaycast")
+FloorDetectorRaycast = NodePath("FloorDetectorRayCast")
 
-[node name="FloorDetectorRaycast" type="RayCast3D" parent="FootstepManager"]
+[node name="FloorDetectorRayCast" type="RayCast3D" parent="FootstepManager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.765866, 0)
 target_position = Vector3(0, -0.3, 0)
 debug_shape_custom_color = Color(0.0823529, 0.207843, 0.85098, 1)
