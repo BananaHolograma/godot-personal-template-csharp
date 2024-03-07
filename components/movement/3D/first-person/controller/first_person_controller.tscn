@@ -254,13 +254,13 @@ mesh = SubResource("SphereMesh_mw70a")
 [node name="BackWallDetectorLeft" type="RayCast3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -0.0656474, 0.142882, 0.0943921)
-target_position = Vector3(0, 0, 0.6)
+target_position = Vector3(0, 0, 0.7)
 debug_shape_custom_color = Color(1, 0.145098, 0.933333, 1)
 
 [node name="BackWallDetectorRight" type="RayCast3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 0.0182389, 0.142882, 0.0940525)
-target_position = Vector3(0, 0, 0.6)
+target_position = Vector3(0, 0, 0.7)
 debug_shape_custom_color = Color(1, 0.145098, 0.933333, 1)
 
 [node name="Head" type="Node3D" parent="."]

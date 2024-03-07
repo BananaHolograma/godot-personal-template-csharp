@@ -207,7 +207,7 @@ public partial class Destructible : Node
             collision = new CollisionShape3D
             {
                 Shape = mesh.Mesh.CreateConvexShape(false, false),
-                Scale = new Vector3(MaxShardSize, MaxShardSize, MaxShardSize)
+                Scale = Vector3.One * MaxShardSize
             };
             cachedWallPartCollisionShapes.Add(mesh.Name, collision);
         }

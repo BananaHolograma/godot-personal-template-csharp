@@ -9,9 +9,11 @@ public partial class WallRun : Motion
 {
 	#region Exports
 	[Export] public float CameraRotationAngle = .15f;
-	[Export] public float WallGravity = 1.5f;
-	[Export] public float Speed = 5f;
-	[Export] public float HorizontalBoostSpeed = 1.5f;
+	[Export] public float WallGravity = 2.5f;
+	[Export] public float Speed = 7.5f;
+	[Export] public double Acceleration = 0;
+	[Export] public double Friction = 10d;
+	[Export] public float HorizontalBoostSpeed = 2f;
 	[Export] public float VerticalBoostSpeed = 1.5f;
 
 	[Export] public float JumpHorizontalBoost = 1f;
@@ -58,10 +60,10 @@ public partial class WallRun : Motion
 		CurrentWallNormal = GetWallNormal();
 
 		Actor.Velocity += CurrentWallSide.Equals(WallSide.FRONT) ?
-			HorizontalBoostSpeed * Vector3.Up.Rotated(Vector3.Right, Actor.GlobalTransform.Basis.GetEuler().X).Normalized() :
-			VerticalBoostSpeed * Vector3.Forward.Rotated(Vector3.Up, Actor.GlobalTransform.Basis.GetEuler().Y).Normalized();
+		   HorizontalBoostSpeed * Vector3.Up.Rotated(Vector3.Right, Actor.GlobalTransform.Basis.GetEuler().X).Normalized() :
+		   VerticalBoostSpeed * Vector3.Forward.Rotated(Vector3.Up, Actor.GlobalTransform.Basis.GetEuler().Y).Normalized();
 
-		Actor.Velocity = Actor.Velocity with { Y = Actor.Velocity.Y / 2f };
+		Actor.Velocity = Actor.Velocity with { Y = CurrentWallSide.Equals(WallSide.FRONT) ? Actor.Velocity.Y / 2 : .5f };
 
 		RotateCameraBasedOnNormal(CurrentWallNormal);
 
@@ -116,12 +118,13 @@ public partial class WallRun : Motion
 			}
 		}
 
-		Move(Speed, delta, 0, 10d);
+		Move(Speed, delta, Acceleration, Friction);
 
-		Actor.MoveAndSlide();
 
 		if (Actor.WallJump)
 			DetectJump();
+
+		Actor.MoveAndSlide();
 	}
 
 	private Vector3 GetWallNormal()

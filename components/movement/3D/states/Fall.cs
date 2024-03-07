@@ -10,7 +10,7 @@ public partial class Fall : Motion
     [Export] public float Acceleration = 15f;
     [ExportGroup("CoyoteTime")]
     [Export] public bool CoyoteTime = true;
-    [Export] public int CoyoteTimeFrames = 10;
+    [Export] public int CoyoteTimeFrames = 25;
 
     [ExportGroup("JumpBuffer")]
     [Export] public bool JumpBuffer = true;
@@ -40,9 +40,7 @@ public partial class Fall : Motion
         if ((!WasGrounded && IsGrounded) || Actor.IsOnFloor())
         {
             if (JumpBufferCountIsActive() && JumpRequested)
-            {
                 FSM.ChangeStateTo("Jump");
-            }
 
             FSM.ChangeStateTo("Idle");
         }
