@@ -6,10 +6,10 @@ using GodotExtensions;
 namespace GameRoot;
 public partial class PushWaveArea : Area3D
 {
-	[Export] public int PushableBodies = 9;
+	[Export] public int PushableBodies = 7;
 	[Export] public float MinPushForce = 5f;
-	[Export] public float MaxPushForce = 10f;
-	[Export] public float WaveSpeed = 2.5f;
+	[Export] public float MaxPushForce = 20f;
+	[Export] public float WaveSpeed = 2f;
 	[Export] public float WaveRadius = 5f;
 	[Export] public float TimeAlive = 3f;
 	public bool Active
@@ -30,9 +30,7 @@ public partial class PushWaveArea : Area3D
 		CollisionLayer = 0;
 		CollisionMask = 1 | 128 | 256;
 
-		CollisionShape3D shape = new() { Shape = new SphereShape3D() { Radius = WaveRadius } };
-
-		AddChild(shape);
+		AddChild(new CollisionShape3D() { Shape = new SphereShape3D() { Radius = WaveRadius } });
 		CreateAliveTimer();
 		SetPhysicsProcess(Active);
 	}
@@ -56,7 +54,7 @@ public partial class PushWaveArea : Area3D
 			BodiesPushed.Add(body.Name, body);
 			body.LinearDamp = .1f;
 			body.AngularDamp = .1f;
-			body.AngularVelocity = Vector3.One.Generate3DRandomFixedDirection() * rng.RandfRange(.5f, 5f);
+			body.AngularVelocity = Vector3.One.Generate3DRandomFixedDirection() * rng.RandfRange(.5f, 3f);
 			body.ApplyImpulse(
 				Vector3.One.Generate3DRandomDirection() * rng.RandfRange(MinPushForce, MaxPushForce),
 				body.Position.Flip().Normalized()
