@@ -21,4 +21,6 @@ public static class Camera3DExtension
     /// <returns>The origin of the camera's global transformation in world space.</returns>
     public static Vector3 CenterByOrigin(this Camera3D camera) => camera.GlobalTransform.Origin;
 
+    public static Vector3 ForwardDirection(this Camera3D camera) => Vector3.Forward.Z * camera.GlobalTransform.Basis.Z.Normalized();
+
 }

@@ -46,6 +46,10 @@ public partial class Telekinesis : Node3D
 
     public override void _UnhandledInput(InputEvent @event)
     {
+        // TODO - SEE WHAT CONTROLS CREATE THE PUSH WAVE
+        if (Input.IsActionJustPressed("throw"))
+            PushWave();
+
         if (Input.IsActionJustPressed("pull") && ThereAreFreeSlots())
         {
             // TODO - REVISIT THIS BEHAVIOUR AS CAN BE USED IN A MORE OPTIMAL WAY COMBINING RAYCAST & AREA OR NOT
@@ -105,7 +109,7 @@ public partial class Telekinesis : Node3D
             .Cast<Throwable3D>();
     }
 
-    private void PullForceBasedOnThrowableMode(Throwable3D body, double delta)
+    public void PullForceBasedOnThrowableMode(Throwable3D body, double delta)
     {
         if (body.GrabModeIsDynamic())
             body.UpdateLinearVelocity((body.Grabber.GlobalPosition - body.GlobalPosition) * PullPower);
@@ -113,7 +117,7 @@ public partial class Telekinesis : Node3D
             body.GlobalPosition = body.GlobalPosition.MoveToward(body.Grabber.GlobalPosition, (float)(PullPower * delta));
     }
 
-    private void PullBody(Throwable3D body)
+    public void PullBody(Throwable3D body)
     {
         if (!ThereAreFreeSlots() || TotalSlotPoints + body.SlotPoints > UsableSlots)
         {
@@ -132,9 +136,9 @@ public partial class Telekinesis : Node3D
 
         EmitSignal(SignalName.PulledThrowable, body);
     }
-    private void ThrowBody(Throwable3D body)
+    public void ThrowBody(Throwable3D body)
     {
-        Vector3 impulse = Vector3.Forward.Z * GetViewport().GetCamera3D().GlobalTransform.Basis.Z.Normalized() * ThrowPower;
+        Vector3 impulse = GetViewport().GetCamera3D().ForwardDirection() * ThrowPower;
 
         body.Throw(impulse);
         ActiveBodies.Remove(body);
@@ -145,7 +149,16 @@ public partial class Telekinesis : Node3D
         EmitSignal(SignalName.ThrowedThrowable, body);
     }
 
-    private bool ThereAreFreeSlots()
+
+    public void PushWave()
+    {
+        PushWaveArea wave = new() { Direction = GetViewport().GetCamera3D().ForwardDirection() };
+        AddChild(wave);
+
+        wave.Activate();
+    }
+
+    public bool ThereAreFreeSlots()
     {
         return TotalSlotPoints <= UsableSlots && UsableSlots > 1 ? AvailableSlots.Where(slot => slot.GetChildCount() == 0).Any() : ActiveBodies.Count == 0;
     }
