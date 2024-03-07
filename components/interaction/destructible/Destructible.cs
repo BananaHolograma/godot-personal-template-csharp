@@ -147,6 +147,8 @@ public partial class Destructible : Node
 
         body.GlobalPosition = Target.GlobalPosition + spawnPosition;
         body.GlobalRotation = Target.GlobalRotation;
+        body.LinearDamp = .1f;
+        body.AngularDamp = .1f;
         body.AngularVelocity = Vector3.One.Generate3DRandomFixedDirection() * rng.RandfRange(.5f, 2.5f);
         body.ApplyImpulse(GenerateImpulse(ExplosionMode), spawnPosition.Flip().Normalized());
     }
@@ -194,10 +196,7 @@ public partial class Destructible : Node
 
     private void CreateMeshCollision(RigidBody3D body, MeshInstance3D mesh)
     {
-        CollisionShape3D collision = new();
-        BoxShape3D shape = new() { Size = mesh.Scale * 1.15f };
-
-        collision.Shape = shape;
+        CollisionShape3D collision = new() { Shape = new BoxShape3D() { Size = mesh.Scale * 1.25f } };
         body.AddChild(collision);
     }
 

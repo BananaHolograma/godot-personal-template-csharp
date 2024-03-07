@@ -1,4 +1,5 @@
 using Godot;
+using GodotExtensions;
 
 namespace GameRoot;
 
@@ -7,6 +8,7 @@ public partial class Throwable3D : RigidBody3D
 {
     [Export] public GRAB_MODE GrabMode = GRAB_MODE.DYNAMIC;
     [Export] public int SlotPoints = 1;
+    [Export(PropertyHint.Range, "0, 255, 1")] public int TransparencyOnPull = 255;
 
     public enum GRAB_MODE
     {
@@ -24,6 +26,8 @@ public partial class Throwable3D : RigidBody3D
     public uint OriginalCollisionLayer = 128; // Throwable layer
     public uint OriginalCollisionMask = 1 | 4 | 8 | 256; // Interact with world, player, enemies and shards
     public Vector3 CurrentLinearVelocity;
+
+    public int OriginalTransparency;
     public Node3D Grabber;
     private GRAB_MODE CurrentGrabMode;
     private STATE CurrentState = STATE.NEUTRAL;
@@ -67,8 +71,10 @@ public partial class Throwable3D : RigidBody3D
 
         Reparent(grabber);
 
+        ApplyTransparency();
         CurrentState = STATE.PULL;
     }
+
 
     public void Throw(Vector3 impulse)
     {
@@ -82,6 +88,7 @@ public partial class Throwable3D : RigidBody3D
 
         Grabber = null;
         CurrentState = STATE.THROW;
+        RecoverTransparency();
     }
 
     public void Drop()
@@ -98,11 +105,37 @@ public partial class Throwable3D : RigidBody3D
 
         Grabber = null;
         CurrentState = STATE.NEUTRAL;
+        RecoverTransparency();
     }
-
 
     public bool GrabModeIsFreeze() => CurrentGrabMode.Equals(GRAB_MODE.FREEZE);
     public bool GrabModeIsDynamic() => CurrentGrabMode.Equals(GRAB_MODE.DYNAMIC);
+
+    private void ApplyTransparency()
+    {
+        if (TransparencyOnPull == 255)
+            return;
+
+        StandardMaterial3D material = (StandardMaterial3D)this.FirstNodeOfType<MeshInstance3D>().GetActiveMaterial(0);
+
+        if (material != null)
+        {
+            OriginalTransparency = material.AlbedoColor.A8;
+            material.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+            material.AlbedoColor = material.AlbedoColor with { A8 = TransparencyOnPull };
+        }
+    }
+
+    private void RecoverTransparency()
+    {
+        if (TransparencyOnPull == 255)
+            return;
+
+        StandardMaterial3D material = (StandardMaterial3D)this.FirstNodeOfType<MeshInstance3D>().GetActiveMaterial(0);
+
+        if (material != null)
+            material.AlbedoColor = material.AlbedoColor with { A8 = OriginalTransparency };
+    }
 }
 
 
