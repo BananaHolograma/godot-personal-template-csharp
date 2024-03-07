@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://bar1kabj1cpie"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4xrco"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2dkef"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_21ngl"]
+_surfaces = [{
+"aabb": AABB(-6.55671e-08, -1.5, -0.75, 1e-05, 3, 1.50001),
+"attribute_data": PackedByteArray(0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0),
+"format": 34359738391,
+"material": SubResource("StandardMaterial3D_4xrco"),
+"name": "WallLeft",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray(226, 205, 140, 179, 0, 0, 192, 191, 0, 0, 64, 63, 226, 205, 140, 51, 0, 0, 192, 63, 0, 0, 64, 63, 226, 205, 140, 179, 0, 0, 192, 191, 2, 0, 64, 191, 226, 205, 140, 51, 0, 0, 192, 63, 0, 0, 64, 63, 226, 205, 140, 51, 0, 0, 192, 63, 0, 0, 64, 191, 226, 205, 140, 179, 0, 0, 192, 191, 2, 0, 64, 191, 255, 255, 255, 127, 255, 127, 0, 128, 255, 255, 255, 127, 255, 127, 0, 128, 255, 255, 255, 127, 255, 127, 0, 128, 255, 255, 255, 127, 255, 127, 0, 128, 255, 255, 255, 127, 255, 127, 0, 128, 255, 255, 255, 127, 255, 127, 0, 128)
+}, {
+"aabb": AABB(-1.5, -1.5, -0.75, 1.50001, 3.00001, 1.01328e-05),
+"attribute_data": PackedByteArray(0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0),
+"format": 34359738391,
+"material": SubResource("StandardMaterial3D_2dkef"),
+"name": "WallRight",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray(226, 205, 140, 51, 0, 0, 192, 63, 0, 0, 64, 191, 0, 0, 192, 191, 0, 0, 192, 63, 1, 0, 64, 191, 226, 205, 140, 179, 0, 0, 192, 191, 2, 0, 64, 191, 0, 0, 192, 191, 0, 0, 192, 63, 1, 0, 64, 191, 0, 0, 192, 191, 0, 0, 192, 191, 255, 255, 63, 191, 226, 205, 140, 179, 0, 0, 192, 191, 2, 0, 64, 191, 255, 255, 255, 255, 255, 255, 255, 191, 255, 255, 255, 255, 255, 255, 255, 191, 255, 255, 255, 255, 255, 255, 255, 191, 0, 0, 0, 0, 255, 255, 255, 191, 0, 0, 0, 0, 255, 255, 255, 191, 0, 0, 0, 0, 255, 255, 255, 191)
+}]
+
+[node name="Wall_Corner_Outside_1,5M_Plane" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_21ngl")
+skeleton = NodePath("../CSGMesher/Output")
