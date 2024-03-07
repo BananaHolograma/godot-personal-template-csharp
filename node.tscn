@@ -349,3 +349,7 @@ mesh = SubResource("BoxMesh_gxqct")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D8"]
 shape = SubResource("ConvexPolygonShape3D_03fqo")
+
+[node name="Area3D" type="Area3D" parent="."]
+linear_damp_space_override = 1
+angular_damp_space_override = 1

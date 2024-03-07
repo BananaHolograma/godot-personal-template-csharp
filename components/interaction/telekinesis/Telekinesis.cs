@@ -152,7 +152,7 @@ public partial class Telekinesis : Node3D
 
     public void PushWave()
     {
-        PushWaveArea wave = new() { Direction = GetViewport().GetCamera3D().ForwardDirection() };
+        PushWaveArea wave = new() { Direction = GetViewport().GetCamera3D().ForwardDirection(), Actor = Actor };
         AddChild(wave);
 
         wave.Activate();
