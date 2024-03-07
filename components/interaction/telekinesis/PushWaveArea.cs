@@ -67,7 +67,7 @@ public partial class PushWaveArea : Area3D
 		foreach (RigidBody3D body in GetOverlappingBodies().Where(body => !BodiesPushed.ContainsKey(body.Name)).Cast<RigidBody3D>())
 		{
 			//To elevate the objects when pushed
-			Vector3 UpwardOffset = (Actor == null ? Vector3.Up : Actor.UpDirection) * rng.RandfRange(MinUpwardForce, MaxUpwardForce);
+			Vector3 UpwardOffset = MaxUpwardForce == 0 ? Vector3.Zero : (Actor == null ? Vector3.Up : Actor.UpDirection) * rng.RandfRange(MinUpwardForce, MaxUpwardForce);
 
 			BodiesPushed.Add(body.Name, body);
 			body.AngularVelocity = Vector3.One.Generate3DRandomFixedDirection() * rng.RandfRange(.5f, 1f);
