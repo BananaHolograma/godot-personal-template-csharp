@@ -39,6 +39,11 @@ public partial class Throwable3D : RigidBody3D
         OriginalParent = GetParent();
         CollisionLayer = OriginalCollisionLayer;
         CollisionMask = OriginalCollisionMask;
+
+        StandardMaterial3D material = (StandardMaterial3D)this.FirstNodeOfType<MeshInstance3D>().GetActiveMaterial(0);
+
+        if (material != null)
+            OriginalTransparency = material.AlbedoColor.A8;
     }
 
 
@@ -120,7 +125,6 @@ public partial class Throwable3D : RigidBody3D
 
         if (material != null)
         {
-            OriginalTransparency = material.AlbedoColor.A8;
             material.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
             material.AlbedoColor = material.AlbedoColor with { A8 = TransparencyOnPull };
         }

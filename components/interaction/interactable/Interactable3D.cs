@@ -39,7 +39,6 @@ public partial class Interactable3D : Area3D
         CanceledInteraction += OnCancelInteraction;
         Focused += OnFocused;
         UnFocused += OnUnFocused;
-
     }
 
     public void Activate()

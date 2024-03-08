@@ -1,6 +1,7 @@
 using Godot;
 
 namespace GameRoot;
+[GlobalClass]
 public partial class InteractableParameters : Resource
 {
 	public enum CATEGORY

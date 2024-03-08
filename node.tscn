@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://uirp2yubi5o6"]
+[gd_scene load_steps=43 format=3 uid="uid://uirp2yubi5o6"]
 
 [ext_resource type="PackedScene" uid="uid://bdnf7ahkyulgk" path="res://components/movement/3D/first-person/controller/first_person_controller.tscn" id="1_0w1lh"]
 [ext_resource type="Script" path="res://components/interaction/throwable/Throwable3D.cs" id="2_td1dh"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://components/collisions/3D/Hitbox3D.cs" id="3_qdmy2"]
 [ext_resource type="Script" path="res://components/collisions/3D/Hurtbox3D.cs" id="4_36alg"]
 [ext_resource type="Script" path="res://components/interaction/destructible/Destructible.cs" id="5_ml8f5"]
+[ext_resource type="Script" path="res://components/interaction/interactable/Interactable3D.cs" id="7_fskap"]
+[ext_resource type="Script" path="res://components/interaction/interactable/InteractableParameters.cs" id="8_fqpsw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ad5vo"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -117,6 +119,22 @@ points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_03fqo"]
 points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="Resource" id="Resource_44nfr"]
+script = ExtResource("8_fqpsw")
+Title = ""
+Description = ""
+Category = 0
+Scannable = false
+Pickable = false
+PickupMessage = ""
+PullPower = 20.0
+ThrowPower = 10.0
+Usable = false
+UsableMessage = ""
+CanBeSaved = false
+InventorySaveMessage = ""
+LockPlayer = false
 
 [node name="World" type="Node3D"]
 
@@ -322,7 +340,7 @@ mesh = SubResource("BoxMesh_gxqct")
 shape = SubResource("ConvexPolygonShape3D_um78a")
 
 [node name="RigidBody3D6" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.4392, 1.74744, 0.5279)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.4392, 2.34327, 0.5279)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D6"]
 mesh = SubResource("BoxMesh_gxqct")
@@ -331,7 +349,7 @@ mesh = SubResource("BoxMesh_gxqct")
 shape = SubResource("ConvexPolygonShape3D_gt8nn")
 
 [node name="RigidBody3D7" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.6626, 1.74744, 0.5279)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9485, 0.999256, 0.5279)
 mass = 1.2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D7"]
@@ -341,7 +359,7 @@ mesh = SubResource("BoxMesh_gxqct")
 shape = SubResource("ConvexPolygonShape3D_770v3")
 
 [node name="RigidBody3D8" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.4821, 1.74744, 2.86657)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.3925, 1.75753, 2.82156)
 mass = 0.85
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D8"]
@@ -349,3 +367,7 @@ mesh = SubResource("BoxMesh_gxqct")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D8"]
 shape = SubResource("ConvexPolygonShape3D_03fqo")
+
+[node name="Interactable3D" type="Area3D" parent="."]
+script = ExtResource("7_fskap")
+Parameters = SubResource("Resource_44nfr")
