@@ -1,0 +1,761 @@
+[gd_scene load_steps=4 format=3 uid="uid://cprqov8oarr6m"]
+
+[ext_resource type="Script" path="res://components/world-building/tilemap_to_3D/MapLoader.cs" id="1_8cliw"]
+[ext_resource type="PackedScene" uid="uid://ceq6gyf8db0h8" path="res://components/world-building/tilemap_to_3D/blocks/map_block_2x2.tscn" id="2_1d1k6"]
+[ext_resource type="Script" path="res://components/world-building/tilemap_to_3D/blocks/MapBlock.cs" id="3_54wxa"]
+
+[node name="TestMapLoader" type="Node3D"]
+
+[node name="MapLoader" type="Node3D" parent="."]
+script = ExtResource("1_8cliw")
+MapFilePath = "res://components/world-building/tilemap_to_3D/test_map.tscn"
+
+[node name="TestDungeonMap" type="Node3D" parent="MapLoader"]
+
+[node name="TestDungeonMap_Level0" type="Node3D" parent="MapLoader/TestDungeonMap"]
+
+[node name="MapBlock1" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock2" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock3" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock4" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock5" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock6" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock7" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock8" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock9" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock10" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock11" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock12" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock13" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock14" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock15" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock16" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock17" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock18" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock19" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock20" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock21" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock22" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock23" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock24" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock25" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock26" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock27" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock28" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock29" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock30" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock31" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock32" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock33" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock34" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock35" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock36" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock37" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock38" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock39" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock40" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock41" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock42" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock43" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock44" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock45" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock46" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock47" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock48" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock49" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock50" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock51" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock52" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock53" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock54" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock55" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock56" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock57" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock58" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock59" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock60" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock61" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock62" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock63" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock64" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock65" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock66" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock67" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock68" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock69" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock70" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock71" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock72" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock73" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock74" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock75" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock76" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock77" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock78" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock79" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock80" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock81" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock82" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock83" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock84" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock85" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock86" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock87" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock88" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock89" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock90" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock91" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock92" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock93" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock94" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock95" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock96" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock97" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock98" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock99" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock100" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock101" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock102" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock103" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock104" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock105" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock106" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock107" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock108" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock109" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock110" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock111" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock112" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock113" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 2)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock114" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 4)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock115" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock116" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock117" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock118" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock119" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock120" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level0" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="TestDungeonMap_Level1" type="Node3D" parent="MapLoader/TestDungeonMap"]
+
+[node name="MapBlock121" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock122" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock123" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock124" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock125" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock126" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock127" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock128" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 6)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock129" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock130" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock131" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock132" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock133" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock134" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock135" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock136" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock137" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock138" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock139" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock140" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock141" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock142" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock143" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock144" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock145" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock146" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock147" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock148" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock149" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock150" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock151" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock152" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock153" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock154" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 24)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock155" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 8)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock156" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 10)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock157" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock158" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock159" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock160" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock161" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock162" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock163" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock164" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock165" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock166" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock167" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 12)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock168" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock169" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock170" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock171" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 14)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock172" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock173" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock174" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock175" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock176" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock177" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 16)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock178" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock179" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock180" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock181" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 22)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock182" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock183" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 18)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock184" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock185" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 20)
+script = ExtResource("3_54wxa")
+
+[node name="MapBlock186" type="Node3D" parent="MapLoader/TestDungeonMap/TestDungeonMap_Level1" instance=ExtResource("2_1d1k6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, 20)
+script = ExtResource("3_54wxa")
