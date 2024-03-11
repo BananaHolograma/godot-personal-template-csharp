@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://36m7sdj6ybju"]
+
+[ext_resource type="Script" path="res://components/world-building/tilemap_to_3D/blocks/MapBlock.cs" id="1_4fe4s"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wqnuq"]
+size = Vector2(1, 3)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gnvqj"]
+size = Vector2(1, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e07a8"]
+size = Vector3(1, 3, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_plef8"]
+size = Vector3(1, 3, 0.1)
+
+[node name="MapBlock1" type="Node3D"]
+script = ExtResource("1_4fe4s")
+CurrentMapBlockMode = 1
+
+[node name="@MeshInstance3D@258380" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_wqnuq")
+
+[node name="@MeshInstance3D@258381" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+mesh = SubResource("PlaneMesh_gnvqj")
+
+[node name="@MeshInstance3D@258382" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.4)
+mesh = SubResource("BoxMesh_e07a8")
+
+[node name="@MeshInstance3D@258383" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.4)
+mesh = SubResource("BoxMesh_plef8")

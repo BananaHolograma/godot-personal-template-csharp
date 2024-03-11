@@ -17,7 +17,7 @@ public partial class MapLoader : Node3D
     [Export] public bool GenerateWallsCollisions = true;
     [Export] public Vector2 DefaultGridPlaneSize = new(1, 1);
     [Export] public int DefaultGridPlaneHeight = 3;
-    [Export] public Vector3 DefaultGridBoxSize = new(1, 3, 1);
+    [Export] public Vector3 DefaultGridBoxSize = new(1, 1, .1f);
     [Export] public int DefaultGridBoxHeight = 3;
 
     [Export]
@@ -44,11 +44,6 @@ public partial class MapLoader : Node3D
         }
     }
 
-    public enum MapBlockMode
-    {
-        PLANE,
-        BOX
-    }
     internal enum TileDataLayer
     {
         MAPBLOCK_SCENE,
