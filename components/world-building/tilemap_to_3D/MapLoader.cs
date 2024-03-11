@@ -121,7 +121,7 @@ public partial class MapLoader : Node3D
                         PackedScene mapBlockScene = ObtainSceneFromCustomTileData(data);
 
                         MapBlock mapBlock = mapBlockScene.Instantiate() as MapBlock;
-                        mapBlock.Translate(new Vector3(cell.X * map2D.GridSize, 0, cell.Y * map2D.GridSize));
+                        mapBlock.Translate(new Vector3(cell.X * map2D.GridSize.X, 0, cell.Y * map2D.GridSize.Y));
                         mapLevelRoot.AddChild(mapBlock);
                         mapBlock.UpdateFaces(GetCellNeighbours(cells, cell));
                         mapBlock.SetOwnerToEditedSceneRoot();
