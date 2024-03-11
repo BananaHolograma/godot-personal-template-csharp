@@ -1,4 +1,3 @@
-using System;
 using Godot;
 using Godot.Collections;
 using GodotExtensions;
@@ -9,7 +8,6 @@ namespace GameRoot;
 [GlobalClass]
 public partial class MapLoader : Node3D
 {
-
     [Export(PropertyHint.File)] public string MapFilePath = string.Empty;
     [Export] public bool MergeMeshes = true;
     [Export] public bool GenerateFloorCollisions = true;
@@ -42,8 +40,50 @@ public partial class MapLoader : Node3D
 
     private bool _generateMap = false;
     private bool _clearMap = false;
-
     private readonly Dictionary<string, PackedScene> cachedScenes = new();
+    private readonly System.Collections.Generic.Dictionary<string, SingleMeshMerged> singleMeshes = new();
+
+    public class SingleMeshMerged
+    {
+        public string MeshName { get; private set; }
+        public ArrayMesh ArrayMesh { get; set; }
+        public SurfaceTool SurfaceTool { get; private set; }
+        private string Type { get; }
+
+        public SingleMeshMerged(string meshName)
+        {
+            Type = meshName.Trim().ToLower();
+            MeshName = $"{meshName.Capitalize()}SingleMesh";
+            ArrayMesh = new ArrayMesh();
+            SurfaceTool = new SurfaceTool();
+        }
+
+        public string GetMeshType() => Type;
+        public void MergeMesh(MeshInstance3D meshToMerge)
+        {
+            SurfaceTool.AppendFrom(meshToMerge.Mesh, 0, meshToMerge.GlobalTransform);
+            ArrayMesh = SurfaceTool.Commit();
+        }
+
+        public void AddToTree(Node3D parent, bool generateCollisions = true)
+        {
+            MeshInstance3D mesh = new() { Name = MeshName };
+            parent.AddChild(mesh);
+            mesh.Mesh = ArrayMesh;
+            mesh.SetOwnerToEditedSceneRoot();
+
+            if (generateCollisions)
+            {
+                StaticBody3D body = new();
+                CollisionShape3D collision = new() { Shape = mesh.Mesh.CreateTrimeshShape() };
+                body.AddChild(collision);
+                mesh.AddChild(body);
+                body.SetOwnerToEditedSceneRoot();
+                collision.SetOwnerToEditedSceneRoot();
+            }
+        }
+    }
+
     public void GenerateMap()
     {
         if (MapFileIsValid(MapFilePath))
@@ -60,35 +100,61 @@ public partial class MapLoader : Node3D
                 return;
             }
 
+
             int numberOfMaps = tilemap.GetLayersCount();
 
             Node3D mapRoot = CreateMapRootNode(map2D);
 
             foreach (int layer in GD.Range(0, numberOfMaps))
             {
+                singleMeshes.Clear();
+
                 Node3D mapLevelRoot = CreateMapLevelRootNode(mapRoot, map2D, layer);
                 Array<Vector2I> cells = tilemap.GetUsedCells(layer);
-
-
 
                 foreach (Vector2I cell in cells)
                 {
                     TileData data = tilemap.GetCellTileData(layer, cell);
 
-                    if (layer == 1)
-                        GD.Print("DATA BRO ", data);
                     if (data is not null)
                     {
                         PackedScene mapBlockScene = ObtainSceneFromCustomTileData(data);
-                        if (layer == 1)
-                            GD.Print("LAYER BRO ", mapBlockScene);
+
                         MapBlock mapBlock = mapBlockScene.Instantiate() as MapBlock;
                         mapBlock.Translate(new Vector3(cell.X * map2D.GridSize, 0, cell.Y * map2D.GridSize));
                         mapLevelRoot.AddChild(mapBlock);
                         mapBlock.UpdateFaces(GetCellNeighbours(cells, cell));
+                        mapBlock.SetOwnerToEditedSceneRoot();
 
-                        SetOwnerToEditedSceneRoot(mapBlock);
+                        if (MergeMeshes)
+                        {
+                            foreach (MeshInstance3D meshToMerge in mapBlock.VisibleMeshes())
+                            {
+                                string type = GetKeyTypeFromMesh(meshToMerge);
+
+                                if (!singleMeshes.ContainsKey(type))
+                                    singleMeshes.Add(type, new SingleMeshMerged(type));
+
+                                if (singleMeshes.TryGetValue(type, out SingleMeshMerged singleMeshMerged))
+                                    singleMeshMerged.MergeMesh(meshToMerge);
+
+                            }
+                        }
                     }
+                }
+
+                if (mapLevelRoot.GetChildCount() == 0)
+                {
+                    mapLevelRoot.QueueFree();
+                    continue;
+                }
+
+                if (MergeMeshes)
+                {
+                    mapLevelRoot.QueueFreeChildren();
+
+                    foreach (SingleMeshMerged singleMeshMerged in singleMeshes.Values)
+                        singleMeshMerged.AddToTree(mapLevelRoot, GenerateCollisionsOnType(singleMeshMerged.GetMeshType()));
                 }
             }
         }
@@ -98,36 +164,13 @@ public partial class MapLoader : Node3D
         }
     }
 
-    private void SetOwnerToEditedSceneRoot(Node node)
-    {
-        if (Engine.IsEditorHint())
-            node.Owner = GetTree().EditedSceneRoot;
-    }
-    private Dictionary<Vector2, bool> GetCellNeighbours(Array<Vector2I> cells, Vector2I cell)
-    {
-        return new() {
-            {Vector2.Up, cells.Contains(cell + Vector2I.Up)},
-            {Vector2.Down, cells.Contains (cell + Vector2I.Down)},
-            {Vector2.Left, cells.Contains(cell + Vector2I.Left)},
-            {Vector2.Right, cells.Contains(cell + Vector2I.Right)},
-        };
-    }
-
-    private bool HasNeighbour(Array<Vector2I> cells, Vector2I cell, Vector2I direction)
-    {
-        return cells.Contains(cell + direction);
-    }
-    public void ClearGeneratedMap()
-    {
-        this.QueueFreeChildren();
-    }
 
     private Node3D CreateMapRootNode(Map2D map2D)
     {
         Node3D mapRoot = new() { Name = map2D.MapName };
         AddChild(mapRoot);
 
-        SetOwnerToEditedSceneRoot(mapRoot);
+        mapRoot.SetOwnerToEditedSceneRoot();
 
         return mapRoot;
     }
@@ -137,7 +180,7 @@ public partial class MapLoader : Node3D
         Node3D mapLayerRoot = new() { Name = $"{map2D.MapName}_Level{layer}" };
         mapRoot.AddChild(mapLayerRoot);
 
-        SetOwnerToEditedSceneRoot(mapLayerRoot);
+        mapLayerRoot.SetOwnerToEditedSceneRoot();
 
         return mapLayerRoot;
     }
@@ -155,9 +198,44 @@ public partial class MapLoader : Node3D
         return cachedScenes[scenePath];
     }
 
-
     private static bool MapFileIsValid(string mapFilePath)
     {
         return mapFilePath.IsAbsolutePath() && ResourceLoader.Exists(mapFilePath);
+    }
+
+    private static string GetKeyTypeFromMesh(MeshInstance3D mesh)
+    {
+        string name = mesh.Name.ToString().Trim().ToLower();
+
+        return name.Contains("wall") ? "walls" : name;
+    }
+
+    private bool GenerateCollisionsOnType(string name)
+    {
+        return name switch
+        {
+            "floor" => GenerateFloorCollisions,
+            "ceil" => GenerateCeilCollisions,
+            "walls" => GenerateWallsCollisions,
+            _ => false,
+        };
+    }
+    private static Dictionary<Vector2, bool> GetCellNeighbours(Array<Vector2I> cells, Vector2I cell)
+    {
+        return new() {
+            {Vector2.Up, cells.Contains(cell + Vector2I.Up)},
+            {Vector2.Down, cells.Contains (cell + Vector2I.Down)},
+            {Vector2.Left, cells.Contains(cell + Vector2I.Left)},
+            {Vector2.Right, cells.Contains(cell + Vector2I.Right)},
+        };
+    }
+
+    private static bool HasNeighbour(Array<Vector2I> cells, Vector2I cell, Vector2I direction)
+    {
+        return cells.Contains(cell + direction);
+    }
+    public void ClearGeneratedMap()
+    {
+        this.QueueFreeChildren();
     }
 }

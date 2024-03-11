@@ -205,4 +205,14 @@ public static class NodeExtension
         foreach (Node child in node.GetChildren())
             child.QueueFree();
     }
+
+    /// <summary>
+    /// Set the owner node to edited scene root if Engine is editor hint.
+    /// </summary>
+    /// <param name="node">The target node</param>
+    public static void SetOwnerToEditedSceneRoot(this Node node)
+    {
+        if (Engine.IsEditorHint())
+            node.Owner = node.GetTree().EditedSceneRoot;
+    }
 }

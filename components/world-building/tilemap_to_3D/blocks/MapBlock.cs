@@ -36,7 +36,18 @@ public partial class MapBlock : Node3D
 		}
 	}
 
-	public Array<MeshInstance3D> VisibleMeshes() =>
-		(Array<MeshInstance3D>)GetChildren().Where(child => child is MeshInstance3D mesh && mesh.Visible);
+	public Array<MeshInstance3D> VisibleMeshes()
+	{
+		Array<MeshInstance3D> visibleMeshes = new();
+
+		foreach (Node child in GetChildren())
+		{
+			if (child is MeshInstance3D mesh && mesh.Visible)
+				visibleMeshes.Add((MeshInstance3D)child);
+		}
+
+		return visibleMeshes;
+	}
+
 
 }
