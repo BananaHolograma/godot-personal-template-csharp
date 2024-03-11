@@ -1,6 +1,7 @@
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using GodotExtensions;
 
 namespace GameRoot;
 
@@ -36,10 +37,42 @@ public partial class MapBlock : Node3D
 	private Vector2 _size = new(2, 2);
 	private int _height = 3;
 
+	public MeshInstance3D Floor;
+	public MeshInstance3D Ceil;
+	public MeshInstance3D NorthWall;
+	public MeshInstance3D SouthWall;
+	public MeshInstance3D EastWall;
+	public MeshInstance3D WestWall;
+
+
 	public override void _EnterTree()
 	{
+		this.QueueFreeChildren();
+
 		AddToGroup(GroupName);
 		Name = $"MapBlock{GetTree().GetNodesInGroup(GroupName).Count}";
+
+		Floor = new() { Name = "Floor", Position = Vector3.Zero, Mesh = new PlaneMesh() { Size = Size, Orientation = PlaneMesh.OrientationEnum.Y } };
+		Ceil = new() { Name = "Ceil", Position = new Vector3(0, Height, 0), Mesh = new PlaneMesh() { Size = Size, FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.Y } };
+		NorthWall = new() { Name = "NorthWall", Position = new Vector3(0, Height / 2f, -Size.X / 2f), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Height), Orientation = PlaneMesh.OrientationEnum.Z } };
+		SouthWall = new() { Name = "SouthWall", Position = new Vector3(0, Height / 2f, Size.X / 2f), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Height), FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.Z }, };
+		EastWall = new() { Name = "EastWall", Position = new Vector3(Size.X / 2f, Height / 2f, 0), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Height), FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.X } };
+		WestWall = new() { Name = "WestWall", Position = new Vector3(-Size.X / 2f, Height / 2f, 0), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Height), Orientation = PlaneMesh.OrientationEnum.X }, };
+
+		AddChild(Floor);
+		AddChild(Ceil);
+		AddChild(NorthWall);
+		AddChild(SouthWall);
+		AddChild(EastWall);
+		AddChild(WestWall);
+
+		Floor.SetOwnerToEditedSceneRoot();
+		Ceil.SetOwnerToEditedSceneRoot();
+		NorthWall.SetOwnerToEditedSceneRoot();
+		SouthWall.SetOwnerToEditedSceneRoot();
+		EastWall.SetOwnerToEditedSceneRoot();
+		WestWall.SetOwnerToEditedSceneRoot();
+
 	}
 
 	public void UpdateFaces(Dictionary<Vector2, bool> neighbours)
@@ -48,10 +81,10 @@ public partial class MapBlock : Node3D
 			return;
 
 		Dictionary<Vector2, MeshInstance3D> vectorToWall = new() {
-			{Vector2.Up, GetNode<MeshInstance3D>("NorthWall")},
-			{Vector2.Down, GetNode<MeshInstance3D>("SouthWall")},
-			{Vector2.Left, GetNode<MeshInstance3D>("WestWall")},
-			{Vector2.Right, GetNode<MeshInstance3D>("EastWall")},
+			{Vector2.Up, NorthWall},
+			{Vector2.Down, SouthWall},
+			{Vector2.Left, WestWall},
+			{Vector2.Right, EastWall},
 		};
 
 		foreach (Vector2 neighbourDirection in neighbours.Keys)
@@ -64,14 +97,14 @@ public partial class MapBlock : Node3D
 		}
 	}
 
-	public void ChangeSize(Vector2 newSize, int newHeight = 0)
+	public void ChangeSize(Vector2 newSize, int newHeight = 0, bool onlyOnVisibleMeshes = true)
 	{
 		newHeight = newHeight == 0 ? Height : newHeight;
 
-		if (newSize.IsZeroApprox() || newHeight == 0)
+		if (newSize.IsZeroApprox() || newHeight == 0 || (newSize.IsEqualApprox(Size) && Height == newHeight))
 			return;
 
-		foreach (MeshInstance3D mesh in AvailableMeshes())
+		foreach (MeshInstance3D mesh in onlyOnVisibleMeshes ? VisibleMeshes() : AvailableMeshes())
 		{
 			PlaneMesh meshPlane = mesh.Mesh as PlaneMesh;
 
@@ -98,12 +131,12 @@ public partial class MapBlock : Node3D
 	private Array<MeshInstance3D> AvailableMeshes()
 	{
 		return new Array<MeshInstance3D>() {
-			GetNode<MeshInstance3D>("Floor"),
-			GetNode<MeshInstance3D>("Ceil"),
-			GetNode<MeshInstance3D>("NorthWall"),
-			GetNode<MeshInstance3D>("SouthWall"),
-			GetNode<MeshInstance3D>("EastWall"),
-			GetNode<MeshInstance3D>("WestWall")
+			Floor,
+			Ceil,
+			NorthWall,
+			SouthWall,
+			EastWall,
+			WestWall
 		};
 	}
 
@@ -111,11 +144,8 @@ public partial class MapBlock : Node3D
 	{
 		Array<MeshInstance3D> visibleMeshes = new();
 
-		foreach (Node child in GetChildren())
-		{
-			if (child is MeshInstance3D mesh && mesh.Visible)
-				visibleMeshes.Add((MeshInstance3D)child);
-		}
+		foreach (MeshInstance3D child in AvailableMeshes().Where(child => child != null && child.Visible))
+			visibleMeshes.Add(child);
 
 		return visibleMeshes;
 	}

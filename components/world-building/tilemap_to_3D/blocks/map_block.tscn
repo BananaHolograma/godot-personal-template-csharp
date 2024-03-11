@@ -1,52 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://ceq6gyf8db0h8"]
+[gd_scene load_steps=2 format=3 uid="uid://ceq6gyf8db0h8"]
 
 [ext_resource type="Script" path="res://components/world-building/tilemap_to_3D/blocks/MapBlock.cs" id="1_fm37f"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_v82ls"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_eb640"]
-flip_faces = true
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_sbrr1"]
-size = Vector2(2, 3)
-orientation = 2
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_2x8fe"]
-flip_faces = true
-size = Vector2(2, 3)
-orientation = 2
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_ugrhr"]
-size = Vector2(2, 3)
-orientation = 0
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_ejrla"]
-flip_faces = true
-size = Vector2(2, 3)
-orientation = 0
-
-[node name="MapBlock" type="Node3D"]
+[node name="MapBlock1" type="Node3D"]
 script = ExtResource("1_fm37f")
-
-[node name="Floor" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_v82ls")
-
-[node name="Ceil" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-mesh = SubResource("PlaneMesh_eb640")
-
-[node name="NorthWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1)
-mesh = SubResource("PlaneMesh_sbrr1")
-
-[node name="SouthWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 1)
-mesh = SubResource("PlaneMesh_2x8fe")
-
-[node name="WestWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.5, 0)
-mesh = SubResource("PlaneMesh_ugrhr")
-
-[node name="EastWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.5, 0)
-mesh = SubResource("PlaneMesh_ejrla")
+Size = Vector2(3, 2)
