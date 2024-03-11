@@ -4,6 +4,8 @@ using GodotExtensions;
 
 namespace GameRoot;
 
+public record MapBlockSize(Vector2 Size, int Height);
+
 [Tool]
 [GlobalClass]
 public partial class MapLoader : Node3D
@@ -13,6 +15,10 @@ public partial class MapLoader : Node3D
     [Export] public bool GenerateFloorCollisions = true;
     [Export] public bool GenerateCeilCollisions = false;
     [Export] public bool GenerateWallsCollisions = true;
+    [Export] public Vector2 DefaultGridPlaneSize = new(2, 2);
+    [Export] public int DefaultGridPlaneHeight = 3;
+    [Export] public Vector3 DefaultGridBoxSize = new(2, 3, 2);
+    [Export] public int DefaultGridBoxHeight = 3;
 
     [Export]
     public bool Generate
@@ -38,51 +44,22 @@ public partial class MapLoader : Node3D
         }
     }
 
+    public enum MapBlockMode
+    {
+        PLANE,
+        BOX
+    }
+    internal enum TileDataLayer
+    {
+        MAPBLOCK_SCENE,
+        MAPBLOCK_GRID_SIZE,
+        MAPBLOCK_HEIGHT
+    }
     private bool _generateMap = false;
     private bool _clearMap = false;
     private readonly Dictionary<string, PackedScene> cachedScenes = new();
     private readonly System.Collections.Generic.Dictionary<string, SingleMeshMerged> singleMeshes = new();
 
-    public class SingleMeshMerged
-    {
-        public string MeshName { get; private set; }
-        public ArrayMesh ArrayMesh { get; set; }
-        public SurfaceTool SurfaceTool { get; private set; }
-        private string Type { get; }
-
-        public SingleMeshMerged(string meshName)
-        {
-            Type = meshName.Trim().ToLower();
-            MeshName = $"{meshName.Capitalize()}SingleMesh";
-            ArrayMesh = new ArrayMesh();
-            SurfaceTool = new SurfaceTool();
-        }
-
-        public string GetMeshType() => Type;
-        public void MergeMesh(MeshInstance3D meshToMerge)
-        {
-            SurfaceTool.AppendFrom(meshToMerge.Mesh, 0, meshToMerge.GlobalTransform);
-            ArrayMesh = SurfaceTool.Commit();
-        }
-
-        public void AddToTree(Node3D parent, bool generateCollisions = true)
-        {
-            MeshInstance3D mesh = new() { Name = MeshName };
-            parent.AddChild(mesh);
-            mesh.Mesh = ArrayMesh;
-            mesh.SetOwnerToEditedSceneRoot();
-
-            if (generateCollisions)
-            {
-                StaticBody3D body = new();
-                CollisionShape3D collision = new() { Shape = mesh.Mesh.CreateTrimeshShape() };
-                body.AddChild(collision);
-                mesh.AddChild(body);
-                body.SetOwnerToEditedSceneRoot();
-                collision.SetOwnerToEditedSceneRoot();
-            }
-        }
-    }
 
     public void GenerateMap()
     {
@@ -119,12 +96,12 @@ public partial class MapLoader : Node3D
                     if (data is not null)
                     {
                         PackedScene mapBlockScene = ObtainSceneFromCustomTileData(data);
-
+                        MapBlockSize mapBlockSize = ObtainMapBlockSizeFromCustomTileData(data);
                         MapBlock mapBlock = mapBlockScene.Instantiate() as MapBlock;
 
-                        mapBlock.Translate(new Vector3(cell.X * map2D.GridSize.X, 0, cell.Y * map2D.GridSize.Y));
+                        mapBlock.Translate(new Vector3(cell.X * mapBlockSize.Size.X, 0, cell.Y * mapBlockSize.Size.Y));
                         mapLevelRoot.AddChild(mapBlock);
-                        mapBlock.ChangeSize(map2D.GridSize, map2D.Height);
+                        mapBlock.ChangeSize(mapBlockSize.Size, mapBlockSize.Height);
                         mapBlock.UpdateFaces(GetCellNeighbours(cells, cell));
                         mapBlock.SetOwnerToEditedSceneRoot();
 
@@ -166,7 +143,6 @@ public partial class MapLoader : Node3D
         }
     }
 
-
     private Node3D CreateMapRootNode(Map2D map2D)
     {
         Node3D mapRoot = new() { Name = map2D.MapName };
@@ -189,7 +165,7 @@ public partial class MapLoader : Node3D
 
     private PackedScene ObtainSceneFromCustomTileData(TileData data)
     {
-        string scenePath = (string)data.GetCustomDataByLayerId(0);
+        string scenePath = (string)data.GetCustomDataByLayerId((int)TileDataLayer.MAPBLOCK_SCENE);
 
         if (cachedScenes.TryGetValue(scenePath, out PackedScene mapBlockScene))
             return mapBlockScene;
@@ -198,6 +174,20 @@ public partial class MapLoader : Node3D
             cachedScenes.Add(scenePath, ResourceLoader.Load<PackedScene>(scenePath));
 
         return cachedScenes[scenePath];
+    }
+
+    private MapBlockSize ObtainMapBlockSizeFromCustomTileData(TileData data)
+    {
+        Vector2 mapBlockSize = (Vector2)data.GetCustomDataByLayerId((int)TileDataLayer.MAPBLOCK_GRID_SIZE);
+        int mapBlockHeight = (int)data.GetCustomDataByLayerId((int)TileDataLayer.MAPBLOCK_HEIGHT);
+
+        if (mapBlockSize.IsZeroApprox())
+            mapBlockSize = DefaultGridPlaneSize;
+
+        if (mapBlockHeight == 0)
+            mapBlockHeight = DefaultGridPlaneHeight;
+
+        return new MapBlockSize(mapBlockSize, mapBlockHeight);
     }
 
     private static bool MapFileIsValid(string mapFilePath)
@@ -239,5 +229,46 @@ public partial class MapLoader : Node3D
     public void ClearGeneratedMap()
     {
         this.QueueFreeChildren();
+    }
+}
+
+public class SingleMeshMerged
+{
+    public string MeshName { get; private set; }
+    public ArrayMesh ArrayMesh { get; set; }
+    public SurfaceTool SurfaceTool { get; private set; }
+    private string Type { get; }
+
+    public SingleMeshMerged(string meshName)
+    {
+        Type = meshName.Trim().ToLower();
+        MeshName = $"{meshName.Capitalize()}SingleMesh";
+        ArrayMesh = new ArrayMesh();
+        SurfaceTool = new SurfaceTool();
+    }
+
+    public string GetMeshType() => Type;
+    public void MergeMesh(MeshInstance3D meshToMerge)
+    {
+        SurfaceTool.AppendFrom(meshToMerge.Mesh, 0, meshToMerge.GlobalTransform);
+        ArrayMesh = SurfaceTool.Commit();
+    }
+
+    public void AddToTree(Node3D parent, bool generateCollisions = true)
+    {
+        MeshInstance3D mesh = new() { Name = MeshName };
+        parent.AddChild(mesh);
+        mesh.Mesh = ArrayMesh;
+        mesh.SetOwnerToEditedSceneRoot();
+
+        if (generateCollisions)
+        {
+            StaticBody3D body = new();
+            CollisionShape3D collision = new() { Shape = mesh.Mesh.CreateTrimeshShape() };
+            body.AddChild(collision);
+            mesh.AddChild(body);
+            body.SetOwnerToEditedSceneRoot();
+            collision.SetOwnerToEditedSceneRoot();
+        }
     }
 }
