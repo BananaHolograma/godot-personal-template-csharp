@@ -22,7 +22,7 @@ public partial class MapBlock : Node3D
 		}
 	}
 	[Export]
-	public int Height
+	public float Height
 	{
 		get => _height;
 		set
@@ -35,7 +35,7 @@ public partial class MapBlock : Node3D
 	}
 
 	private Vector2 _size = new(2, 2);
-	private int _height = 3;
+	private float _height = 3;
 
 	public MeshInstance3D Floor;
 	public MeshInstance3D Ceil;
@@ -97,7 +97,7 @@ public partial class MapBlock : Node3D
 		}
 	}
 
-	public void ChangeSize(Vector2 newSize, int newHeight = 0, bool onlyOnVisibleMeshes = true)
+	public void ChangeSize(Vector2 newSize, float newHeight = 0, bool onlyOnVisibleMeshes = true)
 	{
 		newHeight = newHeight == 0 ? Height : newHeight;
 

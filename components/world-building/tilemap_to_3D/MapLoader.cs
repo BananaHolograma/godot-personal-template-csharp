@@ -15,9 +15,9 @@ public partial class MapLoader : Node3D
     [Export] public bool GenerateFloorCollisions = true;
     [Export] public bool GenerateCeilCollisions = false;
     [Export] public bool GenerateWallsCollisions = true;
-    [Export] public Vector2 DefaultGridPlaneSize = new(2, 2);
+    [Export] public Vector2 DefaultGridPlaneSize = new(1, 1);
     [Export] public int DefaultGridPlaneHeight = 3;
-    [Export] public Vector3 DefaultGridBoxSize = new(2, 3, 2);
+    [Export] public Vector3 DefaultGridBoxSize = new(1, 3, 1);
     [Export] public int DefaultGridBoxHeight = 3;
 
     [Export]
@@ -96,9 +96,15 @@ public partial class MapLoader : Node3D
                     if (data is not null)
                     {
                         PackedScene mapBlockScene = ObtainSceneFromCustomTileData(data);
+
+                        if (mapBlockScene == null)
+                            continue;
+
                         MapBlockSize mapBlockSize = ObtainMapBlockSizeFromCustomTileData(data);
                         MapBlock mapBlock = mapBlockScene.Instantiate() as MapBlock;
 
+                        if (layer == 1)
+                            GD.Print(mapBlockSize.Size, mapBlockSize.Height);
                         mapBlock.Translate(new Vector3(cell.X * mapBlockSize.Size.X, 0, cell.Y * mapBlockSize.Size.Y));
                         mapLevelRoot.AddChild(mapBlock);
                         mapBlock.ChangeSize(mapBlockSize.Size, mapBlockSize.Height);
@@ -171,9 +177,12 @@ public partial class MapLoader : Node3D
             return mapBlockScene;
 
         if (MapFileIsValid(scenePath))
+        {
             cachedScenes.Add(scenePath, ResourceLoader.Load<PackedScene>(scenePath));
+            return cachedScenes[scenePath];
+        }
 
-        return cachedScenes[scenePath];
+        return null;
     }
 
     private MapBlockSize ObtainMapBlockSizeFromCustomTileData(TileData data)
@@ -263,8 +272,8 @@ public class SingleMeshMerged
 
         if (generateCollisions)
         {
-            StaticBody3D body = new();
-            CollisionShape3D collision = new() { Shape = mesh.Mesh.CreateTrimeshShape() };
+            StaticBody3D body = new() { Name = $"{MeshName}StaticBody" };
+            CollisionShape3D collision = new() { Name = $"{MeshName}Collision", Shape = mesh.Mesh.CreateTrimeshShape() };
             body.AddChild(collision);
             mesh.AddChild(body);
             body.SetOwnerToEditedSceneRoot();
