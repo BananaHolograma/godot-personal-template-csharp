@@ -2,51 +2,54 @@
 
 [ext_resource type="Script" path="res://components/world-building/tilemap_to_3D/blocks/MapBlock.cs" id="1_fm37f"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_jkfkr"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_i5wb3"]
+size = Vector2(1, 1)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_d4s8w"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_33fpm"]
 flip_faces = true
+size = Vector2(1, 1)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_4yga7"]
-size = Vector2(2, 3)
+[sub_resource type="PlaneMesh" id="PlaneMesh_4eu8s"]
+size = Vector2(1, 3)
 orientation = 2
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_s6new"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_kwv2r"]
 flip_faces = true
-size = Vector2(2, 3)
+size = Vector2(1, 3)
 orientation = 2
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_illy2"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_66r8x"]
 flip_faces = true
-size = Vector2(2, 3)
+size = Vector2(1, 3)
 orientation = 0
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_h338q"]
-size = Vector2(2, 3)
+[sub_resource type="PlaneMesh" id="PlaneMesh_bc5yu"]
+size = Vector2(1, 3)
 orientation = 0
 
-[node name="MapBlockPlane" type="Node3D"]
+[node name="MapBlock1" type="Node3D"]
 script = ExtResource("1_fm37f")
+GroupName = "mapblock_plane"
 
-[node name="Floor" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_jkfkr")
+[node name="@MeshInstance3D@37827" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_i5wb3")
 
-[node name="Ceil" type="MeshInstance3D" parent="."]
+[node name="@MeshInstance3D@37828" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-mesh = SubResource("PlaneMesh_d4s8w")
+mesh = SubResource("PlaneMesh_33fpm")
 
-[node name="NorthWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1)
-mesh = SubResource("PlaneMesh_4yga7")
+[node name="@MeshInstance3D@37829" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.5)
+mesh = SubResource("PlaneMesh_4eu8s")
 
-[node name="SouthWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 1)
-mesh = SubResource("PlaneMesh_s6new")
+[node name="@MeshInstance3D@37830" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.5)
+mesh = SubResource("PlaneMesh_kwv2r")
 
-[node name="EastWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.5, 0)
-mesh = SubResource("PlaneMesh_illy2")
+[node name="@MeshInstance3D@37831" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, 0)
+mesh = SubResource("PlaneMesh_66r8x")
 
-[node name="WestWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.5, 0)
-mesh = SubResource("PlaneMesh_h338q")
+[node name="@MeshInstance3D@37832" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.5, 0)
+mesh = SubResource("PlaneMesh_bc5yu")

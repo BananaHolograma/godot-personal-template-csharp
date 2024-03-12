@@ -4,8 +4,6 @@ using GodotExtensions;
 
 namespace GameRoot;
 
-public record MapBlockSize(Vector2 Size, int Height);
-
 [Tool]
 [GlobalClass]
 public partial class MapLoader : Node3D
@@ -15,10 +13,8 @@ public partial class MapLoader : Node3D
     [Export] public bool GenerateFloorCollisions = true;
     [Export] public bool GenerateCeilCollisions = false;
     [Export] public bool GenerateWallsCollisions = true;
-    [Export] public Vector2 DefaultGridPlaneSize = new(1, 1);
-    [Export] public int DefaultGridPlaneHeight = 3;
+    [Export] public Vector3 DefaultGridPlaneSize = new(1, 1, 0);
     [Export] public Vector3 DefaultGridBoxSize = new(1, 1, .1f);
-    [Export] public int DefaultGridBoxHeight = 3;
 
     [Export]
     public bool Generate
@@ -95,14 +91,12 @@ public partial class MapLoader : Node3D
                         if (mapBlockScene == null)
                             continue;
 
-                        MapBlockSize mapBlockSize = ObtainMapBlockSizeFromCustomTileData(data);
+                        Vector3 mapBlockSize = ObtainMapBlockSizeFromCustomTileData(data);
                         MapBlock mapBlock = mapBlockScene.Instantiate() as MapBlock;
 
-                        if (layer == 1)
-                            GD.Print(mapBlockSize.Size, mapBlockSize.Height);
-                        mapBlock.Translate(new Vector3(cell.X * mapBlockSize.Size.X, 0, cell.Y * mapBlockSize.Size.Y));
+                        mapBlock.Translate(new Vector3(cell.X * mapBlockSize.X, 0, cell.Y * mapBlockSize.Y));
                         mapLevelRoot.AddChild(mapBlock);
-                        mapBlock.ChangeSize(mapBlockSize.Size, mapBlockSize.Height);
+                        mapBlock.ChangeSize(mapBlockSize);
                         mapBlock.UpdateFaces(GetCellNeighbours(cells, cell));
                         mapBlock.SetOwnerToEditedSceneRoot();
 
@@ -180,18 +174,14 @@ public partial class MapLoader : Node3D
         return null;
     }
 
-    private MapBlockSize ObtainMapBlockSizeFromCustomTileData(TileData data)
+    private Vector3 ObtainMapBlockSizeFromCustomTileData(TileData data)
     {
-        Vector2 mapBlockSize = (Vector2)data.GetCustomDataByLayerId((int)TileDataLayer.MAPBLOCK_GRID_SIZE);
-        int mapBlockHeight = (int)data.GetCustomDataByLayerId((int)TileDataLayer.MAPBLOCK_HEIGHT);
+        Vector3 mapBlockSize = (Vector3)data.GetCustomDataByLayerId((int)TileDataLayer.MAPBLOCK_GRID_SIZE);
 
         if (mapBlockSize.IsZeroApprox())
-            mapBlockSize = DefaultGridPlaneSize;
+            mapBlockSize = DefaultGridBoxSize;
 
-        if (mapBlockHeight == 0)
-            mapBlockHeight = DefaultGridPlaneHeight;
-
-        return new MapBlockSize(mapBlockSize, mapBlockHeight);
+        return mapBlockSize;
     }
 
     private static bool MapFileIsValid(string mapFilePath)

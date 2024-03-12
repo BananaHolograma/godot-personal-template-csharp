@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -12,39 +13,15 @@ public partial class MapBlock : Node3D
 	[Export] public MapBlockMode CurrentMapBlockMode = MapBlockMode.PLANE;
 	[Export] public string GroupName = "mapblock";
 	[Export]
-	public Vector2 PlaneSize
+	public Vector3 Size
 	{
-		get => _planeSize;
+		get => _size;
 		set
 		{
-			if (!_planeSize.IsEqualApprox(value))
-				ChangeSize(value, Height);
+			if (!_size.IsEqualApprox(value))
+				ChangeSize(value);
 
-			_planeSize = value;
-		}
-	}
-	[Export]
-	public float Height
-	{
-		get => _height;
-		set
-		{
-			if (_height != value)
-				ChangeSize(PlaneSize, value);
-
-			_height = value;
-		}
-	}
-
-	public Vector3 BoxSize
-	{
-		get => _boxSize;
-		set
-		{
-			/* if (!_boxSize.IsEqualApprox(value))
-				ChangeSize(value, Height);
- */
-			_boxSize = value;
+			_size = value;
 		}
 	}
 
@@ -62,25 +39,32 @@ public partial class MapBlock : Node3D
 	public MeshInstance3D EastWall;
 	public MeshInstance3D WestWall;
 
-	private Vector2 _planeSize = new(2, 2);
-	private Vector3 _boxSize = new(1, 3, .1f);
-	private float _height = 3;
+	private Vector3 _size = new(1, 3, .1f);
+
 
 	public override void _EnterTree()
 	{
-		AddToGroup(GroupName);
-		Name = $"MapBlock{GetTree().GetNodesInGroup(GroupName).Count}";
+		AddToGroup(GetGroupName());
+		Name = $"MapBlock{GetTree().GetNodesInGroup(GetGroupName()).Count}";
 
 		if (CurrentMapBlockMode.Equals(MapBlockMode.PLANE))
-		{
 			GeneratePlaneMeshes();
-		}
+
 
 		if (CurrentMapBlockMode.Equals(MapBlockMode.BOX))
-		{
 			GenerateBoxMeshes();
+
+		foreach (MeshInstance3D mesh in AvailableMeshes())
+		{
+			AddChild(mesh);
+			mesh.SetOwnerToEditedSceneRoot();
 		}
 
+	}
+
+	private StringName GetGroupName()
+	{
+		return $"{GroupName}_{(CurrentMapBlockMode.Equals(MapBlockMode.PLANE) ? "plane" : "box")}";
 	}
 
 	public void UpdateFaces(Dictionary<Vector2, bool> neighbours)
@@ -105,35 +89,57 @@ public partial class MapBlock : Node3D
 		}
 	}
 
-
-	public void ChangeSize(Vector2 newSize, float newHeight = 0, bool onlyOnVisibleMeshes = true)
+	public void ChangeSize(Vector3 newSize, bool onlyOnVisibleMeshes = true)
 	{
-		newHeight = newHeight == 0 ? Height : newHeight;
-
-		if (newSize.IsZeroApprox() || newHeight == 0 || (newSize.IsEqualApprox(PlaneSize) && Height == newHeight))
+		if (newSize.IsZeroApprox() || newSize.Y == 0 || newSize.IsEqualApprox(Size))
 			return;
 
 		foreach (MeshInstance3D mesh in onlyOnVisibleMeshes ? VisibleMeshes() : AvailableMeshes())
 		{
+			if (CurrentMapBlockMode.Equals(MapBlockMode.PLANE))
+				ChangeSizeOnPlaneMeshes(mesh, newSize);
+
+			if (CurrentMapBlockMode.Equals(MapBlockMode.BOX))
+				ChangeSizeOnBoxMeshes(mesh, newSize);
+		}
+	}
+
+	private void ChangeSizeOnBoxMeshes(MeshInstance3D mesh, Vector3 newSize)
+	{
+		if (newSize.Y > 0 && mesh.Name == "Ceil")
+			mesh.Position = mesh.Position with { Y = newSize.Y };
+
+		if (new[] { "Ceil", "Floor" }.Any(name => name == mesh.Name))
+		{
 			PlaneMesh meshPlane = mesh.Mesh as PlaneMesh;
+			meshPlane.Size = new Vector2(Size.X, Size.X);
+			return;
+		}
 
-			if (newHeight > 0 && mesh.Name == "Ceil")
-				mesh.Position = mesh.Position with { Y = newHeight };
+		BoxMesh meshBox = mesh.Mesh as BoxMesh;
 
-			if (new[] { "Ceil", "Floor" }.Any(name => name == mesh.Name))
-				meshPlane.Size = newSize;
+	}
 
-			if (new[] { "NorthWall", "SouthWall" }.Any(name => name == mesh.Name))
-			{
-				meshPlane.Size = new Vector2(newSize.X, newHeight);
-				mesh.Position = mesh.Position with { Y = newHeight / 2f, Z = Mathf.Sign(mesh.Position.Z) * (newSize.Y / 2f) };
-			}
+	private void ChangeSizeOnPlaneMeshes(MeshInstance3D mesh, Vector3 newSize)
+	{
+		PlaneMesh meshPlane = mesh.Mesh as PlaneMesh;
 
-			if (new[] { "EastWall", "WestWall" }.Any(name => name == mesh.Name))
-			{
-				meshPlane.Size = new Vector2((newSize.Y > newSize.X || newSize.X > newSize.Y) ? newSize.Y : newSize.X, newHeight);
-				mesh.Position = mesh.Position with { X = Mathf.Sign(mesh.Position.X) * (newSize.X / 2f), Y = newHeight / 2f };
-			}
+		if (newSize.Y > 0 && mesh.Name == "Ceil")
+			mesh.Position = mesh.Position with { Y = newSize.Y };
+
+		if (new[] { "Ceil", "Floor" }.Any(name => name == mesh.Name))
+			meshPlane.Size = new Vector2(Size.X, Size.X);
+
+		if (new[] { "NorthWall", "SouthWall" }.Any(name => name == mesh.Name))
+		{
+			meshPlane.Size = new Vector2(newSize.X, newSize.Y);
+			mesh.Position = mesh.Position with { Y = newSize.Y / 2f, Z = Mathf.Sign(mesh.Position.Z) * (newSize.Y / 2f) };
+		}
+
+		if (new[] { "EastWall", "WestWall" }.Any(name => name == mesh.Name))
+		{
+			meshPlane.Size = new Vector2((newSize.Y > newSize.X || newSize.X > newSize.Y) ? newSize.Y : newSize.X, newSize.Y);
+			mesh.Position = mesh.Position with { X = Mathf.Sign(mesh.Position.X) * (newSize.X / 2f), Y = newSize.Y / 2f };
 		}
 	}
 
@@ -141,51 +147,23 @@ public partial class MapBlock : Node3D
 	{
 		this.QueueFreeChildren();
 
-		Floor = new() { Name = "Floor", Position = Vector3.Zero, Mesh = new PlaneMesh() { Size = new Vector2(BoxSize.X, BoxSize.Y) } };
-		Ceil = new() { Name = "Ceil", Position = new Vector3(0, Height, 0), Mesh = new PlaneMesh() { Size = new Vector2(BoxSize.X, BoxSize.Y) } };
-		NorthWall = new() { Name = "NorthWall", Position = new Vector3(0, Height / 2f, -(BoxSize.X / 2f - BoxSize.Z)), Mesh = new BoxMesh() { Size = BoxSize } };
-		SouthWall = new() { Name = "SouthWall", Position = new Vector3(0, Height / 2f, (BoxSize.X / 2f) - BoxSize.Z), Mesh = new BoxMesh() { Size = BoxSize } };
-
-
-		AddChild(Floor);
-		AddChild(Ceil);
-		AddChild(NorthWall);
-		AddChild(SouthWall);
-		AddChild(EastWall);
-		AddChild(WestWall);
-
-		Floor.SetOwnerToEditedSceneRoot();
-		Ceil.SetOwnerToEditedSceneRoot();
-		NorthWall.SetOwnerToEditedSceneRoot();
-		SouthWall.SetOwnerToEditedSceneRoot();
-		EastWall.SetOwnerToEditedSceneRoot();
-		WestWall.SetOwnerToEditedSceneRoot();
-
+		Floor = new() { Name = "Floor", Position = Vector3.Zero, Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Size.X), Orientation = PlaneMesh.OrientationEnum.Y } };
+		Ceil = new() { Name = "Ceil", Position = new Vector3(0, Size.Y, 0), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Size.X), FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.Y } };
+		NorthWall = new() { Name = "NorthWall", Position = new Vector3(0, Size.Y / 2f, -(Size.X / 2f + Size.Z / 2f)), Mesh = new BoxMesh() { Size = Size } };
+		SouthWall = new() { Name = "SouthWall", Position = new Vector3(0, Size.Y / 2f, (Size.X / 2f) + Size.Z / 2f), Mesh = new BoxMesh() { Size = Size } };
+		EastWall = new() { Name = "EastWall", Position = new Vector3(Size.X / 2f + Size.Z / 2f, Size.Y / 2f, 0), Rotation = new Vector3(0, Mathf.DegToRad(90), 0), Mesh = new BoxMesh() { Size = Size } };
+		WestWall = new() { Name = "WestWall", Position = new Vector3(-(Size.X / 2f + Size.Z / 2f), Size.Y / 2f, 0), Rotation = new Vector3(0, Mathf.DegToRad(90), 0), Mesh = new BoxMesh() { Size = Size } };
 	}
 	private void GeneratePlaneMeshes()
 	{
 		this.QueueFreeChildren();
 
-		Floor = new() { Name = "Floor", Position = Vector3.Zero, Mesh = new PlaneMesh() { Size = PlaneSize, Orientation = PlaneMesh.OrientationEnum.Y } };
-		Ceil = new() { Name = "Ceil", Position = new Vector3(0, Height, 0), Mesh = new PlaneMesh() { Size = PlaneSize, FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.Y } };
-		NorthWall = new() { Name = "NorthWall", Position = new Vector3(0, Height / 2f, -PlaneSize.X / 2f), Mesh = new PlaneMesh() { Size = new Vector2(PlaneSize.X, Height), Orientation = PlaneMesh.OrientationEnum.Z } };
-		SouthWall = new() { Name = "SouthWall", Position = new Vector3(0, Height / 2f, PlaneSize.X / 2f), Mesh = new PlaneMesh() { Size = new Vector2(PlaneSize.X, Height), FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.Z }, };
-		EastWall = new() { Name = "EastWall", Position = new Vector3(PlaneSize.X / 2f, Height / 2f, 0), Mesh = new PlaneMesh() { Size = new Vector2(PlaneSize.X, Height), FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.X } };
-		WestWall = new() { Name = "WestWall", Position = new Vector3(-PlaneSize.X / 2f, Height / 2f, 0), Mesh = new PlaneMesh() { Size = new Vector2(PlaneSize.X, Height), Orientation = PlaneMesh.OrientationEnum.X }, };
-
-		AddChild(Floor);
-		AddChild(Ceil);
-		AddChild(NorthWall);
-		AddChild(SouthWall);
-		AddChild(EastWall);
-		AddChild(WestWall);
-
-		Floor.SetOwnerToEditedSceneRoot();
-		Ceil.SetOwnerToEditedSceneRoot();
-		NorthWall.SetOwnerToEditedSceneRoot();
-		SouthWall.SetOwnerToEditedSceneRoot();
-		EastWall.SetOwnerToEditedSceneRoot();
-		WestWall.SetOwnerToEditedSceneRoot();
+		Floor = new() { Name = "Floor", Position = Vector3.Zero, Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Size.X), Orientation = PlaneMesh.OrientationEnum.Y } };
+		Ceil = new() { Name = "Ceil", Position = new Vector3(0, Size.Y, 0), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Size.X), FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.Y } };
+		NorthWall = new() { Name = "NorthWall", Position = new Vector3(0, Size.Y / 2f, -Size.X / 2f), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Size.Y), Orientation = PlaneMesh.OrientationEnum.Z } };
+		SouthWall = new() { Name = "SouthWall", Position = new Vector3(0, Size.Y / 2f, Size.X / 2f), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Size.Y), FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.Z }, };
+		EastWall = new() { Name = "EastWall", Position = new Vector3(Size.X / 2f, Size.Y / 2f, 0), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Size.Y), FlipFaces = true, Orientation = PlaneMesh.OrientationEnum.X } };
+		WestWall = new() { Name = "WestWall", Position = new Vector3(-Size.X / 2f, Size.Y / 2f, 0), Mesh = new PlaneMesh() { Size = new Vector2(Size.X, Size.Y), Orientation = PlaneMesh.OrientationEnum.X }, };
 	}
 
 	private Array<MeshInstance3D> AvailableMeshes()
@@ -209,6 +187,4 @@ public partial class MapBlock : Node3D
 
 		return visibleMeshes;
 	}
-
-
 }
